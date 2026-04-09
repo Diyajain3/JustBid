@@ -1,0 +1,2674 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tender Scout - Create your company profile and find matching tenders">
+    <title>Create Profile | Tender Scout</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/tokens.css">
+    <style>
+        /* Base Reset & Typography */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            font-size: var(--text-base);
+            line-height: var(--leading-normal);
+            color: var(--color-text-primary);
+            background-color: var(--color-bg-raised);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(var(--blur-lg)) saturate(180%);
+            -webkit-backdrop-filter: blur(var(--blur-lg)) saturate(180%);
+            border-bottom: var(--border-width) solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 var(--space-6);
+            z-index: var(--z-dropdown);
+        }
+
+        [data-theme="dark"] .header {
+            background: rgba(10, 15, 26, 0.85);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            text-decoration: none;
+            color: var(--color-text-primary);
+            font-weight: var(--weight-semibold);
+            font-size: var(--text-lg);
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--color-accent), var(--color-accent-secondary));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: var(--space-2);
+            border-radius: var(--radius-md);
+            color: var(--color-text-secondary);
+            transition: all var(--duration-fast) var(--ease-out);
+        }
+
+        .theme-toggle:hover {
+            background: var(--color-bg-muted);
+            color: var(--color-text-primary);
+        }
+
+        /* Main Container */
+        .main {
+            padding-top: calc(var(--header-height) + var(--space-10));
+            padding-bottom: var(--space-16);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 0 var(--space-5);
+        }
+
+        /* Progress Stepper */
+        .stepper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: var(--space-1);
+            margin-bottom: var(--space-8);
+        }
+
+        .stepper-step {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .stepper-dot {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-sm);
+            font-weight: var(--weight-semibold);
+            transition: all var(--duration-normal) var(--ease-out);
+        }
+
+        .stepper-dot.completed {
+            background: var(--color-success);
+            color: white;
+            box-shadow: 0 2px 8px rgba(22, 163, 74, 0.3);
+        }
+
+        .stepper-dot.active {
+            background: var(--color-accent);
+            color: white;
+            box-shadow: 0 2px 12px rgba(37, 99, 235, 0.4);
+            transform: scale(1.05);
+        }
+
+        .stepper-dot.pending {
+            background: var(--color-bg-muted);
+            color: var(--color-text-muted);
+            border: 2px solid var(--color-border);
+        }
+
+        .stepper-label {
+            font-size: var(--text-sm);
+            font-weight: var(--weight-medium);
+            color: var(--color-text-muted);
+            display: none;
+            transition: color var(--duration-fast) var(--ease-out);
+        }
+
+        .stepper-step:has(.stepper-dot.active) .stepper-label {
+            color: var(--color-accent);
+        }
+
+        .stepper-step:has(.stepper-dot.completed) .stepper-label {
+            color: var(--color-text-secondary);
+        }
+
+        @media (min-width: 640px) {
+            .stepper-label {
+                display: block;
+            }
+        }
+
+        .stepper-line {
+            width: 48px;
+            height: 3px;
+            background: var(--color-border);
+            border-radius: var(--radius-full);
+            transition: background var(--duration-normal) var(--ease-out);
+        }
+
+        .stepper-line.completed {
+            background: var(--color-success);
+        }
+
+        /* Card Container */
+        .card {
+            background: var(--color-bg-base);
+            border-radius: var(--radius-xl);
+            border: var(--border-width) solid var(--color-border-subtle);
+            padding: var(--space-8);
+            box-shadow: var(--shadow-card);
+            transition: box-shadow var(--duration-normal) var(--ease-out);
+        }
+
+        .card-title {
+            font-size: var(--text-2xl);
+            font-weight: var(--weight-bold);
+            color: var(--color-text-primary);
+            text-align: center;
+            margin-bottom: var(--space-3);
+            letter-spacing: var(--tracking-tight);
+            line-height: var(--leading-tight);
+        }
+
+        .card-subtitle {
+            font-size: var(--text-base);
+            color: var(--color-text-muted);
+            text-align: center;
+            margin-bottom: var(--space-8);
+            line-height: var(--leading-normal);
+            max-width: 440px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Search Input */
+        .search-container {
+            position: relative;
+            margin-bottom: var(--space-5);
+        }
+
+        .search-input {
+            width: 100%;
+            height: 52px;
+            padding: 0 var(--space-4) 0 var(--space-12);
+            font-size: var(--text-base);
+            border: var(--border-width) solid var(--color-border);
+            border-radius: var(--radius-lg);
+            background: var(--color-bg-base);
+            color: var(--color-text-primary);
+            transition: all var(--duration-fast) var(--ease-out);
+        }
+
+        .search-input:hover {
+            border-color: var(--color-border-strong);
+            background: var(--color-bg-subtle);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 3px var(--color-accent-subtle);
+            background: var(--color-bg-base);
+        }
+
+        .search-input::placeholder {
+            color: var(--color-text-muted);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: var(--space-4);
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-text-muted);
+            pointer-events: none;
+            transition: color var(--duration-fast) var(--ease-out);
+        }
+
+        .search-container:focus-within .search-icon {
+            color: var(--color-accent);
+        }
+
+        .search-hint {
+            font-size: var(--text-sm);
+            color: var(--color-text-muted);
+            text-align: center;
+            margin-bottom: var(--space-6);
+        }
+
+        /* Search Results */
+        .search-results {
+            border: var(--border-width) solid var(--color-border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            margin-bottom: var(--space-6);
+            display: none;
+            background: var(--color-bg-base);
+        }
+
+        .search-results.visible {
+            display: block;
+            animation: slideDown var(--duration-normal) var(--ease-out);
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .search-result-item {
+            padding: var(--space-4);
+            border-bottom: var(--border-width) solid var(--color-border);
+            cursor: pointer;
+            transition: background var(--duration-fast) var(--ease-out);
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-3);
+        }
+
+        .search-result-item:last-child { border-bottom: none; }
+        .search-result-item:hover { background: var(--color-bg-raised); }
+        .search-result-item.selected { background: var(--color-accent-subtle); }
+
+        .result-radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--color-border-strong);
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--duration-fast) var(--ease-out);
+        }
+
+        .search-result-item.selected .result-radio {
+            border-color: var(--color-accent);
+            background: var(--color-accent);
+        }
+
+        .search-result-item.selected .result-radio::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .result-info { flex: 1; }
+        .result-name { font-weight: var(--weight-medium); color: var(--color-text-primary); margin-bottom: var(--space-1); }
+        .result-meta { font-size: var(--text-sm); color: var(--color-text-secondary); }
+
+        /* Manual Entry Link */
+        .manual-link { text-align: center; margin-top: var(--space-4); }
+        .manual-link a { color: var(--color-accent); text-decoration: none; font-size: var(--text-sm); transition: color var(--duration-fast) var(--ease-out); }
+        .manual-link a:hover { text-decoration: underline; }
+
+        /* Form Inputs */
+        .form-group { margin-bottom: var(--space-6); }
+        .form-label { display: block; font-size: var(--text-sm); font-weight: var(--weight-medium); color: var(--color-text-primary); margin-bottom: var(--space-2); }
+        .form-label .required { color: var(--color-error); margin-left: 2px; }
+
+        .form-input {
+            width: 100%;
+            height: 46px;
+            padding: 0 var(--space-4);
+            font-size: var(--text-base);
+            border: var(--border-width) solid var(--color-border);
+            border-radius: var(--radius-lg);
+            background: var(--color-bg-base);
+            color: var(--color-text-primary);
+            transition: all var(--duration-fast) var(--ease-out);
+        }
+
+        .form-input:hover { border-color: var(--color-border-strong); background: var(--color-bg-subtle); }
+        .form-input:focus { outline: none; border-color: var(--color-accent); box-shadow: 0 0 0 3px var(--color-accent-subtle); background: var(--color-bg-base); }
+
+        /* Size Selector */
+        .size-selector {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-3);
+        }
+
+        @media (min-width: 640px) {
+            .size-selector { grid-template-columns: repeat(4, 1fr); }
+        }
+
+        .size-option {
+            padding: var(--space-4) var(--space-3);
+            border: var(--border-width) solid var(--color-border);
+            border-radius: var(--radius-lg);
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--duration-fast) var(--ease-out);
+            font-size: var(--text-sm);
+            font-weight: var(--weight-medium);
+            color: var(--color-text-secondary);
+            background: var(--color-bg-base);
+        }
+
+        .size-option:hover { border-color: var(--color-accent); transform: translateY(-1px); }
+        .size-option.selected { border-color: var(--color-accent); background: var(--color-accent-subtle); color: var(--color-accent); box-shadow: 0 0 0 3px var(--color-accent-subtle); }
+
+        /* Industry Cards */
+        .industry-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-4);
+            margin-bottom: var(--space-6);
+        }
+
+        @media (min-width: 640px) {
+            .industry-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        .industry-card {
+            padding: var(--space-5);
+            border: var(--border-width) solid var(--color-border);
+            border-radius: var(--radius-lg);
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--duration-fast) var(--ease-out);
+            background: var(--color-bg-base);
+        }
+
+        .industry-card:hover { border-color: var(--color-accent); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06); }
+        .industry-card.selected { border-color: var(--color-accent); background: var(--color-accent-subtle); box-shadow: 0 0 0 3px var(--color-accent-subtle), 0 2px 8px rgba(37, 99, 235, 0.1); }
+
+        .industry-icon {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--space-3);
+            background: var(--color-bg-raised);
+            border-radius: var(--radius-md);
+            color: var(--color-text-secondary);
+            transition: all var(--duration-fast) var(--ease-out);
+        }
+
+        .industry-card:hover .industry-icon { background: var(--color-accent-subtle); color: var(--color-accent); }
+        .industry-card.selected .industry-icon { background: var(--color-accent); color: white; }
+        .industry-name { font-size: var(--text-sm); font-weight: var(--weight-medium); color: var(--color-text-primary); }
+
+        /* Company Info Bar */
+        .company-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-4) var(--space-5);
+            background: var(--color-bg-subtle);
+            border: var(--border-width) solid var(--color-border-subtle);
+            border-radius: var(--radius-xl);
+            margin-bottom: var(--space-8);
+        }
+
+        .company-bar-info { display: flex; align-items: center; gap: var(--space-4); }
+
+        .company-bar-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--color-accent), var(--color-accent-dark));
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+        }
+
+        .company-bar-name { font-weight: var(--weight-semibold); color: var(--color-text-primary); font-size: var(--text-base); }
+        .company-bar-uid { font-size: var(--text-sm); color: var(--color-text-muted); font-family: var(--font-mono); }
+
+        /* Tabs */
+        .tabs { display: flex; gap: var(--space-2); margin-bottom: var(--space-6); border-bottom: 2px solid var(--color-border-subtle); padding-bottom: 0; }
+
+        .tab {
+            padding: var(--space-3) var(--space-5);
+            font-size: var(--text-sm);
+            font-weight: var(--weight-medium);
+            color: var(--color-text-muted);
+            background: none;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            transition: all var(--duration-fast) var(--ease-out);
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
+        }
+
+        .tab:hover { color: var(--color-text-primary); background: var(--color-bg-raised); }
+        .tab.active { color: var(--color-accent); font-weight: var(--weight-semibold); }
+        .tab.active::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 2px; background: var(--color-accent); border-radius: var(--radius-full); }
+
+        /* Code Tree */
+        .code-tree { border: var(--border-width) solid var(--color-border); border-radius: var(--radius-lg); max-height: 400px; overflow-y: auto; overflow-x: hidden; }
+
+        .code-category { border-bottom: var(--border-width) solid var(--color-border-subtle); }
+        .code-category:last-child { border-bottom: none; }
+
+        .code-category-header { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-4); cursor: pointer; transition: all var(--duration-fast) var(--ease-out); }
+        .code-category-header:hover { background: var(--color-bg-raised); }
+        .code-category.expanded .code-category-header { background: var(--color-bg-subtle); }
+
+        .code-toggle { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; color: var(--color-text-muted); transition: all var(--duration-fast) var(--ease-out); }
+        .code-category.expanded .code-toggle { transform: rotate(90deg); color: var(--color-accent); }
+
+        .code-category-name { flex: 1; font-weight: var(--weight-medium); color: var(--color-text-primary); font-size: var(--text-sm); }
+        .code-category-code { font-size: var(--text-xs); color: var(--color-text-muted); font-family: var(--font-mono); padding: 2px 6px; background: var(--color-bg-muted); border-radius: var(--radius-sm); }
+
+        .code-category-count { display: none; min-width: 22px; height: 22px; padding: 0 7px; background: var(--color-accent); color: white; border-radius: var(--radius-full); font-size: var(--text-xs); font-weight: var(--weight-semibold); text-align: center; line-height: 22px; }
+        .code-category-count.visible { display: inline-block; }
+
+        .code-items { display: none; padding-left: var(--space-6); background: var(--color-bg-raised); border-top: var(--border-width) solid var(--color-border-subtle); }
+        .code-category.expanded .code-items { display: block; }
+
+        .code-item { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); cursor: pointer; transition: all var(--duration-fast) var(--ease-out); border-left: 2px solid transparent; margin-left: var(--space-2); }
+        .code-item:hover { background: var(--color-bg-muted); border-left-color: var(--color-border-strong); }
+        .code-item.selected { border-left-color: var(--color-accent); background: var(--color-accent-subtle); }
+
+        .code-checkbox { width: 18px; height: 18px; border: 2px solid var(--color-border-strong); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; transition: all var(--duration-fast) var(--ease-out); flex-shrink: 0; }
+        .code-item:hover .code-checkbox { border-color: var(--color-accent); }
+        .code-item.selected .code-checkbox { background: var(--color-accent); border-color: var(--color-accent); box-shadow: 0 1px 3px rgba(37, 99, 235, 0.3); }
+        .code-item.selected .code-checkbox svg { display: block; }
+        .code-checkbox svg { display: none; width: 12px; height: 12px; color: white; }
+
+        .code-item-name { flex: 1; font-size: var(--text-sm); color: var(--color-text-primary); }
+        .code-item-code { font-size: var(--text-xs); color: var(--color-text-muted); font-family: var(--font-mono); }
+
+        /* Selected Tags */
+        .selected-section { margin-top: var(--space-6); }
+        .selected-label { font-size: var(--text-sm); color: var(--color-text-secondary); margin-bottom: var(--space-3); }
+        .selected-tags { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+
+        .selected-tag { display: inline-flex; align-items: center; gap: var(--space-2); padding: var(--space-2) var(--space-3); background: var(--color-accent-subtle); color: var(--color-accent); border-radius: var(--radius-full); font-size: var(--text-sm); }
+        .selected-tag button { background: none; border: none; cursor: pointer; color: var(--color-accent); padding: 0; display: flex; align-items: center; justify-content: center; }
+        .selected-tag button:hover { color: var(--color-accent-dark); }
+
+        /* Confirmation */
+        .success-icon {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, var(--color-success), #15803d);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--space-6);
+            color: white;
+            box-shadow: 0 4px 16px rgba(22, 163, 74, 0.3);
+            animation: successPop 0.5s var(--ease-spring);
+        }
+
+        @keyframes successPop {
+            0% { transform: scale(0); opacity: 0; }
+            60% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .profile-summary { background: var(--color-bg-subtle); border: var(--border-width) solid var(--color-border-subtle); border-radius: var(--radius-xl); padding: var(--space-6); margin-bottom: var(--space-6); }
+
+        .profile-summary-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-5); padding-bottom: var(--space-4); border-bottom: var(--border-width) solid var(--color-border-subtle); }
+        .profile-summary-title { font-weight: var(--weight-semibold); color: var(--color-text-primary); }
+        .profile-summary-uid { font-size: var(--text-sm); color: var(--color-text-secondary); }
+        .profile-summary-edit { font-size: var(--text-sm); color: var(--color-accent); background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: var(--space-1); }
+        .profile-summary-edit:hover { text-decoration: underline; }
+
+        .profile-summary-row { display: flex; align-items: flex-start; padding: var(--space-3) 0; border-top: var(--border-width) solid var(--color-border); }
+        .profile-summary-label { width: 120px; font-size: var(--text-sm); color: var(--color-text-secondary); flex-shrink: 0; }
+        .profile-summary-value { font-size: var(--text-sm); color: var(--color-text-primary); }
+
+        /* Navigation Buttons */
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: var(--space-8); gap: var(--space-4); }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            height: var(--size-btn-md);
+            padding: 0 var(--space-6);
+            font-size: var(--text-sm);
+            font-weight: var(--weight-semibold);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all var(--duration-fast) var(--ease-out);
+            text-decoration: none;
+            position: relative;
+        }
+
+        .btn:focus-visible { outline: var(--border-width-2) solid var(--color-accent); outline-offset: var(--border-width-2); }
+
+        .btn-primary { background: var(--color-accent); color: var(--color-text-inverse); border: none; box-shadow: 0 1px 3px rgba(37, 99, 235, 0.2), 0 4px 12px rgba(37, 99, 235, 0.15); }
+        .btn-primary:hover { background: var(--color-accent-hover); box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25), 0 8px 20px rgba(37, 99, 235, 0.2); transform: translateY(-1px); }
+        .btn-primary:active { transform: translateY(0); box-shadow: 0 1px 2px rgba(37, 99, 235, 0.2); }
+        .btn-primary:disabled { background: var(--color-bg-muted); color: var(--color-text-muted); cursor: not-allowed; box-shadow: none; transform: none; }
+
+        .btn-secondary { background: var(--color-bg-base); color: var(--color-text-primary); border: var(--border-width) solid var(--color-border); }
+        .btn-secondary:hover { background: var(--color-bg-subtle); border-color: var(--color-border-strong); }
+        .btn-secondary:active { background: var(--color-bg-muted); }
+
+        .btn-ghost { background: none; color: var(--color-text-secondary); border: none; }
+        .btn-ghost:hover { background: var(--color-bg-muted); color: var(--color-text-primary); }
+
+        .btn-large { height: var(--size-btn-lg); padding: 0 var(--space-8); font-size: var(--text-base); border-radius: var(--radius-xl); }
+
+        /* Step visibility */
+        .step { display: none; }
+        .step.active { display: block; animation: fadeIn var(--duration-normal) var(--ease-out); }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Dashboard Preview */
+        .dashboard-preview { margin-top: var(--space-10); padding-top: var(--space-8); border-top: var(--border-width) solid var(--color-border-subtle); }
+
+        .dashboard-title {
+            font-size: var(--text-xs);
+            font-weight: var(--weight-semibold);
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-4);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .dashboard-title::before { content: ''; width: 8px; height: 8px; background: var(--color-accent); border-radius: 50%; animation: pulse 2s infinite; }
+
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        .tender-card { background: var(--color-bg-base); border: var(--border-width) solid var(--color-border-subtle); border-radius: var(--radius-lg); padding: var(--space-4); margin-bottom: var(--space-3); transition: all var(--duration-fast) var(--ease-out); }
+        .tender-card:hover { border-color: var(--color-border); box-shadow: var(--shadow-sm); }
+
+        .tender-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-2); }
+
+        .tender-match { display: inline-flex; align-items: center; gap: var(--space-1); padding: var(--space-1) var(--space-2); border-radius: var(--radius-full); font-size: var(--text-xs); font-weight: var(--weight-medium); }
+        .tender-match::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+        .tender-match.high { background: var(--color-success-bg); color: var(--color-success); }
+        .tender-match.medium { background: var(--color-warning-bg); color: var(--color-warning); }
+
+        .tender-source { font-size: var(--text-xs); color: var(--color-text-muted); padding: var(--space-1) var(--space-2); background: var(--color-bg-base); border-radius: var(--radius-sm); }
+        .tender-title { font-weight: var(--weight-medium); color: var(--color-text-primary); margin-bottom: var(--space-1); }
+        .tender-meta { font-size: var(--text-sm); color: var(--color-text-muted); margin-bottom: var(--space-2); }
+        .tender-codes { font-size: var(--text-xs); color: var(--color-text-muted); }
+
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+            .card { padding: var(--space-6); border-radius: var(--radius-xl); }
+            .card-title { font-size: var(--text-xl); }
+            .nav-buttons { flex-direction: column-reverse; }
+            .nav-buttons .btn { width: 100%; }
+            .stepper-line { width: 20px; }
+        }
+
+        /* Loading state */
+        .loading { display: flex; align-items: center; justify-content: center; padding: var(--space-8); color: var(--color-text-muted); }
+        .spinner { width: 24px; height: 24px; border: 2px solid var(--color-border); border-top-color: var(--color-accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: var(--space-3); }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Empty state */
+        .empty-state { text-align: center; padding: var(--space-8); color: var(--color-text-muted); }
+
+        /* Test Presets */
+        .test-presets { margin-bottom: var(--space-6); padding: var(--space-4); background: var(--color-bg-raised); border-radius: var(--radius-lg); border: 1px dashed var(--color-border); }
+
+        .test-presets-label { font-size: var(--text-xs); font-weight: var(--weight-semibold); color: var(--color-accent); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-3); display: flex; align-items: center; gap: var(--space-2); }
+
+        .test-presets-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-3); }
+
+        @media (min-width: 640px) {
+            .test-presets-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        .test-preset-card { padding: var(--space-3); background: var(--color-bg-base); border: var(--border-width) solid var(--color-border); border-radius: var(--radius-md); cursor: pointer; transition: all var(--duration-fast) var(--ease-out); }
+        .test-preset-card:hover { border-color: var(--color-accent); box-shadow: var(--shadow-sm); }
+        .test-preset-card.selected { border-color: var(--color-accent); background: var(--color-accent-subtle); }
+
+        .test-preset-icon { display: flex; align-items: center; justify-content: center; margin-bottom: var(--space-1); color: var(--color-text-secondary); }
+        .test-preset-card.selected .test-preset-icon { color: var(--color-accent); }
+        .test-preset-name { font-size: var(--text-sm); font-weight: var(--weight-medium); color: var(--color-text-primary); margin-bottom: var(--space-1); }
+        .test-preset-meta { font-size: var(--text-xs); color: var(--color-text-muted); }
+        .test-preset-badge { display: inline-block; font-size: var(--text-xs); padding: 2px 8px; background: var(--color-accent-subtle); color: var(--color-accent); border-radius: var(--radius-sm); margin-top: var(--space-2); }
+
+        .divider { display: flex; align-items: center; text-align: center; margin: var(--space-4) 0; color: var(--color-text-muted); font-size: var(--text-sm); }
+        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: var(--border-width) solid var(--color-border); }
+        .divider span { padding: 0 var(--space-3); }
+
+        /* ========== Hybrid Layout Step 3 ========== */
+        .keywords-section { margin-bottom: var(--space-6); }
+
+        .section-header { display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-4); }
+        .section-header svg { color: var(--color-accent); }
+        .section-title { font-size: var(--text-lg); font-weight: var(--weight-semibold); color: var(--color-text-primary); }
+        .section-subtitle { font-size: var(--text-sm); color: var(--color-text-muted); margin-left: auto; }
+
+        /* Tag Input Component */
+        .tag-input-container { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); padding: var(--space-2) var(--space-3); min-height: 48px; border: var(--border-width) solid var(--color-border); border-radius: var(--radius-lg); background: var(--color-bg-base); cursor: text; transition: all var(--duration-fast) var(--ease-out); }
+        .tag-input-container:focus-within { border-color: var(--color-accent); box-shadow: 0 0 0 3px var(--color-accent-subtle); }
+
+        .keyword-tag { display: inline-flex; align-items: center; gap: var(--space-1); padding: var(--space-1) var(--space-2); padding-right: var(--space-1); background: var(--color-accent-subtle); border: var(--border-width) solid var(--color-accent); border-radius: var(--radius-full); font-size: var(--text-sm); color: var(--color-accent); white-space: nowrap; }
+        .keyword-tag-text { max-width: 180px; overflow: hidden; text-overflow: ellipsis; }
+
+        .keyword-tag-remove { display: flex; align-items: center; justify-content: center; width: 18px; height: 18px; padding: 0; border: none; background: none; color: var(--color-accent); border-radius: 50%; cursor: pointer; transition: all var(--duration-fast) var(--ease-out); }
+        .keyword-tag-remove:hover { background: var(--color-accent); color: white; }
+
+        .tag-input { flex: 1; min-width: 150px; padding: var(--space-1) 0; border: none; background: transparent; font-size: var(--text-sm); font-family: var(--font-sans); color: var(--color-text-primary); outline: none; }
+        .tag-input::placeholder { color: var(--color-text-muted); }
+
+        /* Exclusion Tags */
+        .exclusions-section .section-header svg { color: var(--color-error); }
+        .exclusion-input .keyword-tag { background: var(--color-error-bg); border-color: var(--color-error); color: var(--color-error); }
+        .exclusion-input .keyword-tag-remove:hover { background: var(--color-error); color: white; }
+
+        /* Region Selector */
+        .region-section { margin-top: var(--space-8); padding-top: var(--space-6); border-top: var(--border-width) solid var(--color-border-subtle); }
+        .region-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-4); }
+        .region-title { font-size: var(--text-lg); font-weight: var(--weight-semibold); color: var(--color-text-primary); margin: 0; }
+
+        .region-toggle-all { padding: var(--space-2) var(--space-3); border: var(--border-width) solid var(--color-border); border-radius: var(--radius-md); background: var(--color-bg-base); font-size: var(--text-sm); font-weight: var(--weight-medium); color: var(--color-text-secondary); cursor: pointer; transition: all var(--duration-fast) var(--ease-out); }
+        .region-toggle-all:hover { border-color: var(--color-accent); color: var(--color-accent); }
+
+        .canton-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: var(--space-2); }
+
+        .canton-btn { display: flex; align-items: center; justify-content: center; padding: var(--space-2) var(--space-3); border: var(--border-width) solid var(--color-border); border-radius: var(--radius-md); background: var(--color-bg-base); font-size: var(--text-sm); font-weight: var(--weight-medium); color: var(--color-text-primary); cursor: pointer; transition: all var(--duration-fast) var(--ease-out); }
+        .canton-btn:hover { border-color: var(--color-border-strong); background: var(--color-bg-subtle); }
+        .canton-btn.selected { border-color: var(--color-accent); background: var(--color-accent-subtle); color: var(--color-accent); }
+        .canton-btn .canton-code { font-weight: var(--weight-semibold); margin-right: var(--space-1); }
+
+        /* Vertical Code Sections */
+        .code-section { margin-bottom: var(--space-4); }
+
+        .code-section-header { display: flex; align-items: center; gap: var(--space-2); padding: var(--space-3) var(--space-4); background: var(--color-bg-subtle); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-lg); cursor: pointer; transition: all var(--duration-fast) var(--ease-out); }
+        .code-section-header:hover { border-color: var(--color-border); }
+        .code-section.expanded .code-section-header { border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-bottom-color: transparent; }
+
+        .code-section-icon { color: var(--color-text-muted); }
+        .code-section-title { flex: 1; font-weight: var(--weight-medium); font-size: var(--text-sm); color: var(--color-text-primary); }
+        .code-section-count { background: var(--color-accent); color: var(--color-text-inverse); padding: 2px 8px; border-radius: var(--radius-full); font-size: var(--text-xs); font-weight: var(--weight-semibold); }
+        .code-section-count:empty { display: none; }
+        .code-section-toggle { color: var(--color-text-muted); transition: transform var(--duration-fast) var(--ease-out); }
+        .code-section.expanded .code-section-toggle { transform: rotate(180deg); }
+
+        .code-section-content { display: none; border: 1px solid var(--color-border-subtle); border-top: none; border-radius: 0 0 var(--radius-lg) var(--radius-lg); overflow: hidden; }
+        .code-section.expanded .code-section-content { display: block; }
+
+        /* Filter Toggle */
+        .filter-toggle { display: flex; align-items: center; gap: var(--space-3); margin: var(--space-3); margin-top: var(--space-2); padding: var(--space-2) var(--space-3); background: var(--color-bg-base); border-radius: var(--radius-md); font-size: var(--text-sm); }
+        .filter-toggle-label { color: var(--color-text-muted); white-space: nowrap; }
+        .filter-toggle-buttons { display: flex; gap: 2px; background: var(--color-bg-subtle); border-radius: var(--radius-sm); padding: 2px; }
+
+        .filter-toggle-btn { padding: var(--space-1) var(--space-3); font-size: var(--text-sm); border: none; background: none; color: var(--color-text-muted); border-radius: var(--radius-sm); cursor: pointer; transition: all var(--duration-fast) var(--ease-out); white-space: nowrap; }
+        .filter-toggle-btn:hover { color: var(--color-text-primary); }
+        .filter-toggle-btn.active { background: var(--color-accent); color: var(--color-text-inverse); box-shadow: var(--shadow-sm); }
+
+        .code-section .code-tree { border: none; border-radius: 0; max-height: 300px; }
+
+        /* Selection Summary (per section) */
+        .selection-summary { display: none; padding: var(--space-3) var(--space-4); background: var(--color-bg-base); border-top: 1px solid var(--color-border-subtle); }
+        .selection-summary.visible { display: block; }
+        .selection-summary-title { font-size: var(--text-xs); font-weight: var(--weight-medium); color: var(--color-text-muted); margin-bottom: var(--space-2); text-transform: uppercase; letter-spacing: 0.03em; }
+        .selection-summary-items { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+
+        /* Unified tag style for CPV/NPK */
+        .selection-tag { display: inline-flex; align-items: center; gap: var(--space-1); padding: var(--space-1) var(--space-2); padding-right: var(--space-1); background: var(--color-accent-subtle); border: 1px solid var(--color-accent); border-radius: var(--radius-full); font-size: var(--text-sm); color: var(--color-accent); white-space: nowrap; }
+        .selection-tag-label { max-width: 180px; overflow: hidden; text-overflow: ellipsis; }
+
+        .selection-tag button { display: flex; align-items: center; justify-content: center; width: 18px; height: 18px; padding: 0; border: none; background: none; color: var(--color-text-muted); border-radius: 50%; cursor: pointer; transition: all var(--duration-fast) var(--ease-out); }
+        .selection-tag button:hover { background: var(--color-accent); color: var(--color-text-inverse); }
+
+        /* Hide old selected-section in new layout */
+        .code-section .selected-section { display: none; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="index.html" class="logo">
+            <div class="logo-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <line x1="10" y1="9" x2="8" y2="9"></line>
+                </svg>
+            </div>
+            <span>Tender Scout</span>
+        </a>
+        <div class="header-actions">
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Progress Stepper -->
+            <div class="stepper">
+                <div class="stepper-step">
+                    <div class="stepper-dot active" data-step="1">1</div>
+                    <span class="stepper-label">Company</span>
+                </div>
+                <div class="stepper-line"></div>
+                <div class="stepper-step">
+                    <div class="stepper-dot pending" data-step="2">2</div>
+                    <span class="stepper-label">Industry</span>
+                </div>
+                <div class="stepper-line"></div>
+                <div class="stepper-step">
+                    <div class="stepper-dot pending" data-step="3">3</div>
+                    <span class="stepper-label">Interests</span>
+                </div>
+                <div class="stepper-line"></div>
+                <div class="stepper-step">
+                    <div class="stepper-dot pending" data-step="4">4</div>
+                    <span class="stepper-label">Done</span>
+                </div>
+            </div>
+
+            <!-- Step 1: Company Search -->
+            <div class="step active" id="step1">
+                <div class="card">
+                    <h1 class="card-title">Welcome to Tender Scout</h1>
+                    <p class="card-subtitle">Find your company in the commercial register</p>
+
+                    <!-- Test Presets -->
+                    <div class="test-presets" id="testPresets">
+                        <div class="test-presets-label">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                            </svg>
+                            Test Data (Demo Mode)
+                        </div>
+                        <div class="test-presets-grid" id="testPresetsGrid">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <div class="divider"><span>or search for a company</span></div>
+
+                    <div class="search-container">
+                        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input type="text" class="search-input" id="companySearch" placeholder="Enter company name or UID...">
+                    </div>
+                    <p class="search-hint">Examples: "Berger" or "CHE-109.234.567"</p>
+
+                    <div class="search-results" id="searchResults">
+                        <!-- Results populated by JS -->
+                    </div>
+
+                    <div class="manual-link">
+                        <a href="#" id="manualEntryLink">Company not found? Enter manually &rarr;</a>
+                    </div>
+
+                    <div class="nav-buttons">
+                        <a href="index.html" class="btn btn-ghost">&larr; Back to Home</a>
+                        <button class="btn btn-primary" id="step1Next" disabled>Continue &rarr;</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 1b: Manual Entry -->
+            <div class="step" id="step1b">
+                <div class="card">
+                    <h1 class="card-title">Enter Company Details Manually</h1>
+                    <p class="card-subtitle">Enter your company information below</p>
+
+                    <div class="form-group">
+                        <label class="form-label">Company Name <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="manualCompanyName" placeholder="e.g. Sample GmbH">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Location</label>
+                        <input type="text" class="form-input" id="manualLocation" placeholder="Postcode, City">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Company Size</label>
+                        <div class="size-selector">
+                            <div class="size-option" data-size="1-10">1–10 emp.</div>
+                            <div class="size-option" data-size="11-50">11–50 emp.</div>
+                            <div class="size-option" data-size="51-250">51–250 emp.</div>
+                            <div class="size-option" data-size="250+">250+ emp.</div>
+                        </div>
+                    </div>
+
+                    <div class="nav-buttons">
+                        <button class="btn btn-secondary" id="step1bBack">&larr; Back</button>
+                        <button class="btn btn-primary" id="step1bNext" disabled>Continue &rarr;</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Industry Selection -->
+            <div class="step" id="step2">
+                <div class="card">
+                    <div class="company-bar" id="companyBar">
+                        <div class="company-bar-info">
+                            <div class="company-bar-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="company-bar-name" id="selectedCompanyName">Müller Bau AG</div>
+                                <div class="company-bar-uid" id="selectedCompanyUid">CHE-111.222.333</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h1 class="card-title">What sectors does your company operate in?</h1>
+                    <p class="card-subtitle">Multiple selections allowed</p>
+
+                    <div class="industry-grid">
+                        <div class="industry-card" data-industry="construction">
+                            <div class="industry-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M2 20h20"/><path d="M5 20V8l7-4 7 4v12"/><path d="M9 20v-4h6v4"/><path d="M9 12h6"/>
+                                </svg>
+                            </div>
+                            <div class="industry-name">Construction &amp; Infrastructure</div>
+                        </div>
+                        <div class="industry-card" data-industry="it">
+                            <div class="industry-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/><path d="m7 8 3 3-3 3"/><path d="M14 14h3"/>
+                                </svg>
+                            </div>
+                            <div class="industry-name">IT &amp; Technology</div>
+                        </div>
+                        <div class="industry-card" data-industry="health">
+                            <div class="industry-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                                </svg>
+                            </div>
+                            <div class="industry-name">Health &amp; Social Care</div>
+                        </div>
+                        <div class="industry-card" data-industry="consulting">
+                            <div class="industry-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="2" y="4" width="20" height="16" rx="2"/><path d="M10 4v4"/><path d="M2 8h20"/><path d="M6 12h4"/><path d="M6 16h8"/>
+                                </svg>
+                            </div>
+                            <div class="industry-name">Consulting &amp; Services</div>
+                        </div>
+                        <div class="industry-card" data-industry="environment">
+                            <div class="industry-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+                                </svg>
+                            </div>
+                            <div class="industry-name">Environment &amp; Energy</div>
+                        </div>
+                        <div class="industry-card" data-industry="transport">
+                            <div class="industry-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18h6a1 1 0 0 0 1-1v-3.28a1 1 0 0 0-.684-.948l-3.923-1.308A1 1 0 0 1 17 11.28V6a1 1 0 0 0-1-1h-2"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/>
+                                </svg>
+                            </div>
+                            <div class="industry-name">Transport &amp; Logistics</div>
+                        </div>
+                        <div class="industry-card" data-industry="education">
+                            <div class="industry-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2v-5"/>
+                                </svg>
+                            </div>
+                            <div class="industry-name">Education &amp; Research</div>
+                        </div>
+                        <div class="industry-card" data-industry="supplies">
+                            <div class="industry-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>
+                                </svg>
+                            </div>
+                            <div class="industry-name">Goods &amp; Supplies</div>
+                        </div>
+                        <div class="industry-card" data-industry="other">
+                            <div class="industry-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </div>
+                            <div class="industry-name">Other Sectors</div>
+                        </div>
+                    </div>
+
+                    <!-- Region Selection -->
+                    <div class="region-section">
+                        <div class="region-header">
+                            <h2 class="region-title">Which regions do you operate in?</h2>
+                            <button type="button" class="region-toggle-all" id="regionToggleAll">Select all</button>
+                        </div>
+                        <div class="canton-grid" id="cantonGrid">
+                            <!-- Cantons populated by JS -->
+                        </div>
+                    </div>
+
+                    <div class="nav-buttons">
+                        <button class="btn btn-secondary" id="step2Back">&larr; Back</button>
+                        <button class="btn btn-primary" id="step2Next" disabled>Continue &rarr;</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Keywords, CPV & NPK Selection -->
+            <div class="step" id="step3">
+                <div class="card">
+                    <h1 class="card-title">Define Your Profile</h1>
+                    <p class="card-subtitle">Keywords and codes help us find the right tenders for you</p>
+
+                    <!-- Keywords Section -->
+                    <div class="keywords-section">
+                        <div class="section-header">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                                <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                            </svg>
+                            <span class="section-title">Keywords / Competencies</span>
+                        </div>
+                        <div class="tag-input-container" id="tagInputContainer">
+                            <!-- Tags will be inserted here by JS -->
+                            <input type="text" class="tag-input" id="keywordsInput" placeholder="Enter a keyword...">
+                        </div>
+                    </div>
+
+                    <!-- Exclusions Section -->
+                    <div class="keywords-section exclusions-section">
+                        <div class="section-header">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                            </svg>
+                            <span class="section-title">Exclusion Criteria</span>
+                        </div>
+                        <div class="tag-input-container exclusion-input" id="exclusionInputContainer">
+                            <!-- Tags will be inserted here by JS -->
+                            <input type="text" class="tag-input" id="exclusionsInput" placeholder="Enter a term to exclude...">
+                        </div>
+                    </div>
+
+                    <!-- CPV Codes Section -->
+                    <div class="code-section" id="cpvSection">
+                        <div class="code-section-header">
+                            <svg class="code-section-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="2" y1="12" x2="22" y2="12"></line>
+                                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                            </svg>
+                            <span class="code-section-title">CPV Codes (EU Procurement)</span>
+                            <span class="code-section-count" id="cpvSectionCount"></span>
+                            <svg class="code-section-toggle" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                        <div class="code-section-content">
+                            <div class="search-container" style="margin: var(--space-3); margin-bottom: 0;">
+                                <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                                <input type="text" class="search-input" id="cpvSearch" placeholder="Search CPV code or description...">
+                            </div>
+                            <div class="filter-toggle">
+                                <span class="filter-toggle-label">Show:</span>
+                                <div class="filter-toggle-buttons">
+                                    <button class="filter-toggle-btn active" data-filter="recommended" id="cpvFilterRecommended">Recommended</button>
+                                    <button class="filter-toggle-btn" data-filter="all" id="cpvFilterAll">Show all</button>
+                                </div>
+                            </div>
+                            <div class="code-tree" id="cpvTree">
+                                <!-- CPV categories populated by JS -->
+                            </div>
+                        </div>
+                        <!-- CPV Selection Summary -->
+                        <div class="selection-summary" id="cpvSelectionSummary">
+                            <div class="selection-summary-title">Recommendation / Your Selection</div>
+                            <div class="selection-summary-items" id="cpvSelectionItems">
+                                <!-- Items populated by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NPK Codes Section (only for construction) -->
+                    <div class="code-section" id="npkSection" style="display: none;">
+                        <div class="code-section-header">
+                            <svg class="code-section-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                            </svg>
+                            <span class="code-section-title">NPK Chapters (Swiss Construction)</span>
+                            <span class="code-section-count" id="npkSectionCount"></span>
+                            <svg class="code-section-toggle" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                        <div class="code-section-content">
+                            <div class="search-container" style="margin: var(--space-3); margin-bottom: 0;">
+                                <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                                <input type="text" class="search-input" id="npkSearch" placeholder="Search NPK chapters...">
+                            </div>
+                            <div class="filter-toggle">
+                                <span class="filter-toggle-label">Show:</span>
+                                <div class="filter-toggle-buttons">
+                                    <button class="filter-toggle-btn active" data-filter="recommended" id="npkFilterRecommended">Recommended</button>
+                                    <button class="filter-toggle-btn" data-filter="all" id="npkFilterAll">Show all</button>
+                                </div>
+                            </div>
+                            <div class="code-tree" id="npkTree">
+                                <!-- NPK chapters populated by JS -->
+                            </div>
+                        </div>
+                        <!-- NPK Selection Summary -->
+                        <div class="selection-summary" id="npkSelectionSummary">
+                            <div class="selection-summary-title">Recommendation / Your Selection</div>
+                            <div class="selection-summary-items" id="npkSelectionItems">
+                                <!-- Items populated by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nav-buttons">
+                        <button class="btn btn-secondary" id="step3Back">&larr; Back</button>
+                        <button class="btn btn-primary" id="step3Next" disabled>Continue &rarr;</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Confirmation -->
+            <div class="step" id="step4">
+                <div class="card">
+                    <div class="success-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </div>
+
+                    <h1 class="card-title">Your profile is ready!</h1>
+                    <p class="card-subtitle">We will notify you as soon as matching tenders become available.</p>
+
+                    <div class="profile-summary">
+                        <div class="profile-summary-header">
+                            <div>
+                                <div class="profile-summary-title" id="summaryCompanyName">Müller Bau AG</div>
+                                <div class="profile-summary-uid" id="summaryCompanyUid">CHE-111.222.333 · Zurich</div>
+                            </div>
+                            <button class="profile-summary-edit" id="editProfile">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
+                                Edit
+                            </button>
+                        </div>
+                        <div class="profile-summary-row">
+                            <div class="profile-summary-label">Industries:</div>
+                            <div class="profile-summary-value" id="summaryIndustries">Construction &amp; Infrastructure</div>
+                        </div>
+                        <div class="profile-summary-row" id="summaryKeywordsRow" style="display: none;">
+                            <div class="profile-summary-label">Keywords:</div>
+                            <div class="profile-summary-value" id="summaryKeywords">-</div>
+                        </div>
+                        <div class="profile-summary-row">
+                            <div class="profile-summary-label">CPV Codes:</div>
+                            <div class="profile-summary-value" id="summaryCpv">45000000 (Construction works)</div>
+                        </div>
+                        <div class="profile-summary-row" id="summaryNpkRow" style="display: none;">
+                            <div class="profile-summary-label">NPK Chapters:</div>
+                            <div class="profile-summary-value" id="summaryNpk">-</div>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-bottom: var(--space-6);">
+                        <button class="btn btn-secondary btn-large" style="width: 100%;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                            </svg>
+                            Enable Email Notifications
+                        </button>
+                    </div>
+
+                    <!-- Dashboard Preview -->
+                    <div class="dashboard-preview">
+                        <h2 class="dashboard-title">Preview: Matching Tenders</h2>
+
+                        <div class="tender-card">
+                            <div class="tender-header">
+                                <span class="tender-match high">98% Match</span>
+                                <span class="tender-source">SIMAP</span>
+                            </div>
+                            <div class="tender-title">Renovation of Musterstadt School</div>
+                            <div class="tender-meta">City of Zurich · CHF 2.5M · Deadline: 15.02.2026</div>
+                            <div class="tender-codes">NPK: 211, 215, 221 · CPV: 45000000</div>
+                        </div>
+
+                        <div class="tender-card">
+                            <div class="tender-header">
+                                <span class="tender-match medium">85% Match</span>
+                                <span class="tender-source">SIMAP</span>
+                            </div>
+                            <div class="tender-title">New Administrative Building, Canton of Bern</div>
+                            <div class="tender-meta">Canton of Bern · CHF 8.2M · Deadline: 28.02.2026</div>
+                            <div class="tender-codes">NPK: 215, 221, 241 · CPV: 45210000</div>
+                        </div>
+                    </div>
+
+                    <div class="nav-buttons" style="justify-content: center;">
+                        <button class="btn btn-primary btn-large" id="goToDashboard">
+                            Go to Dashboard &rarr;
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // =====================================================
+        // TEST DATA - Loaded from JSON
+        // =====================================================
+
+        let testCompanies = [];
+
+        // Industry icons for test presets (SVG)
+        const industryIcons = {
+            construction: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20h20"/><path d="M5 20V8l7-4 7 4v12"/><path d="M9 20v-4h6v4"/><path d="M9 12h6"/></svg>',
+            it: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/><path d="m7 8 3 3-3 3"/><path d="M14 14h3"/></svg>',
+            health: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>',
+            consulting: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M10 4v4"/><path d="M2 8h20"/><path d="M6 12h4"/><path d="M6 16h8"/></svg>',
+            environment: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>',
+            transport: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18h6a1 1 0 0 0 1-1v-3.28a1 1 0 0 0-.684-.948l-3.923-1.308A1 1 0 0 1 17 11.28V6a1 1 0 0 0-1-1h-2"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>',
+            education: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2v-5"/></svg>',
+            supplies: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>',
+            other: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>'
+        };
+
+        // Load test companies from JSON
+        async function loadTestCompanies() {
+            try {
+                const response = await fetch('data/test_companies.json');
+                const data = await response.json();
+                testCompanies = data.testCompanies;
+                renderTestPresets();
+            } catch (error) {
+                console.error('Could not load test companies:', error);
+                document.getElementById('testPresets').style.display = 'none';
+            }
+        }
+
+        // Render test preset cards
+        function renderTestPresets() {
+            const grid = document.getElementById('testPresetsGrid');
+            if (!grid || testCompanies.length === 0) return;
+
+            grid.innerHTML = testCompanies.map(company => {
+                const primaryIndustry = company.suggestedIndustries[0] || 'other';
+                const icon = industryIcons[primaryIndustry] || industryIcons.other;
+                const industryLabel = industryNames[primaryIndustry] || 'Company';
+
+                return `
+                    <div class="test-preset-card" data-company-id="${company.id}">
+                        <div class="test-preset-icon">${icon}</div>
+                        <div class="test-preset-name">${company.name}</div>
+                        <div class="test-preset-meta">${company.location} · ${company.employeeCount} emp.</div>
+                        <div class="test-preset-badge">${industryLabel}</div>
+                    </div>
+                `;
+            }).join('');
+
+            grid.querySelectorAll('.test-preset-card').forEach(card => {
+                card.addEventListener('click', () => selectTestPreset(card.dataset.companyId));
+            });
+        }
+
+        // Select a test preset company
+        function selectTestPreset(companyId) {
+            const company = testCompanies.find(c => c.id === companyId);
+            if (!company) return;
+
+            document.querySelectorAll('.test-preset-card').forEach(card => {
+                card.classList.toggle('selected', card.dataset.companyId === companyId);
+            });
+
+            document.querySelectorAll('.search-result-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+
+            state.company = {
+                name: company.name,
+                uid: company.uid,
+                location: company.location,
+                type: company.legalForm,
+                isTestData: true,
+                testCompanyId: companyId
+            };
+
+            state.suggestedIndustries = company.suggestedIndustries || [];
+            state.suggestedRegions = company.suggestedRegions || [];
+            state.suggestedCpv = company.suggestedCpv || [];
+            state.suggestedNpk = company.suggestedNpk || [];
+            state.suggestedKeywords = company.suggestedKeywords || [];
+            state.suggestedExclusions = company.suggestedExclusions || [];
+
+            state.manualEntry = false;
+            document.getElementById('step1Next').disabled = false;
+        }
+
+        const mockCompanies = [];
+
+        // CPV Data with industry mappings and all divisions
+        const cpvIndustryMappings = {
+            construction: ['45', '44', '71'],
+            it: ['72', '48', '30', '32'],
+            health: ['85', '33'],
+            consulting: ['79', '73'],
+            environment: ['90', '09'],
+            transport: ['60', '63', '34'],
+            education: ['80', '22'],
+            supplies: ['30', '39', '18', '15'],
+            other: ['50', '98', '92'],
+        };
+
+        // All CPV divisions (complete list)
+        const cpvAllDivisions = [
+            { code: '03000000', name: 'Agricultural products', children: [
+                { code: '03100000', name: 'Agricultural products and horticulture' },
+                { code: '03200000', name: 'Cereals, potatoes, vegetables, fruits' },
+                { code: '03300000', name: 'Products from animal husbandry' },
+            ]},
+            { code: '09000000', name: 'Petroleum, fuels, electricity', children: [
+                { code: '09100000', name: 'Fuels' },
+                { code: '09200000', name: 'Petroleum, coal and oil products' },
+                { code: '09300000', name: 'Electricity, heating, solar and nuclear energy' },
+                { code: '09310000', name: 'Electricity' },
+                { code: '09330000', name: 'Solar energy' },
+            ]},
+            { code: '14000000', name: 'Mining, base metals', children: [
+                { code: '14200000', name: 'Sand and clay' },
+                { code: '14300000', name: 'Chemical minerals and fertilisers' },
+                { code: '14600000', name: 'Metal ores and alloys' },
+                { code: '14700000', name: 'Base metals' },
+            ]},
+            { code: '15000000', name: 'Food, beverages, tobacco', children: [
+                { code: '15100000', name: 'Animal products, meat' },
+                { code: '15200000', name: 'Fish and fish products' },
+                { code: '15300000', name: 'Fruit, vegetables and products' },
+                { code: '15500000', name: 'Dairy products' },
+                { code: '15800000', name: 'Miscellaneous food products' },
+                { code: '15900000', name: 'Beverages, tobacco' },
+            ]},
+            { code: '18000000', name: 'Clothing, footwear, luggage', children: [
+                { code: '18100000', name: 'Professional and work clothing' },
+                { code: '18200000', name: 'Outerwear' },
+                { code: '18400000', name: 'Specialist clothing and accessories' },
+                { code: '18800000', name: 'Footwear' },
+            ]},
+            { code: '22000000', name: 'Printed products', children: [
+                { code: '22100000', name: 'Printed books, brochures' },
+                { code: '22200000', name: 'Newspapers, magazines' },
+                { code: '22800000', name: 'Registers, business books' },
+            ]},
+            { code: '30000000', name: 'Office machinery, computers', children: [
+                { code: '30100000', name: 'Office machinery and supplies' },
+                { code: '30190000', name: 'Office supplies and accessories' },
+                { code: '30200000', name: 'Computer equipment and accessories' },
+                { code: '30210000', name: 'Data processing equipment (hardware)' },
+                { code: '30230000', name: 'Computers' },
+            ]},
+            { code: '32000000', name: 'Broadcasting and telecommunications equipment', children: [
+                { code: '32200000', name: 'Transmission apparatus for radio-telephony' },
+                { code: '32300000', name: 'Television receivers, video equipment' },
+                { code: '32400000', name: 'Networks' },
+                { code: '32500000', name: 'Telecommunications equipment and accessories' },
+            ]},
+            { code: '33000000', name: 'Medical equipment', children: [
+                { code: '33100000', name: 'Medical devices' },
+                { code: '33140000', name: 'Medical consumables' },
+                { code: '33150000', name: 'Radiological equipment' },
+                { code: '33160000', name: 'Operating theatre equipment' },
+                { code: '33190000', name: 'Miscellaneous medical devices' },
+            ]},
+            { code: '34000000', name: 'Transport equipment and accessories', children: [
+                { code: '34100000', name: 'Motor vehicles' },
+                { code: '34200000', name: 'Vehicle bodies, trailers' },
+                { code: '34300000', name: 'Parts and accessories for vehicles' },
+                { code: '34400000', name: 'Motorcycles, bicycles' },
+                { code: '34600000', name: 'Locomotives and rolling stock' },
+            ]},
+            { code: '35000000', name: 'Security and defence equipment', children: [
+                { code: '35100000', name: 'Emergency and security equipment' },
+                { code: '35200000', name: 'Police equipment' },
+                { code: '35300000', name: 'Weapons, ammunition and accessories' },
+            ]},
+            { code: '37000000', name: 'Musical instruments, sports, toys', children: [
+                { code: '37300000', name: 'Musical instruments and parts' },
+                { code: '37400000', name: 'Sports equipment and gear' },
+                { code: '37500000', name: 'Games and toys' },
+            ]},
+            { code: '38000000', name: 'Laboratory and optical equipment', children: [
+                { code: '38300000', name: 'Measuring instruments' },
+                { code: '38400000', name: 'Instruments for checking physical properties' },
+                { code: '38500000', name: 'Testing and control equipment' },
+            ]},
+            { code: '39000000', name: 'Furniture and furnishings', children: [
+                { code: '39100000', name: 'Furniture' },
+                { code: '39200000', name: 'Furnishing' },
+                { code: '39300000', name: 'Miscellaneous equipment' },
+                { code: '39500000', name: 'Textile articles' },
+                { code: '39700000', name: 'Household appliances' },
+            ]},
+            { code: '42000000', name: 'Industrial machinery', children: [
+                { code: '42100000', name: 'Power-generating machinery and engines' },
+                { code: '42400000', name: 'Lifting and handling equipment' },
+                { code: '42500000', name: 'Refrigeration and ventilation equipment' },
+                { code: '42900000', name: 'Miscellaneous general-purpose and special-purpose machinery' },
+            ]},
+            { code: '44000000', name: 'Construction structures and materials', children: [
+                { code: '44100000', name: 'Construction materials and related items' },
+                { code: '44200000', name: 'Construction products' },
+                { code: '44300000', name: 'Cable, wire and related products' },
+                { code: '44400000', name: 'Miscellaneous manufactured products' },
+                { code: '44500000', name: 'Tools, locks, keys' },
+            ]},
+            { code: '45000000', name: 'Construction works', children: [
+                { code: '45100000', name: 'Site preparation work' },
+                { code: '45200000', name: 'Complete or part construction works' },
+                { code: '45210000', name: 'Building construction works' },
+                { code: '45220000', name: 'Engineering and construction works' },
+                { code: '45230000', name: 'Construction work for pipelines' },
+                { code: '45300000', name: 'Building installation work' },
+                { code: '45310000', name: 'Electrical installation work' },
+                { code: '45320000', name: 'Insulation work' },
+                { code: '45330000', name: 'Plumbing and sanitary engineering works' },
+                { code: '45340000', name: 'Installation of fencing and railing' },
+                { code: '45400000', name: 'Building completion work' },
+                { code: '45410000', name: 'Plastering work' },
+                { code: '45420000', name: 'Joinery work' },
+                { code: '45430000', name: 'Floor and wall covering work' },
+                { code: '45440000', name: 'Painting and glazing work' },
+                { code: '45450000', name: 'Other building completion work' },
+                { code: '45500000', name: 'Hire of construction machinery' },
+            ]},
+            { code: '48000000', name: 'Software and information systems', children: [
+                { code: '48100000', name: 'Industry-specific software' },
+                { code: '48200000', name: 'Networking and internet software' },
+                { code: '48300000', name: 'Document creation software' },
+                { code: '48400000', name: 'Business transaction software' },
+                { code: '48600000', name: 'Database and operating software' },
+                { code: '48700000', name: 'Software utilities' },
+                { code: '48800000', name: 'Information systems and servers' },
+            ]},
+            { code: '50000000', name: 'Repair and maintenance services', children: [
+                { code: '50100000', name: 'Repair and maintenance of vehicles' },
+                { code: '50200000', name: 'Repair and maintenance of aircraft' },
+                { code: '50300000', name: 'Repair and maintenance of IT equipment' },
+                { code: '50400000', name: 'Repair and maintenance of medical devices' },
+                { code: '50500000', name: 'Repair and maintenance of pumps and valves' },
+                { code: '50700000', name: 'Repair and maintenance of building installations' },
+                { code: '50800000', name: 'Miscellaneous repair and maintenance services' },
+            ]},
+            { code: '51000000', name: 'Installation services (excl. software)', children: [
+                { code: '51100000', name: 'Installation of electrical and mechanical equipment' },
+                { code: '51200000', name: 'Installation of measuring instruments' },
+                { code: '51500000', name: 'Installation of machinery and equipment' },
+            ]},
+            { code: '55000000', name: 'Hotel and restaurant services', children: [
+                { code: '55100000', name: 'Hotel services' },
+                { code: '55300000', name: 'Restaurant and catering services' },
+                { code: '55500000', name: 'Canteen and catering services' },
+            ]},
+            { code: '60000000', name: 'Transport services', children: [
+                { code: '60100000', name: 'Road transport' },
+                { code: '60200000', name: 'Rail transport' },
+                { code: '60400000', name: 'Air transport' },
+                { code: '60600000', name: 'Water transport' },
+            ]},
+            { code: '63000000', name: 'Supporting transport services', children: [
+                { code: '63100000', name: 'Cargo handling and storage' },
+                { code: '63500000', name: 'Travel agency and similar services' },
+                { code: '63700000', name: 'Support services for road transport' },
+            ]},
+            { code: '64000000', name: 'Postal and telecommunications services', children: [
+                { code: '64100000', name: 'Postal and courier services' },
+                { code: '64200000', name: 'Telecommunications services' },
+            ]},
+            { code: '65000000', name: 'Utility services', children: [
+                { code: '65100000', name: 'Water distribution and related services' },
+                { code: '65200000', name: 'Gas distribution and related services' },
+                { code: '65300000', name: 'Electricity distribution and related services' },
+                { code: '65400000', name: 'Other energy sources and distribution' },
+            ]},
+            { code: '66000000', name: 'Financial and insurance services', children: [
+                { code: '66100000', name: 'Banking and investment services' },
+                { code: '66500000', name: 'Insurance and pension services' },
+            ]},
+            { code: '70000000', name: 'Real estate services', children: [
+                { code: '70100000', name: 'Real estate services for own properties' },
+                { code: '70200000', name: 'Real estate rental or leasing' },
+                { code: '70300000', name: 'Property agency and management services' },
+            ]},
+            { code: '71000000', name: 'Architectural, engineering and inspection services', children: [
+                { code: '71200000', name: 'Architectural services' },
+                { code: '71300000', name: 'Engineering services' },
+                { code: '71400000', name: 'Urban planning and landscape architecture' },
+                { code: '71500000', name: 'Construction-related services' },
+                { code: '71600000', name: 'Technical testing and analysis' },
+            ]},
+            { code: '72000000', name: 'IT services', children: [
+                { code: '72100000', name: 'Hardware consultancy' },
+                { code: '72200000', name: 'Software programming and consultancy' },
+                { code: '72300000', name: 'Data services' },
+                { code: '72400000', name: 'Internet services' },
+                { code: '72500000', name: 'Computer-related services' },
+                { code: '72600000', name: 'Computer support and consultancy' },
+                { code: '72700000', name: 'Computer network services' },
+                { code: '72800000', name: 'Computer auditing and testing' },
+                { code: '72900000', name: 'Computer back-up and conversion services' },
+            ]},
+            { code: '73000000', name: 'Research and development', children: [
+                { code: '73100000', name: 'Research and experimental development' },
+                { code: '73200000', name: 'Research and development consultancy' },
+                { code: '73300000', name: 'Design and execution of research' },
+            ]},
+            { code: '75000000', name: 'Public administration services', children: [
+                { code: '75100000', name: 'Administration services' },
+                { code: '75200000', name: 'Community services' },
+            ]},
+            { code: '76000000', name: 'Services related to the oil and gas industry', children: [
+                { code: '76100000', name: 'Services related to the gas industry' },
+                { code: '76300000', name: 'Drilling services' },
+                { code: '76400000', name: 'Equipment positioning services' },
+            ]},
+            { code: '77000000', name: 'Agricultural, forestry and related services', children: [
+                { code: '77100000', name: 'Agricultural services' },
+                { code: '77200000', name: 'Forestry services' },
+                { code: '77300000', name: 'Horticultural services' },
+                { code: '77400000', name: 'Zoological services' },
+            ]},
+            { code: '79000000', name: 'Business services', children: [
+                { code: '79100000', name: 'Legal services' },
+                { code: '79200000', name: 'Accounting, auditing and fiscal services' },
+                { code: '79300000', name: 'Market and economic research, surveys' },
+                { code: '79400000', name: 'Business and management consultancy' },
+                { code: '79500000', name: 'Office support services' },
+                { code: '79600000', name: 'Recruitment services' },
+                { code: '79700000', name: 'Investigation and security services' },
+                { code: '79800000', name: 'Printing and related services' },
+                { code: '79900000', name: 'Miscellaneous business and management services' },
+            ]},
+            { code: '80000000', name: 'Education and training services', children: [
+                { code: '80100000', name: 'Primary education services' },
+                { code: '80200000', name: 'Secondary education services' },
+                { code: '80300000', name: 'Higher education services' },
+                { code: '80400000', name: 'Adult education and other instruction' },
+                { code: '80500000', name: 'Training services' },
+                { code: '80600000', name: 'Training in defence and security' },
+            ]},
+            { code: '85000000', name: 'Health and social work services', children: [
+                { code: '85100000', name: 'Health services' },
+                { code: '85110000', name: 'Hospital services' },
+                { code: '85120000', name: 'Medical practice and related services' },
+                { code: '85140000', name: 'Miscellaneous health services' },
+                { code: '85300000', name: 'Social work services' },
+                { code: '85310000', name: 'Social welfare services' },
+                { code: '85320000', name: 'Social counselling services' },
+            ]},
+            { code: '90000000', name: 'Sewage, refuse, environment', children: [
+                { code: '90400000', name: 'Sewage disposal' },
+                { code: '90500000', name: 'Urban solid waste disposal services' },
+                { code: '90600000', name: 'Cleaning and sanitation in urban areas' },
+                { code: '90700000', name: 'Environmental services' },
+                { code: '90710000', name: 'Environmental management' },
+                { code: '90720000', name: 'Environmental protection' },
+            ]},
+            { code: '92000000', name: 'Recreation, culture and sporting services', children: [
+                { code: '92100000', name: 'Film and video services' },
+                { code: '92300000', name: 'Entertainment services' },
+                { code: '92500000', name: 'Library services' },
+                { code: '92600000', name: 'Sporting services' },
+            ]},
+            { code: '98000000', name: 'Other community services', children: [
+                { code: '98100000', name: 'Membership organisation services' },
+                { code: '98300000', name: 'Miscellaneous services' },
+                { code: '98390000', name: 'Other services' },
+            ]},
+        ];
+
+        // Legacy format for backward compatibility
+        const cpvData = {
+            construction: cpvAllDivisions.filter(d => ['45', '44', '71'].some(prefix => d.code.startsWith(prefix))),
+            it: cpvAllDivisions.filter(d => ['72', '48', '30', '32'].some(prefix => d.code.startsWith(prefix))),
+            health: cpvAllDivisions.filter(d => ['85', '33'].some(prefix => d.code.startsWith(prefix))),
+            consulting: cpvAllDivisions.filter(d => ['79', '73'].some(prefix => d.code.startsWith(prefix))),
+            environment: cpvAllDivisions.filter(d => ['90', '09'].some(prefix => d.code.startsWith(prefix))),
+            transport: cpvAllDivisions.filter(d => ['60', '63', '34'].some(prefix => d.code.startsWith(prefix))),
+            education: cpvAllDivisions.filter(d => ['80', '22'].some(prefix => d.code.startsWith(prefix))),
+            supplies: cpvAllDivisions.filter(d => ['30', '39', '18', '15'].some(prefix => d.code.startsWith(prefix))),
+            other: cpvAllDivisions.filter(d => ['50', '98', '92'].some(prefix => d.code.startsWith(prefix))),
+        };
+
+        // All NPK chapters (complete list)
+        const npkAllChapters = [
+            { code: '100', name: 'Site Setup', children: [
+                { code: '102', name: 'General site setup' },
+                { code: '104', name: 'Scaffolding' },
+                { code: '106', name: 'Temporary structures' },
+                { code: '108', name: 'Site safety' },
+            ]},
+            { code: '200', name: 'Structural Works', children: [
+                { code: '211', name: 'Demolition works' },
+                { code: '212', name: 'Excavation and earthworks' },
+                { code: '215', name: 'Masonry works' },
+                { code: '218', name: 'Rendering works' },
+                { code: '221', name: 'Concrete works' },
+                { code: '222', name: 'Reinforced concrete works' },
+                { code: '224', name: 'Reinforcement works' },
+                { code: '241', name: 'Precast concrete construction' },
+                { code: '261', name: 'Special foundation works' },
+            ]},
+            { code: '300', name: 'Windows, External Doors, Gates', children: [
+                { code: '311', name: 'Timber windows' },
+                { code: '321', name: 'Metal windows' },
+                { code: '331', name: 'PVC windows' },
+                { code: '341', name: 'Timber-metal windows' },
+                { code: '351', name: 'External doors' },
+                { code: '361', name: 'Industrial gates' },
+                { code: '371', name: 'Sun protection' },
+            ]},
+            { code: '400', name: 'Roof, Waterproofing, Insulation', children: [
+                { code: '411', name: 'Pitched roof works' },
+                { code: '421', name: 'Flat roof works' },
+                { code: '431', name: 'Green roof systems' },
+                { code: '441', name: 'Sheet metal works' },
+                { code: '451', name: 'Waterproofing' },
+                { code: '461', name: 'Thermal insulation' },
+            ]},
+            { code: '500', name: 'Facade Construction', children: [
+                { code: '511', name: 'External thermal insulation' },
+                { code: '521', name: 'Curtain wall facades' },
+                { code: '531', name: 'Metal facades' },
+                { code: '541', name: 'Glass facades' },
+                { code: '551', name: 'Timber facades' },
+            ]},
+            { code: '600', name: 'Interior Fit-out', children: [
+                { code: '611', name: 'Plastering works' },
+                { code: '621', name: 'Carpentry works' },
+                { code: '631', name: 'Interior doors' },
+                { code: '641', name: 'Floor coverings' },
+                { code: '651', name: 'Tiling works' },
+                { code: '661', name: 'Painting works' },
+                { code: '671', name: 'Wallpapering works' },
+                { code: '681', name: 'Drylining' },
+            ]},
+            { code: '700', name: 'Building Services', children: [
+                { code: '711', name: 'Sanitary installations' },
+                { code: '721', name: 'Heating systems' },
+                { code: '731', name: 'Heat pumps' },
+                { code: '741', name: 'Ventilation systems' },
+                { code: '751', name: 'Air conditioning systems' },
+                { code: '761', name: 'Electrical installations' },
+                { code: '771', name: 'Building automation' },
+                { code: '781', name: 'Lift installations' },
+            ]},
+            { code: '800', name: 'Landscaping', children: [
+                { code: '811', name: 'Gardening works' },
+                { code: '821', name: 'Paving works' },
+                { code: '831', name: 'Fencing' },
+                { code: '841', name: 'Drainage' },
+                { code: '851', name: 'Playground installations' },
+            ]},
+            { code: '900', name: 'Specialist Areas', children: [
+                { code: '911', name: 'Swimming pool technology' },
+                { code: '921', name: 'Kitchen technology' },
+                { code: '931', name: 'Laboratory technology' },
+                { code: '941', name: 'Fire protection' },
+                { code: '951', name: 'Security technology' },
+            ]},
+        ];
+
+        const npkData = npkAllChapters;
+
+        const industryNames = {
+            construction: 'Construction & Infrastructure',
+            it: 'IT & Technology',
+            health: 'Health & Social Care',
+            consulting: 'Consulting & Services',
+            environment: 'Environment & Energy',
+            transport: 'Transport & Logistics',
+            education: 'Education & Research',
+            supplies: 'Goods & Supplies',
+            other: 'Other Sectors',
+        };
+
+        // Swiss Cantons
+        const swissCantons = [
+            { code: 'AG', name: 'Aargau' },
+            { code: 'AI', name: 'Appenzell Innerrhoden' },
+            { code: 'AR', name: 'Appenzell Ausserrhoden' },
+            { code: 'BE', name: 'Bern' },
+            { code: 'BL', name: 'Basel-Landschaft' },
+            { code: 'BS', name: 'Basel-Stadt' },
+            { code: 'FR', name: 'Fribourg' },
+            { code: 'GE', name: 'Geneva' },
+            { code: 'GL', name: 'Glarus' },
+            { code: 'GR', name: 'Graubünden' },
+            { code: 'JU', name: 'Jura' },
+            { code: 'LU', name: 'Lucerne' },
+            { code: 'NE', name: 'Neuchâtel' },
+            { code: 'NW', name: 'Nidwalden' },
+            { code: 'OW', name: 'Obwalden' },
+            { code: 'SG', name: 'St. Gallen' },
+            { code: 'SH', name: 'Schaffhausen' },
+            { code: 'SO', name: 'Solothurn' },
+            { code: 'SZ', name: 'Schwyz' },
+            { code: 'TG', name: 'Thurgau' },
+            { code: 'TI', name: 'Ticino' },
+            { code: 'UR', name: 'Uri' },
+            { code: 'VD', name: 'Vaud' },
+            { code: 'VS', name: 'Valais' },
+            { code: 'ZG', name: 'Zug' },
+            { code: 'ZH', name: 'Zurich' },
+        ];
+
+        // =====================================================
+        // STATE
+        // =====================================================
+
+        const state = {
+            currentStep: 1,
+            company: null,
+            manualEntry: false,
+            selectedIndustries: [],
+            selectedRegions: [],
+            selectedCpv: [],
+            selectedNpk: [],
+            selectedKeywords: [],
+            selectedExclusions: [],
+            suggestedIndustries: [],
+            suggestedRegions: [],
+            suggestedCpv: [],
+            suggestedNpk: [],
+            suggestedKeywords: [],
+            suggestedExclusions: [],
+            showAllCpv: false,
+            showAllNpk: false,
+        };
+
+        // Keyword suggestions per industry
+        const keywordSuggestions = {
+            construction: ['BIM', 'Timber construction', 'Minergie', 'SNBS', 'General contractor', 'Renovation', 'Above-ground construction', 'Civil engineering', 'Steel construction'],
+            it: ['SAP', 'CRM', 'ERP', 'Cloud', 'Analytics', 'Microsoft 365', 'DevOps', 'Cybersecurity', 'AI', 'Machine Learning'],
+            health: ['eHealth', 'Home care', 'Nursing', 'Telemedicine', 'Medical technology', 'Laboratory', 'Pharma'],
+            consulting: ['Lean', 'Agile', 'Process optimisation', 'Digitalisation', 'Change Management', 'Strategy', 'Project management'],
+            environment: ['Photovoltaics', 'Wind energy', 'Recycling', 'Wastewater', 'Environmental impact', 'CO2 reduction'],
+            transport: ['Logistics', 'Freight forwarding', 'Last mile', 'Fleet management', 'Public transport', 'E-mobility'],
+            education: ['E-learning', 'LMS', 'Further education', 'Didactics', 'STEM', 'University'],
+            supplies: ['Office supplies', 'Furnishing', 'Procurement', 'Warehousing', 'Just-in-time'],
+            other: ['ISO certification', 'Quality management', 'Compliance', 'Sustainability'],
+        };
+
+        // =====================================================
+        // DOM ELEMENTS
+        // =====================================================
+
+        const elements = {
+            steps: document.querySelectorAll('.step'),
+            stepperDots: document.querySelectorAll('.stepper-dot'),
+            stepperLines: document.querySelectorAll('.stepper-line'),
+            companySearch: document.getElementById('companySearch'),
+            searchResults: document.getElementById('searchResults'),
+            manualEntryLink: document.getElementById('manualEntryLink'),
+            manualCompanyName: document.getElementById('manualCompanyName'),
+            manualLocation: document.getElementById('manualLocation'),
+            sizeOptions: document.querySelectorAll('.size-option'),
+            industryCards: document.querySelectorAll('.industry-card'),
+            tagInputContainer: document.getElementById('tagInputContainer'),
+            keywordsInput: document.getElementById('keywordsInput'),
+            exclusionInputContainer: document.getElementById('exclusionInputContainer'),
+            exclusionsInput: document.getElementById('exclusionsInput'),
+            cpvSection: document.getElementById('cpvSection'),
+            npkSection: document.getElementById('npkSection'),
+            cpvTree: document.getElementById('cpvTree'),
+            npkTree: document.getElementById('npkTree'),
+            cpvSearch: document.getElementById('cpvSearch'),
+            npkSearch: document.getElementById('npkSearch'),
+            cpvSectionCount: document.getElementById('cpvSectionCount'),
+            npkSectionCount: document.getElementById('npkSectionCount'),
+            cpvSelectionSummary: document.getElementById('cpvSelectionSummary'),
+            cpvSelectionItems: document.getElementById('cpvSelectionItems'),
+            npkSelectionSummary: document.getElementById('npkSelectionSummary'),
+            npkSelectionItems: document.getElementById('npkSelectionItems'),
+            cpvFilterRecommended: document.getElementById('cpvFilterRecommended'),
+            cpvFilterAll: document.getElementById('cpvFilterAll'),
+            npkFilterRecommended: document.getElementById('npkFilterRecommended'),
+            npkFilterAll: document.getElementById('npkFilterAll'),
+            themeToggle: document.getElementById('themeToggle'),
+            regionToggleAll: document.getElementById('regionToggleAll'),
+            cantonGrid: document.getElementById('cantonGrid'),
+        };
+
+        // =====================================================
+        // THEME TOGGLE
+        // =====================================================
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+        }
+
+        function updateThemeIcon(theme) {
+            const sunIcon = elements.themeToggle.querySelector('.sun-icon');
+            const moonIcon = elements.themeToggle.querySelector('.moon-icon');
+            if (theme === 'dark') {
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+            } else {
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
+            }
+        }
+
+        elements.themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+
+        // =====================================================
+        // STEP NAVIGATION
+        // =====================================================
+
+        function goToStep(step) {
+            state.currentStep = step;
+            elements.steps.forEach(s => s.classList.remove('active'));
+            const stepId = step === 1.5 ? 'step1b' : `step${step}`;
+            document.getElementById(stepId).classList.add('active');
+
+            elements.stepperDots.forEach((dot, index) => {
+                const dotStep = index + 1;
+                dot.classList.remove('completed', 'active', 'pending');
+                if (dotStep < Math.ceil(step)) {
+                    dot.classList.add('completed');
+                    dot.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+                } else if (dotStep === Math.ceil(step)) {
+                    dot.classList.add('active');
+                    dot.textContent = dotStep;
+                } else {
+                    dot.classList.add('pending');
+                    dot.textContent = dotStep;
+                }
+            });
+
+            elements.stepperLines.forEach((line, index) => {
+                line.classList.toggle('completed', index < Math.ceil(step) - 1);
+            });
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // =====================================================
+        // STEP 1: COMPANY SEARCH
+        // =====================================================
+
+        let searchTimeout;
+        elements.companySearch.addEventListener('input', (e) => {
+            const query = e.target.value.trim().toLowerCase();
+            clearTimeout(searchTimeout);
+
+            if (query.length < 2) {
+                elements.searchResults.classList.remove('visible');
+                return;
+            }
+
+            searchTimeout = setTimeout(() => {
+                const results = testCompanies.filter(c =>
+                    c.name.toLowerCase().includes(query) ||
+                    c.uid.toLowerCase().includes(query) ||
+                    c.location.toLowerCase().includes(query)
+                );
+
+                if (results.length > 0) {
+                    elements.searchResults.innerHTML = results.map(c => `
+                        <div class="search-result-item" data-company-id="${c.id}">
+                            <div class="result-radio"></div>
+                            <div class="result-info">
+                                <div class="result-name">${c.name}</div>
+                                <div class="result-meta">${c.uid} · ${c.location} · ${c.legalForm}</div>
+                            </div>
+                        </div>
+                    `).join('');
+                    elements.searchResults.classList.add('visible');
+
+                    elements.searchResults.querySelectorAll('.search-result-item').forEach(item => {
+                        item.addEventListener('click', () => {
+                            selectTestPreset(item.dataset.companyId);
+                            elements.searchResults.querySelectorAll('.search-result-item').forEach(i => {
+                                i.classList.toggle('selected', i.dataset.companyId === item.dataset.companyId);
+                            });
+                        });
+                    });
+                } else {
+                    elements.searchResults.innerHTML = '<div class="empty-state">No companies found. Zefix API integration coming soon.</div>';
+                    elements.searchResults.classList.add('visible');
+                }
+            }, 300);
+        });
+
+        elements.manualEntryLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            goToStep(1.5);
+        });
+
+        document.getElementById('step1Next').addEventListener('click', () => {
+            updateCompanyBar();
+            applyIndustrySuggestions();
+            applyRegionSuggestions();
+            goToStep(2);
+        });
+
+        function applyIndustrySuggestions() {
+            if (state.suggestedIndustries.length > 0) {
+                state.selectedIndustries = [...state.suggestedIndustries];
+                elements.industryCards.forEach(card => {
+                    const industry = card.dataset.industry;
+                    const isSelected = state.suggestedIndustries.includes(industry);
+                    card.classList.toggle('selected', isSelected);
+                });
+                document.getElementById('step2Next').disabled = false;
+            }
+        }
+
+        function applyRegionSuggestions() {
+            if (state.suggestedRegions.length > 0) {
+                if (state.suggestedRegions.includes('all')) {
+                    selectAllCantons();
+                } else {
+                    state.suggestedRegions.forEach(regionCode => {
+                        const btn = elements.cantonGrid.querySelector(`.canton-btn[data-canton="${regionCode}"]`);
+                        if (btn && !btn.classList.contains('selected')) {
+                            btn.classList.add('selected');
+                            if (!state.selectedRegions.includes(regionCode)) {
+                                state.selectedRegions.push(regionCode);
+                            }
+                        }
+                    });
+                    updateRegionToggleButton();
+                }
+            }
+        }
+
+        // =====================================================
+        // STEP 1B: MANUAL ENTRY
+        // =====================================================
+
+        elements.manualCompanyName.addEventListener('input', updateManualEntryButton);
+
+        elements.sizeOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                elements.sizeOptions.forEach(o => o.classList.remove('selected'));
+                option.classList.add('selected');
+                state.companySize = option.dataset.size;
+                updateManualEntryButton();
+            });
+        });
+
+        function updateManualEntryButton() {
+            const hasName = elements.manualCompanyName.value.trim().length > 0;
+            document.getElementById('step1bNext').disabled = !hasName;
+        }
+
+        document.getElementById('step1bBack').addEventListener('click', () => goToStep(1));
+
+        document.getElementById('step1bNext').addEventListener('click', () => {
+            state.company = {
+                name: elements.manualCompanyName.value.trim(),
+                uid: 'Manual',
+                location: elements.manualLocation.value.trim() || 'Switzerland',
+                type: 'Company',
+            };
+            state.manualEntry = true;
+            updateCompanyBar();
+            goToStep(2);
+        });
+
+        function updateCompanyBar() {
+            document.getElementById('selectedCompanyName').textContent = state.company.name;
+            document.getElementById('selectedCompanyUid').textContent = state.company.uid === 'Manual'
+                ? state.company.location
+                : `${state.company.uid} · ${state.company.location}`;
+        }
+
+        // =====================================================
+        // STEP 2: INDUSTRY SELECTION
+        // =====================================================
+
+        elements.industryCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const industry = card.dataset.industry;
+                card.classList.toggle('selected');
+
+                if (card.classList.contains('selected')) {
+                    state.selectedIndustries.push(industry);
+                } else {
+                    state.selectedIndustries = state.selectedIndustries.filter(i => i !== industry);
+                }
+
+                document.getElementById('step2Next').disabled = state.selectedIndustries.length === 0;
+            });
+        });
+
+        document.getElementById('step2Back').addEventListener('click', () => {
+            goToStep(state.manualEntry ? 1.5 : 1);
+        });
+
+        document.getElementById('step2Next').addEventListener('click', () => {
+            const hasConstruction = state.selectedIndustries.includes('construction');
+            elements.npkSection.style.display = hasConstruction ? 'block' : 'none';
+
+            buildCpvTree();
+            if (hasConstruction) {
+                buildNpkTree();
+            }
+
+            applyStep3Suggestions();
+            initializeSectionToggles();
+            goToStep(3);
+        });
+
+        // =====================================================
+        // REGION SELECTION
+        // =====================================================
+
+        function buildCantonGrid() {
+            elements.cantonGrid.innerHTML = swissCantons.map(canton => `
+                <button type="button" class="canton-btn" data-canton="${canton.code}">
+                    <span class="canton-code">${canton.code}</span>
+                    ${canton.name}
+                </button>
+            `).join('');
+
+            elements.cantonGrid.querySelectorAll('.canton-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const cantonCode = btn.dataset.canton;
+                    btn.classList.toggle('selected');
+
+                    if (btn.classList.contains('selected')) {
+                        if (!state.selectedRegions.includes(cantonCode)) {
+                            state.selectedRegions.push(cantonCode);
+                        }
+                    } else {
+                        state.selectedRegions = state.selectedRegions.filter(r => r !== cantonCode);
+                    }
+                    updateRegionToggleButton();
+                });
+            });
+        }
+
+        function selectAllCantons() {
+            state.selectedRegions = swissCantons.map(c => c.code);
+            elements.cantonGrid.querySelectorAll('.canton-btn').forEach(btn => {
+                btn.classList.add('selected');
+            });
+            updateRegionToggleButton();
+        }
+
+        function deselectAllCantons() {
+            state.selectedRegions = [];
+            elements.cantonGrid.querySelectorAll('.canton-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            updateRegionToggleButton();
+        }
+
+        function updateRegionToggleButton() {
+            const allSelected = state.selectedRegions.length === swissCantons.length;
+            elements.regionToggleAll.textContent = allSelected ? 'Deselect all' : 'Select all';
+        }
+
+        buildCantonGrid();
+
+        elements.regionToggleAll.addEventListener('click', () => {
+            const allSelected = state.selectedRegions.length === swissCantons.length;
+            if (allSelected) {
+                deselectAllCantons();
+            } else {
+                selectAllCantons();
+            }
+        });
+
+        // =====================================================
+        // KEYWORD TAG INPUT
+        // =====================================================
+
+        function renderKeywordTags() {
+            const existingTags = elements.tagInputContainer.querySelectorAll('.keyword-tag');
+            existingTags.forEach(tag => tag.remove());
+
+            state.selectedKeywords.forEach(kw => {
+                const tag = document.createElement('div');
+                tag.className = 'keyword-tag';
+                tag.innerHTML = `
+                    <span class="keyword-tag-text">${kw}</span>
+                    <button class="keyword-tag-remove" data-keyword="${kw}" aria-label="Remove">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                `;
+                elements.tagInputContainer.insertBefore(tag, elements.keywordsInput);
+            });
+
+            elements.tagInputContainer.querySelectorAll('.keyword-tag-remove').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    removeKeyword(btn.dataset.keyword);
+                });
+            });
+
+            updateStep3Button();
+        }
+
+        function removeKeyword(keyword) {
+            const index = state.selectedKeywords.indexOf(keyword);
+            if (index > -1) {
+                state.selectedKeywords.splice(index, 1);
+                renderKeywordTags();
+            }
+        }
+
+        function addKeywordFromInput() {
+            const value = elements.keywordsInput.value.trim();
+            if (value && !state.selectedKeywords.includes(value)) {
+                state.selectedKeywords.push(value);
+                elements.keywordsInput.value = '';
+                renderKeywordTags();
+            }
+        }
+
+        elements.keywordsInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addKeywordFromInput();
+            }
+        });
+
+        elements.tagInputContainer.addEventListener('click', () => {
+            elements.keywordsInput.focus();
+        });
+
+        // =====================================================
+        // EXCLUSIONS TAG INPUT
+        // =====================================================
+
+        function renderExclusionTags() {
+            const existingTags = elements.exclusionInputContainer.querySelectorAll('.keyword-tag');
+            existingTags.forEach(tag => tag.remove());
+
+            state.selectedExclusions.forEach(ex => {
+                const tag = document.createElement('div');
+                tag.className = 'keyword-tag';
+                tag.innerHTML = `
+                    <span class="keyword-tag-text">${ex}</span>
+                    <button class="keyword-tag-remove" data-exclusion="${ex}" aria-label="Remove">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                `;
+                elements.exclusionInputContainer.insertBefore(tag, elements.exclusionsInput);
+            });
+
+            elements.exclusionInputContainer.querySelectorAll('.keyword-tag-remove').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    removeExclusion(btn.dataset.exclusion);
+                });
+            });
+        }
+
+        function removeExclusion(exclusion) {
+            const index = state.selectedExclusions.indexOf(exclusion);
+            if (index > -1) {
+                state.selectedExclusions.splice(index, 1);
+                renderExclusionTags();
+            }
+        }
+
+        function addExclusionFromInput() {
+            const value = elements.exclusionsInput.value.trim();
+            if (value && !state.selectedExclusions.includes(value)) {
+                state.selectedExclusions.push(value);
+                elements.exclusionsInput.value = '';
+                renderExclusionTags();
+            }
+        }
+
+        elements.exclusionsInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addExclusionFromInput();
+            }
+        });
+
+        elements.exclusionInputContainer.addEventListener('click', () => {
+            elements.exclusionsInput.focus();
+        });
+
+        function applyStep3Suggestions() {
+            if (state.suggestedKeywords.length > 0) {
+                state.suggestedKeywords.forEach(kw => {
+                    if (!state.selectedKeywords.includes(kw)) {
+                        state.selectedKeywords.push(kw);
+                    }
+                });
+                renderKeywordTags();
+            }
+
+            if (state.suggestedExclusions.length > 0) {
+                state.suggestedExclusions.forEach(ex => {
+                    if (!state.selectedExclusions.includes(ex)) {
+                        state.selectedExclusions.push(ex);
+                    }
+                });
+                renderExclusionTags();
+            }
+
+            if (state.suggestedCpv.length > 0) {
+                state.suggestedCpv.forEach(suggestion => {
+                    const item = elements.cpvTree.querySelector(`.code-item[data-code="${suggestion.code}"]`);
+                    if (item) {
+                        item.classList.add('selected');
+                        state.selectedCpv.push({ code: suggestion.code, name: suggestion.name });
+                    }
+                });
+            }
+
+            if (state.suggestedNpk.length > 0 && state.selectedIndustries.includes('construction')) {
+                state.suggestedNpk.forEach(suggestion => {
+                    const item = elements.npkTree.querySelector(`.code-item[data-code="${suggestion.code}"]`);
+                    if (item) {
+                        item.classList.add('selected');
+                        state.selectedNpk.push({ code: suggestion.code, name: suggestion.name });
+                    }
+                });
+            }
+
+            updateSectionCounts();
+            updateCategoryCounts();
+            updateSelectionSummaries();
+            updateStep3Button();
+        }
+
+        function initializeSectionToggles() {
+            document.querySelectorAll('.code-section-header').forEach(header => {
+                header.addEventListener('click', () => {
+                    header.parentElement.classList.toggle('expanded');
+                });
+            });
+        }
+
+        function updateSectionCounts() {
+            elements.cpvSectionCount.textContent = state.selectedCpv.length || '';
+            elements.npkSectionCount.textContent = state.selectedNpk.length || '';
+        }
+
+        function updateCategoryCounts() {
+            const cpvCounts = {};
+            state.selectedCpv.forEach(item => {
+                const selectedItem = elements.cpvTree.querySelector(`.code-item[data-code="${item.code}"]`);
+                if (selectedItem) {
+                    const parent = selectedItem.dataset.parent;
+                    cpvCounts[parent] = (cpvCounts[parent] || 0) + 1;
+                }
+            });
+            elements.cpvTree.querySelectorAll('.code-category-count').forEach(el => {
+                const category = el.dataset.category;
+                const count = cpvCounts[category] || 0;
+                el.textContent = count;
+                el.classList.toggle('visible', count > 0);
+            });
+
+            const npkCounts = {};
+            state.selectedNpk.forEach(item => {
+                const selectedItem = elements.npkTree.querySelector(`.code-item[data-code="${item.code}"]`);
+                if (selectedItem) {
+                    const parent = selectedItem.dataset.parent;
+                    npkCounts[parent] = (npkCounts[parent] || 0) + 1;
+                }
+            });
+            elements.npkTree.querySelectorAll('.code-category-count').forEach(el => {
+                const category = el.dataset.category;
+                const count = npkCounts[category] || 0;
+                el.textContent = count;
+                el.classList.toggle('visible', count > 0);
+            });
+        }
+
+        function updateSelectionSummaries() {
+            const cpvCount = state.selectedCpv.length;
+            elements.cpvSelectionSummary.classList.toggle('visible', cpvCount > 0);
+
+            let cpvHtml = state.selectedCpv.map(c => `
+                <div class="selection-tag">
+                    <span class="selection-tag-label">${c.code} ${c.name.substring(0, 20)}${c.name.length > 20 ? '...' : ''}</span>
+                    <button onclick="removeSelection('cpv', '${c.code}')" aria-label="Remove">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            `).join('');
+            elements.cpvSelectionItems.innerHTML = cpvHtml;
+
+            const npkCount = state.selectedNpk.length;
+            elements.npkSelectionSummary.classList.toggle('visible', npkCount > 0);
+
+            let npkHtml = state.selectedNpk.map(c => `
+                <div class="selection-tag">
+                    <span class="selection-tag-label">${c.code} ${c.name.substring(0, 20)}${c.name.length > 20 ? '...' : ''}</span>
+                    <button onclick="removeSelection('npk', '${c.code}')" aria-label="Remove">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            `).join('');
+            elements.npkSelectionItems.innerHTML = npkHtml;
+        }
+
+        window.removeSelection = function(type, code) {
+            if (type === 'cpv') {
+                const index = state.selectedCpv.findIndex(c => c.code === code);
+                if (index > -1) state.selectedCpv.splice(index, 1);
+                const item = elements.cpvTree.querySelector(`.code-item[data-code="${code}"]`);
+                if (item) item.classList.remove('selected');
+            } else if (type === 'npk') {
+                const index = state.selectedNpk.findIndex(c => c.code === code);
+                if (index > -1) state.selectedNpk.splice(index, 1);
+                const item = elements.npkTree.querySelector(`.code-item[data-code="${code}"]`);
+                if (item) item.classList.remove('selected');
+            }
+            updateSectionCounts();
+            updateCategoryCounts();
+            updateSelectionSummaries();
+            updateStep3Button();
+        };
+
+        // =====================================================
+        // STEP 3: CPV/NPK SELECTION
+        // =====================================================
+
+        function resetCodeSelections() {
+            state.selectedCpv = [];
+            state.selectedNpk = [];
+            state.selectedKeywords = [];
+            updateSectionCounts();
+            updateCategoryCounts();
+            updateSelectionSummaries();
+        }
+
+        function buildCpvTree(preserveSelections = false) {
+            const previousSelections = preserveSelections ? [...state.selectedCpv] : [];
+            if (!preserveSelections) {
+                resetCodeSelections();
+            }
+
+            let html = '';
+            let divisions;
+
+            if (state.showAllCpv) {
+                divisions = cpvAllDivisions;
+            } else {
+                if (state.suggestedCpv.length > 0) {
+                    const suggestedPrefixes = new Set();
+                    state.suggestedCpv.forEach(cpv => {
+                        suggestedPrefixes.add(cpv.code.substring(0, 2));
+                    });
+                    divisions = cpvAllDivisions.filter(d =>
+                        Array.from(suggestedPrefixes).some(prefix => d.code.startsWith(prefix))
+                    );
+                } else {
+                    const relevantPrefixes = new Set();
+                    state.selectedIndustries.forEach(industry => {
+                        const prefixes = cpvIndustryMappings[industry] || [];
+                        prefixes.forEach(p => relevantPrefixes.add(p));
+                    });
+
+                    if (relevantPrefixes.size > 0) {
+                        divisions = cpvAllDivisions.filter(d =>
+                            Array.from(relevantPrefixes).some(prefix => d.code.startsWith(prefix))
+                        );
+                    } else {
+                        divisions = cpvAllDivisions;
+                    }
+                }
+            }
+
+            divisions.forEach(category => {
+                html += `
+                    <div class="code-category" data-category="${category.code}">
+                        <div class="code-category-header">
+                            <svg class="code-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                            <span class="code-category-name">${category.name}</span>
+                            <span class="code-category-count" data-category="${category.code}"></span>
+                            <span class="code-category-code">${category.code}</span>
+                        </div>
+                        <div class="code-items">
+                            ${category.children.map(item => `
+                                <div class="code-item" data-code="${item.code}" data-name="${item.name}" data-parent="${category.code}">
+                                    <div class="code-checkbox">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                        </svg>
+                                    </div>
+                                    <span class="code-item-name">${item.name}</span>
+                                    <span class="code-item-code">${item.code}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+
+            elements.cpvTree.innerHTML = html;
+            initializeCodeTree(elements.cpvTree, 'cpv');
+
+            if (preserveSelections && previousSelections.length > 0) {
+                previousSelections.forEach(sel => {
+                    const item = elements.cpvTree.querySelector(`.code-item[data-code="${sel.code}"]`);
+                    if (item) {
+                        item.classList.add('selected');
+                        if (!state.selectedCpv.find(c => c.code === sel.code)) {
+                            state.selectedCpv.push(sel);
+                        }
+                    }
+                });
+                updateSectionCounts();
+                updateCategoryCounts();
+                updateSelectionSummaries();
+            }
+        }
+
+        function buildNpkTree(preserveSelections = false) {
+            const previousSelections = preserveSelections ? [...state.selectedNpk] : [];
+
+            let chapters;
+
+            if (state.showAllNpk) {
+                chapters = npkAllChapters;
+            } else {
+                if (state.suggestedNpk.length > 0) {
+                    const suggestedChapterCodes = new Set();
+                    state.suggestedNpk.forEach(npk => {
+                        npkAllChapters.forEach(chapter => {
+                            if (chapter.children.some(child => child.code === npk.code)) {
+                                suggestedChapterCodes.add(chapter.code);
+                            }
+                        });
+                    });
+                    chapters = npkAllChapters.filter(ch => suggestedChapterCodes.has(ch.code));
+                } else {
+                    chapters = npkAllChapters;
+                }
+            }
+
+            let html = chapters.map(category => `
+                <div class="code-category" data-category="${category.code}">
+                    <div class="code-category-header">
+                        <svg class="code-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                        <span class="code-category-name">${category.name}</span>
+                        <span class="code-category-count" data-category="${category.code}"></span>
+                        <span class="code-category-code">${category.code}</span>
+                    </div>
+                    <div class="code-items">
+                        ${category.children.map(item => `
+                            <div class="code-item" data-code="${item.code}" data-name="${item.name}" data-parent="${category.code}">
+                                <div class="code-checkbox">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </div>
+                                <span class="code-item-name">${item.name}</span>
+                                <span class="code-item-code">${item.code}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+
+            elements.npkTree.innerHTML = html;
+            initializeCodeTree(elements.npkTree, 'npk');
+
+            if (preserveSelections && previousSelections.length > 0) {
+                previousSelections.forEach(sel => {
+                    const item = elements.npkTree.querySelector(`.code-item[data-code="${sel.code}"]`);
+                    if (item) {
+                        item.classList.add('selected');
+                        if (!state.selectedNpk.find(c => c.code === sel.code)) {
+                            state.selectedNpk.push(sel);
+                        }
+                    }
+                });
+                updateSectionCounts();
+                updateCategoryCounts();
+                updateSelectionSummaries();
+            }
+        }
+
+        function initializeCodeTree(tree, type) {
+            tree.querySelectorAll('.code-category-header').forEach(header => {
+                header.addEventListener('click', () => {
+                    header.parentElement.classList.toggle('expanded');
+                });
+            });
+
+            tree.querySelectorAll('.code-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const code = item.dataset.code;
+                    const name = item.dataset.name;
+                    item.classList.toggle('selected');
+
+                    const selectedArray = type === 'cpv' ? state.selectedCpv : state.selectedNpk;
+
+                    if (item.classList.contains('selected')) {
+                        selectedArray.push({ code, name });
+                    } else {
+                        const index = selectedArray.findIndex(c => c.code === code);
+                        if (index > -1) selectedArray.splice(index, 1);
+                    }
+
+                    updateSectionCounts();
+                    updateCategoryCounts();
+                    updateSelectionSummaries();
+                    updateStep3Button();
+                });
+            });
+        }
+
+        function updateStep3Button() {
+            const hasSelection = state.selectedKeywords.length > 0 || state.selectedCpv.length > 0 || state.selectedNpk.length > 0;
+            document.getElementById('step3Next').disabled = !hasSelection;
+        }
+
+        elements.cpvSearch.addEventListener('input', (e) => filterCodeTree(e.target.value, elements.cpvTree));
+        elements.npkSearch.addEventListener('input', (e) => filterCodeTree(e.target.value, elements.npkTree));
+
+        elements.cpvFilterRecommended.addEventListener('click', () => {
+            if (!state.showAllCpv) return;
+            state.showAllCpv = false;
+            elements.cpvFilterRecommended.classList.add('active');
+            elements.cpvFilterAll.classList.remove('active');
+            buildCpvTree(true);
+        });
+
+        elements.cpvFilterAll.addEventListener('click', () => {
+            if (state.showAllCpv) return;
+            state.showAllCpv = true;
+            elements.cpvFilterAll.classList.add('active');
+            elements.cpvFilterRecommended.classList.remove('active');
+            buildCpvTree(true);
+        });
+
+        elements.npkFilterRecommended.addEventListener('click', () => {
+            if (!state.showAllNpk) return;
+            state.showAllNpk = false;
+            elements.npkFilterRecommended.classList.add('active');
+            elements.npkFilterAll.classList.remove('active');
+            buildNpkTree(true);
+        });
+
+        elements.npkFilterAll.addEventListener('click', () => {
+            if (state.showAllNpk) return;
+            state.showAllNpk = true;
+            elements.npkFilterAll.classList.add('active');
+            elements.npkFilterRecommended.classList.remove('active');
+            buildNpkTree(true);
+        });
+
+        function filterCodeTree(query, tree) {
+            query = query.toLowerCase().trim();
+            tree.querySelectorAll('.code-category').forEach(category => {
+                let hasVisibleChildren = false;
+                category.querySelectorAll('.code-item').forEach(item => {
+                    const name = item.dataset.name.toLowerCase();
+                    const code = item.dataset.code.toLowerCase();
+                    const matches = !query || name.includes(query) || code.includes(query);
+                    item.style.display = matches ? 'flex' : 'none';
+                    if (matches) hasVisibleChildren = true;
+                });
+                category.style.display = hasVisibleChildren ? 'block' : 'none';
+                if (query && hasVisibleChildren) {
+                    category.classList.add('expanded');
+                }
+            });
+        }
+
+        document.getElementById('step3Back').addEventListener('click', () => goToStep(2));
+
+        document.getElementById('step3Next').addEventListener('click', () => {
+            updateSummary();
+            goToStep(4);
+        });
+
+        // =====================================================
+        // STEP 4: CONFIRMATION
+        // =====================================================
+
+        function updateSummary() {
+            document.getElementById('summaryCompanyName').textContent = state.company.name;
+            document.getElementById('summaryCompanyUid').textContent = state.company.uid === 'Manual'
+                ? state.company.location
+                : `${state.company.uid} · ${state.company.location}`;
+
+            document.getElementById('summaryIndustries').textContent =
+                state.selectedIndustries.map(i => industryNames[i]).join(', ');
+
+            const hasKeywords = state.selectedKeywords.length > 0;
+            document.getElementById('summaryKeywordsRow').style.display = hasKeywords ? 'flex' : 'none';
+            if (hasKeywords) {
+                document.getElementById('summaryKeywords').textContent = state.selectedKeywords.join(', ');
+            }
+
+            document.getElementById('summaryCpv').textContent =
+                state.selectedCpv.map(c => `${c.code} (${c.name})`).join(', ') || '-';
+
+            const hasConstruction = state.selectedIndustries.includes('construction');
+            document.getElementById('summaryNpkRow').style.display = hasConstruction ? 'flex' : 'none';
+            if (hasConstruction) {
+                document.getElementById('summaryNpk').textContent =
+                    state.selectedNpk.map(c => `${c.code} (${c.name})`).join(', ') || '-';
+            }
+        }
+
+        document.getElementById('editProfile').addEventListener('click', () => goToStep(1));
+
+        document.getElementById('goToDashboard').addEventListener('click', () => {
+            alert('Dashboard coming soon! This is a mockup version.');
+        });
+
+        // =====================================================
+        // INITIALIZATION
+        // =====================================================
+
+        initTheme();
+        loadTestCompanies();
+    </script>
+</body>
+</html>

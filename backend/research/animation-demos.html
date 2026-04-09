@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Orb Animation Options - Tender Scout</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <style>
+        /* ==========================================================================
+           Design Tokens (aligned with DESIGNGUIDE.md Section 12.3)
+           ========================================================================== */
+        :root {
+            --color-bg-base: #ffffff;
+            --color-bg-raised: #f8fafc;
+            --color-bg-muted: #f1f5f9;
+
+            --color-text-primary: #0f172a;
+            --color-text-secondary: #475569;
+            --color-text-muted: #64748b;
+
+            --color-accent: #2563eb;
+            --color-accent-hover: #1d4ed8;
+            --color-accent-subtle: #dbeafe;
+            --color-accent-glow: rgba(37, 99, 235, 0.15);
+            --color-accent-secondary: #8b5cf6;
+            --color-accent-tertiary: #06b6d4;
+
+            --color-border: #e2e8f0;
+            --color-border-strong: #cbd5e1;
+
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+
+            --duration-fast: 100ms;
+            --duration-normal: 200ms;
+            --duration-slow: 300ms;
+            --ease-out: cubic-bezier(0, 0, 0.2, 1);
+            --ease-in: cubic-bezier(0.4, 0, 1, 1);
+            --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+            --radius-md: 6px;
+            --radius-lg: 8px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+            background: var(--color-bg-muted);
+            color: var(--color-text-primary);
+            line-height: 1.6;
+        }
+
+        /* ── LAYOUT ── */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--space-8);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: var(--space-8);
+        }
+
+        h1 { font-size: 1.75rem; font-weight: 600; margin-bottom: var(--space-2); }
+
+        .subtitle {
+            color: var(--color-text-secondary);
+            font-size: 0.9375rem;
+            margin-bottom: var(--space-4);
+        }
+
+        /* ── SEARCH BAR ── */
+        .search-bar {
+            display: flex;
+            align-items: center;
+            max-width: 420px;
+            margin: 0 auto var(--space-6);
+            background: var(--color-bg-base);
+            border: 1px solid var(--color-border-strong);
+            border-radius: 99px;
+            padding: 0.4rem 0.75rem 0.4rem 1rem;
+            gap: 0.5rem;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        .search-bar:focus-within {
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 3px var(--color-accent-subtle);
+        }
+        .search-bar input {
+            border: none;
+            outline: none;
+            flex: 1;
+            font-size: 0.875rem;
+            font-family: inherit;
+            color: var(--color-text-primary);
+            background: transparent;
+        }
+        .search-bar svg { color: var(--color-text-muted); flex-shrink: 0; }
+
+        /* ── FILTER PILLS ── */
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: var(--space-6);
+        }
+        .filter-pill {
+            padding: 0.35rem 1rem;
+            border-radius: 99px;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1.5px solid var(--color-border);
+            background: var(--color-bg-base);
+            color: var(--color-text-secondary);
+            transition: all 0.15s;
+            user-select: none;
+        }
+        .filter-pill:hover { border-color: var(--color-accent); color: var(--color-accent); }
+        .filter-pill.is-active {
+            background: var(--color-accent);
+            border-color: var(--color-accent);
+            color: #fff;
+        }
+
+        /* ── COUNT BADGE ── */
+        .results-count {
+            text-align: center;
+            font-size: 0.8125rem;
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-6);
+            min-height: 1.2em;
+            transition: opacity 0.2s;
+        }
+
+        /* ── CONTEXT BANNER ── */
+        .context-banner {
+            background: var(--color-accent-subtle);
+            border: 1px solid var(--color-accent);
+            border-radius: var(--radius-lg);
+            padding: var(--space-4) var(--space-5);
+            margin-bottom: var(--space-8);
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-3);
+        }
+        .context-banner i { color: var(--color-accent); flex-shrink: 0; margin-top: 2px; }
+        .context-banner p { font-size: 0.875rem; color: var(--color-text-secondary); line-height: 1.5; }
+        .context-banner code {
+            background: rgba(37, 99, 235, 0.1);
+            padding: 0.125em 0.375em;
+            border-radius: 4px;
+            font-family: "JetBrains Mono", monospace;
+            font-size: 0.8125rem;
+        }
+
+        /* ── SECTION HEADERS ── */
+        .section-header {
+            margin: var(--space-8) 0 var(--space-6);
+            padding-bottom: var(--space-3);
+            border-bottom: 2px solid var(--color-border);
+        }
+        .section-header h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+        .section-header h2 i { color: var(--color-accent); }
+        .section-header p { color: var(--color-text-muted); font-size: 0.875rem; margin-top: var(--space-1); }
+
+        /* ── GRID ── */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: var(--space-6);
+        }
+
+        /* ── CARD ── */
+        .card {
+            background: var(--color-bg-base);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            border: 1.5px solid var(--color-border);
+            display: flex;
+            flex-direction: column;
+            transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+            cursor: pointer;
+            position: relative;
+        }
+        .card:hover {
+            border-color: var(--color-accent);
+            box-shadow: 0 6px 24px rgba(37,99,235,0.1);
+            transform: translateY(-2px);
+        }
+        .card.featured {
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 1px var(--color-accent-subtle);
+        }
+        .card.is-selected {
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 3px var(--color-accent-subtle), 0 6px 24px rgba(37,99,235,0.12);
+        }
+        .card.is-hidden { display: none; }
+
+        /* selected badge */
+        .card .selected-badge {
+            display: none;
+            position: absolute;
+            top: -10px;
+            right: 14px;
+            background: var(--color-accent);
+            color: #fff;
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            padding: 0.2rem 0.6rem;
+            border-radius: 99px;
+            text-transform: uppercase;
+        }
+        .card.is-selected .selected-badge { display: block; }
+
+        .card h3 { text-align: center; margin-bottom: var(--space-2); font-size: 1rem; font-weight: 600; }
+        .card > p { text-align: center; color: var(--color-text-muted); font-size: 0.8125rem; margin-bottom: var(--space-5); }
+
+        .demo-area {
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--color-bg-muted);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* paused state */
+        .card.is-paused .demo-area * { animation-play-state: paused !important; }
+        .card.is-paused .demo-area::after {
+            content: '⏸ Paused';
+            position: absolute;
+            top: 8px; right: 10px;
+            font-size: 0.625rem;
+            font-weight: 600;
+            color: var(--color-text-muted);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .label {
+            text-align: center;
+            font-size: 0.6875rem;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 500;
+            margin-bottom: var(--space-4);
+        }
+
+        .design-intent {
+            background: linear-gradient(135deg, var(--color-accent-subtle), #f5f3ff);
+            border-radius: var(--radius-md);
+            padding: var(--space-4);
+            font-size: 0.8125rem;
+            color: var(--color-text-secondary);
+            line-height: 1.5;
+            margin-top: auto;
+            border-left: 3px solid var(--color-accent);
+        }
+        .design-intent strong { color: var(--color-accent); font-weight: 600; }
+
+        /* ── CARD FOOTER ACTIONS ── */
+        .card-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: var(--space-4);
+        }
+        .btn-action {
+            flex: 1;
+            padding: 0.45rem 0.75rem;
+            border-radius: var(--radius-md);
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1.5px solid var(--color-border);
+            background: var(--color-bg-base);
+            color: var(--color-text-secondary);
+            font-family: inherit;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.35rem;
+        }
+        .btn-action:hover { border-color: var(--color-accent); color: var(--color-accent); background: var(--color-accent-subtle); }
+        .btn-action.btn-select { background: var(--color-accent); border-color: var(--color-accent); color: #fff; }
+        .btn-action.btn-select:hover { background: var(--color-accent-hover); border-color: var(--color-accent-hover); }
+        .btn-action.btn-deselect { background: #fee2e2; border-color: #fca5a5; color: #dc2626; }
+        .btn-action.btn-deselect:hover { background: #fecaca; }
+
+        /* ── SPEED CONTROL ── */
+        .speed-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+        }
+        .speed-row input[type=range] {
+            flex: 1;
+            accent-color: var(--color-accent);
+            cursor: pointer;
+            height: 4px;
+        }
+        .speed-value { width: 2.5rem; text-align: right; font-weight: 500; color: var(--color-text-secondary); }
+
+        /* ── COMPARE BAR ── */
+        .compare-bar {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: var(--color-bg-base);
+            border-top: 2px solid var(--color-border);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 100;
+            transform: translateY(100%);
+            transition: transform 0.3s var(--ease-out);
+            box-shadow: 0 -4px 24px rgba(0,0,0,0.08);
+        }
+        .compare-bar.is-visible { transform: translateY(0); }
+        .compare-bar .compare-label {
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            white-space: nowrap;
+        }
+        .compare-chips {
+            display: flex;
+            gap: 0.5rem;
+            flex: 1;
+            flex-wrap: wrap;
+        }
+        .compare-chip {
+            background: var(--color-accent-subtle);
+            border: 1px solid var(--color-accent);
+            color: var(--color-accent);
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 99px;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .compare-chip:hover { background: #bfdbfe; }
+        .compare-chip .remove { font-size: 0.9rem; line-height: 1; opacity: 0.6; }
+        .btn-compare-action {
+            padding: 0.5rem 1.25rem;
+            border-radius: var(--radius-md);
+            font-size: 0.8125rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
+            transition: all 0.15s;
+        }
+        .btn-open-modal { background: var(--color-accent); color: #fff; }
+        .btn-open-modal:hover { background: var(--color-accent-hover); }
+        .btn-clear-compare { background: var(--color-bg-muted); color: var(--color-text-secondary); border: 1.5px solid var(--color-border); }
+        .btn-clear-compare:hover { border-color: #fca5a5; color: #dc2626; }
+
+        /* ── COMPARE MODAL ── */
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15,23,42,0.5);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .modal-backdrop.is-open { display: flex; }
+        .modal {
+            background: var(--color-bg-base);
+            border-radius: 12px;
+            max-width: 960px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+        }
+        .modal-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            background: var(--color-bg-base);
+            z-index: 1;
+        }
+        .modal-header h2 { font-size: 1.1rem; font-weight: 600; }
+        .modal-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--color-text-muted);
+            padding: 0.25rem;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.15s;
+            font-family: inherit;
+        }
+        .modal-close:hover { color: var(--color-text-primary); }
+        .modal-body { padding: 1.5rem; }
+        .compare-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        .compare-item {
+            background: var(--color-bg-muted);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            border: 1.5px solid var(--color-border);
+        }
+        .compare-item .compare-demo {
+            height: 100px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--color-bg-base);
+            border-radius: var(--radius-md);
+        }
+        .compare-item h4 { font-size: 0.875rem; font-weight: 600; text-align: center; }
+        .compare-item .label { margin-bottom: 0; }
+
+        /* ── TOAST ── */
+        .toast-container {
+            position: fixed;
+            bottom: 5rem;
+            right: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 300;
+            pointer-events: none;
+        }
+        .toast {
+            background: var(--color-text-primary);
+            color: #fff;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 0.25s, transform 0.25s;
+            pointer-events: none;
+        }
+        .toast.is-visible { opacity: 1; transform: translateY(0); }
+
+        /* ── REDUCED MOTION ── */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* ════════════════════════════════════════════════════
+           ANIMATIONS (unchanged from original)
+           ════════════════════════════════════════════════════ */
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: 0.8; } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+        /* 1 – Scout Bot */
+        .scout-bot { width: 80px; height: 100px; position: relative; }
+        .scout-bot .head { width: 50px; height: 40px; background: linear-gradient(135deg, var(--color-accent), var(--color-accent-hover)); border-radius: 12px 12px 8px 8px; position: absolute; top: 20px; left: 50%; transform: translateX(-50%); box-shadow: 0 4px 12px var(--color-accent-glow); }
+        .scout-bot .eye { width: 10px; height: 10px; background: white; border-radius: 50%; position: absolute; top: 12px; animation: blink 3s ease-in-out infinite; }
+        .scout-bot .eye-left { left: 10px; }
+        .scout-bot .eye-right { right: 10px; }
+        .scout-bot .eye::after { content: ''; width: 4px; height: 4px; background: var(--color-text-primary); border-radius: 50%; position: absolute; top: 3px; left: 3px; }
+        .scout-bot .antenna { width: 3px; height: 20px; background: var(--color-accent-secondary); position: absolute; top: 0; left: 50%; transform: translateX(-50%); border-radius: 2px; }
+        .scout-bot .antenna::after { content: ''; width: 10px; height: 10px; background: var(--color-accent-tertiary); border-radius: 50%; position: absolute; top: -6px; left: 50%; transform: translateX(-50%); animation: antenna-pulse 1.5s ease-in-out infinite; box-shadow: 0 0 12px var(--color-accent-tertiary); }
+        .scout-bot .body { width: 40px; height: 30px; background: linear-gradient(135deg, #e2e8f0, #cbd5e1); border-radius: 6px; position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); border: 2px solid var(--color-accent); }
+        .scout-bot .scan-wave { position: absolute; top: 5px; left: 50%; width: 100px; height: 100px; transform: translateX(-50%); pointer-events: none; }
+        .scout-bot .scan-wave::before, .scout-bot .scan-wave::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; border: 2px solid var(--color-accent-tertiary); border-radius: 50%; opacity: 0; animation: scan-expand 2s ease-out infinite; }
+        .scout-bot .scan-wave::after { animation-delay: 1s; }
+        @keyframes blink { 0%, 90%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.1); } }
+        @keyframes antenna-pulse { 0%, 100% { transform: translateX(-50%) scale(1); box-shadow: 0 0 8px var(--color-accent-tertiary); } 50% { transform: translateX(-50%) scale(1.3); box-shadow: 0 0 20px var(--color-accent-tertiary); } }
+        @keyframes scan-expand { 0% { transform: scale(0.3); opacity: 0.8; } 100% { transform: scale(1.5); opacity: 0; } }
+
+        /* 2 – Binoculars */
+        .binoculars { width: 100px; height: 80px; position: relative; }
+        .binoculars .barrel { width: 35px; height: 50px; background: linear-gradient(135deg, #334155, #1e293b); border-radius: 20px 20px 8px 8px; position: absolute; top: 15px; }
+        .binoculars .barrel-left { left: 8px; }
+        .binoculars .barrel-right { right: 8px; }
+        .binoculars .lens { width: 30px; height: 30px; background: radial-gradient(circle at 30% 30%, var(--color-accent-subtle), var(--color-accent)); border-radius: 50%; position: absolute; top: 0; left: 50%; transform: translateX(-50%); border: 3px solid #1e293b; overflow: hidden; }
+        .binoculars .barrel-left .lens::after, .binoculars .barrel-right .lens::after { content: ''; position: absolute; width: 150%; height: 8px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent); top: 50%; left: -25%; transform: translateY(-50%) rotate(-45deg); animation: lens-sweep 2s ease-in-out infinite; }
+        .binoculars .barrel-right .lens::after { animation-delay: 0.3s; }
+        .binoculars .bridge { width: 20px; height: 10px; background: #334155; position: absolute; top: 35px; left: 50%; transform: translateX(-50%); border-radius: 4px; }
+        .binoculars .focus-ring { width: 12px; height: 8px; background: var(--color-accent); position: absolute; top: 30px; left: 50%; transform: translateX(-50%); border-radius: 2px; animation: focus-adjust 3s ease-in-out infinite; }
+        @keyframes lens-sweep { 0%, 100% { transform: translateY(-50%) rotate(-45deg) translateX(-100%); } 50% { transform: translateY(-50%) rotate(-45deg) translateX(100%); } }
+        @keyframes focus-adjust { 0%, 100% { transform: translateX(-50%) scaleX(1); } 50% { transform: translateX(-50%) scaleX(1.3); } }
+
+        /* 3 – Compass */
+        .compass { width: 80px; height: 80px; position: relative; }
+        .compass .ring { width: 100%; height: 100%; border: 3px solid var(--color-accent); border-radius: 50%; position: absolute; background: var(--color-bg-base); box-shadow: inset 0 2px 8px rgba(0,0,0,0.1), 0 4px 12px var(--color-accent-glow); }
+        .compass .directions { position: absolute; width: 100%; height: 100%; font-size: 10px; font-weight: 600; color: var(--color-text-muted); }
+        .compass .dir { position: absolute; left: 50%; transform: translateX(-50%); }
+        .compass .dir-n { top: 6px; color: var(--color-accent); font-weight: 700; }
+        .compass .dir-s { bottom: 6px; }
+        .compass .dir-e { top: 50%; right: 6px; transform: translateY(-50%); left: auto; }
+        .compass .dir-w { top: 50%; left: 6px; transform: translateY(-50%); }
+        .compass .needle { position: absolute; width: 6px; height: 50px; top: 50%; left: 50%; transform: translate(-50%, -50%); animation: compass-seek 4s ease-in-out infinite; }
+        .compass .needle::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 0; border-left: 3px solid transparent; border-right: 3px solid transparent; border-bottom: 22px solid #dc2626; }
+        .compass .needle::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 0; border-left: 3px solid transparent; border-right: 3px solid transparent; border-top: 22px solid #cbd5e1; }
+        .compass .center-dot { position: absolute; width: 10px; height: 10px; background: var(--color-accent); border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 8px var(--color-accent); z-index: 2; }
+        @keyframes compass-seek { 0%, 100% { transform: translate(-50%, -50%) rotate(-30deg); } 25% { transform: translate(-50%, -50%) rotate(15deg); } 50% { transform: translate(-50%, -50%) rotate(-10deg); } 75% { transform: translate(-50%, -50%) rotate(5deg); } }
+
+        /* 4 – Radar */
+        .radar { width: 90px; height: 90px; border-radius: 50%; background: radial-gradient(circle, var(--color-bg-raised) 0%, var(--color-bg-muted) 100%); border: 3px solid var(--color-accent); position: relative; overflow: hidden; box-shadow: 0 4px 20px var(--color-accent-glow); }
+        .radar .grid-line { position: absolute; border: 1px solid var(--color-border); border-radius: 50%; }
+        .radar .grid-1 { width: 30%; height: 30%; top: 35%; left: 35%; }
+        .radar .grid-2 { width: 60%; height: 60%; top: 20%; left: 20%; }
+        .radar .crosshair-h, .radar .crosshair-v { position: absolute; background: var(--color-border); }
+        .radar .crosshair-h { width: 100%; height: 1px; top: 50%; }
+        .radar .crosshair-v { width: 1px; height: 100%; left: 50%; }
+        .radar .sweep { position: absolute; top: 50%; left: 50%; width: 50%; height: 50%; background: conic-gradient(from 0deg, transparent 0deg, var(--color-accent) 20deg, transparent 40deg); transform-origin: 0 0; animation: spin 2s linear infinite; }
+        .radar .blip { position: absolute; width: 6px; height: 6px; background: var(--color-accent-tertiary); border-radius: 50%; animation: blip-fade 2s ease-out infinite; box-shadow: 0 0 8px var(--color-accent-tertiary); }
+        .radar .blip-1 { top: 25%; left: 60%; animation-delay: 0.2s; }
+        .radar .blip-2 { top: 40%; left: 75%; animation-delay: 0.8s; }
+        .radar .blip-3 { top: 65%; left: 55%; animation-delay: 1.4s; }
+        .radar .center { position: absolute; width: 8px; height: 8px; background: var(--color-accent); border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 10px var(--color-accent); }
+        @keyframes blip-fade { 0%, 20% { opacity: 0; transform: scale(0); } 30% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.5); } }
+
+        /* 5 – Document Scanner */
+        .doc-scanner { width: 70px; height: 90px; position: relative; }
+        .doc-scanner .document { width: 100%; height: 100%; background: var(--color-bg-base); border: 2px solid var(--color-border); border-radius: 4px; position: relative; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .doc-scanner .doc-line { position: absolute; left: 10%; right: 10%; height: 3px; background: var(--color-border); border-radius: 2px; }
+        .doc-scanner .doc-line:nth-child(1) { top: 15%; width: 60%; }
+        .doc-scanner .doc-line:nth-child(2) { top: 28%; }
+        .doc-scanner .doc-line:nth-child(3) { top: 41%; width: 70%; }
+        .doc-scanner .doc-line:nth-child(4) { top: 54%; width: 50%; }
+        .doc-scanner .doc-line:nth-child(5) { top: 67%; }
+        .doc-scanner .scan-line { position: absolute; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, transparent, var(--color-accent), transparent); box-shadow: 0 0 12px var(--color-accent); animation: doc-scan 2s ease-in-out infinite; }
+        .doc-scanner .highlight { position: absolute; left: 10%; height: 8px; background: var(--color-accent-subtle); border-radius: 2px; opacity: 0; animation: highlight-appear 2s ease-in-out infinite; }
+        .doc-scanner .highlight-1 { top: 26%; width: 40%; animation-delay: 0.3s; }
+        .doc-scanner .highlight-2 { top: 52%; width: 30%; animation-delay: 0.8s; }
+        @keyframes doc-scan { 0%, 100% { top: 5%; } 50% { top: 85%; } }
+        @keyframes highlight-appear { 0%, 30%, 100% { opacity: 0; } 40%, 80% { opacity: 1; } }
+
+        /* 6 – Magnifier */
+        .magnifier { width: 80px; height: 80px; position: relative; animation: magnifier-move 3s ease-in-out infinite; }
+        .magnifier .glass { width: 50px; height: 50px; border: 4px solid var(--color-accent); border-radius: 50%; position: absolute; top: 0; left: 0; background: rgba(37, 99, 235, 0.05); box-shadow: 0 4px 12px var(--color-accent-glow); }
+        .magnifier .glass::before { content: ''; position: absolute; width: 100%; height: 100%; border-radius: 50%; background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), transparent 50%); }
+        .magnifier .handle { width: 8px; height: 30px; background: linear-gradient(135deg, #334155, #1e293b); position: absolute; bottom: 0; right: 5px; transform: rotate(-45deg); border-radius: 4px; }
+        .magnifier .search-target { position: absolute; width: 8px; height: 8px; background: var(--color-accent-tertiary); border-radius: 50%; top: 18px; left: 18px; animation: target-pulse 1s ease-in-out infinite; box-shadow: 0 0 8px var(--color-accent-tertiary); }
+        @keyframes magnifier-move { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 25% { transform: translate(5px, -5px) rotate(-5deg); } 50% { transform: translate(0, 5px) rotate(5deg); } 75% { transform: translate(-5px, 0) rotate(-3deg); } }
+        @keyframes target-pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0.6; } }
+
+        /* 7 – Satellite */
+        .satellite { width: 100px; height: 80px; position: relative; }
+        .satellite .sat-body { width: 24px; height: 16px; background: linear-gradient(135deg, #e2e8f0, #94a3b8); position: absolute; top: 20px; left: 50%; transform: translateX(-50%); border-radius: 3px; animation: sat-orbit 4s ease-in-out infinite; }
+        .satellite .panel { width: 22px; height: 8px; background: linear-gradient(135deg, var(--color-accent), var(--color-accent-hover)); position: absolute; top: 4px; }
+        .satellite .panel-left { left: -24px; border-radius: 2px; }
+        .satellite .panel-right { right: -24px; border-radius: 2px; }
+        .satellite .dish { width: 10px; height: 10px; border: 2px solid #64748b; border-radius: 50%; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); border-bottom-color: transparent; }
+        .satellite .earth { width: 60px; height: 60px; background: radial-gradient(circle at 30% 30%, var(--color-accent-subtle), var(--color-accent)); border-radius: 50%; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); opacity: 0.3; }
+        .satellite .scan-beam { position: absolute; top: 40px; left: 50%; width: 40px; height: 60px; background: linear-gradient(180deg, var(--color-accent-tertiary) 0%, transparent 100%); clip-path: polygon(40% 0%, 60% 0%, 100% 100%, 0% 100%); transform: translateX(-50%); opacity: 0.4; animation: beam-sweep 3s ease-in-out infinite; }
+        @keyframes sat-orbit { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-8px); } }
+        @keyframes beam-sweep { 0%, 100% { transform: translateX(-50%) skewX(-15deg); } 50% { transform: translateX(-50%) skewX(15deg); } }
+
+        /* 8 – Data Mining */
+        .data-mining { width: 100px; height: 80px; position: relative; display: flex; align-items: flex-end; justify-content: center; gap: 6px; }
+        .data-mining .data-bar { width: 12px; background: linear-gradient(to top, var(--color-accent), var(--color-accent-secondary)); border-radius: 3px 3px 0 0; animation: data-grow 2s ease-in-out infinite; }
+        .data-mining .data-bar:nth-child(1) { animation-delay: 0s; }
+        .data-mining .data-bar:nth-child(2) { animation-delay: 0.15s; }
+        .data-mining .data-bar:nth-child(3) { animation-delay: 0.3s; }
+        .data-mining .data-bar:nth-child(4) { animation-delay: 0.45s; }
+        .data-mining .data-bar:nth-child(5) { animation-delay: 0.6s; }
+        .data-mining .sparkle { position: absolute; width: 4px; height: 4px; background: var(--color-accent-tertiary); border-radius: 50%; animation: sparkle-rise 1.5s ease-out infinite; }
+        .data-mining .sparkle-1 { left: 20%; animation-delay: 0.2s; }
+        .data-mining .sparkle-2 { left: 50%; animation-delay: 0.6s; }
+        .data-mining .sparkle-3 { right: 20%; animation-delay: 1s; }
+        @keyframes data-grow { 0%, 100% { height: 20px; } 50% { height: 60px; } }
+        @keyframes sparkle-rise { 0% { bottom: 10px; opacity: 0; } 50% { opacity: 1; } 100% { bottom: 80px; opacity: 0; } }
+
+        /* 9 – Telescope */
+        .telescope { width: 100px; height: 60px; position: relative; }
+        .telescope .tube { width: 70px; height: 20px; background: linear-gradient(180deg, #475569, #334155); position: absolute; left: 15px; top: 20px; border-radius: 4px 15px 15px 4px; transform: rotate(-15deg); }
+        .telescope .lens { width: 24px; height: 24px; background: radial-gradient(circle at 30% 30%, var(--color-accent-subtle), var(--color-accent)); border-radius: 50%; position: absolute; right: -8px; top: -2px; border: 3px solid #1e293b; }
+        .telescope .lens-flare { position: absolute; width: 8px; height: 8px; background: rgba(255,255,255,0.8); border-radius: 50%; top: 4px; right: 4px; animation: flare-pulse 2s ease-in-out infinite; }
+        .telescope .tripod { position: absolute; bottom: 0; left: 35px; }
+        .telescope .tripod-leg { width: 3px; height: 25px; background: #64748b; position: absolute; bottom: 0; transform-origin: top center; }
+        .telescope .tripod-leg:nth-child(1) { transform: rotate(-25deg); left: 0; }
+        .telescope .tripod-leg:nth-child(2) { transform: rotate(0deg); left: 15px; }
+        .telescope .tripod-leg:nth-child(3) { transform: rotate(25deg); left: 30px; }
+        .telescope .star { position: absolute; background: var(--color-accent-tertiary); border-radius: 50%; animation: star-twinkle 1.5s ease-in-out infinite; }
+        .telescope .star-1 { width: 4px; height: 4px; top: 0; right: 10px; animation-delay: 0s; }
+        .telescope .star-2 { width: 3px; height: 3px; top: 8px; right: 0; animation-delay: 0.5s; }
+        .telescope .star-3 { width: 5px; height: 5px; top: 5px; right: 25px; animation-delay: 1s; }
+        @keyframes flare-pulse { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
+        @keyframes star-twinkle { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1); } }
+
+        /* 10 – Processing Rings */
+        .processing-rings { width: 80px; height: 80px; position: relative; }
+        .processing-rings .ring { position: absolute; border-radius: 50%; border: 2px solid transparent; }
+        .processing-rings .ring-1 { width: 100%; height: 100%; border-top-color: var(--color-accent); border-right-color: var(--color-accent); animation: spin 1.5s linear infinite; }
+        .processing-rings .ring-2 { width: 70%; height: 70%; top: 15%; left: 15%; border-top-color: var(--color-accent-secondary); border-left-color: var(--color-accent-secondary); animation: spin 1s linear infinite reverse; }
+        .processing-rings .ring-3 { width: 40%; height: 40%; top: 30%; left: 30%; border-bottom-color: var(--color-accent-tertiary); border-right-color: var(--color-accent-tertiary); animation: spin 0.75s linear infinite; }
+        .processing-rings .core { position: absolute; width: 16%; height: 16%; top: 42%; left: 42%; background: var(--color-accent); border-radius: 50%; animation: pulse 1s var(--ease-in-out) infinite; }
+
+        /* 11 – Typing Dots */
+        .typing-dots { display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .typing-dots .dot { width: 14px; height: 14px; border-radius: 50%; background: var(--color-accent); animation: typing-bounce 1.4s var(--ease-in-out) infinite; }
+        .typing-dots .dot:nth-child(1) { animation-delay: 0s; }
+        .typing-dots .dot:nth-child(2) { animation-delay: 0.2s; background: var(--color-accent-secondary); }
+        .typing-dots .dot:nth-child(3) { animation-delay: 0.4s; background: var(--color-accent-tertiary); }
+        @keyframes typing-bounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-18px); } }
+
+        /* 12 – Smart Bot */
+        .smart-bot { width: 70px; height: 80px; position: relative; }
+        .smart-bot .face { width: 60px; height: 50px; background: linear-gradient(135deg, var(--color-bg-base), var(--color-bg-raised)); border: 3px solid var(--color-accent); border-radius: 20px 20px 25px 25px; position: absolute; top: 15px; left: 50%; transform: translateX(-50%); box-shadow: 0 4px 12px var(--color-accent-glow); }
+        .smart-bot .eye-container { position: absolute; top: 15px; width: 100%; display: flex; justify-content: center; gap: 12px; }
+        .smart-bot .eye { width: 12px; height: 12px; background: var(--color-accent); border-radius: 50%; animation: bot-look 4s ease-in-out infinite; }
+        .smart-bot .mouth { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); width: 20px; height: 8px; border: 2px solid var(--color-accent); border-top: none; border-radius: 0 0 10px 10px; }
+        .smart-bot .ear { position: absolute; width: 8px; height: 20px; background: var(--color-accent); border-radius: 4px; top: 25px; }
+        .smart-bot .ear-left { left: 0; }
+        .smart-bot .ear-right { right: 0; }
+        .smart-bot .thinking-bubble { position: absolute; top: 0; right: 0; display: flex; gap: 3px; }
+        .smart-bot .bubble { background: var(--color-accent-tertiary); border-radius: 50%; animation: bubble-pop 2s ease-in-out infinite; }
+        .smart-bot .bubble:nth-child(1) { width: 4px; height: 4px; animation-delay: 0s; }
+        .smart-bot .bubble:nth-child(2) { width: 6px; height: 6px; animation-delay: 0.2s; }
+        .smart-bot .bubble:nth-child(3) { width: 8px; height: 8px; animation-delay: 0.4s; }
+        @keyframes bot-look { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
+        @keyframes bubble-pop { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
+
+        /* 13 – Pulse Orb */
+        .pulse-orb { width: 80px; height: 80px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, var(--color-accent-subtle), var(--color-accent)); box-shadow: 0 0 40px var(--color-accent-glow), inset 0 0 20px rgba(255, 255, 255, 0.5); position: relative; animation: orb-pulse 2s infinite var(--ease-in-out); }
+        .pulse-orb::after { content: ''; position: absolute; top: -8px; left: -8px; right: -8px; bottom: -8px; border-radius: 50%; border: 2px solid var(--color-accent-tertiary); opacity: 0.5; animation: spin 4s infinite linear; }
+        @keyframes orb-pulse { 0%, 100% { transform: scale(0.95); box-shadow: 0 0 30px var(--color-accent-glow); } 50% { transform: scale(1.05); box-shadow: 0 0 50px var(--color-accent); } }
+
+        /* 14 – Gears */
+        .gears { width: 100px; height: 90px; position: relative; }
+        .gears .gear { position: absolute; display: flex; align-items: center; justify-content: center; }
+        .gears .gear-1 { left: 0; top: 24px; color: var(--color-accent); animation: spin 4s linear infinite; }
+        .gears .gear-1 i { width: 56px; height: 56px; }
+        .gears .gear-2 { left: 38px; top: 0; color: var(--color-accent-secondary); animation: spin 2.8s linear infinite reverse; }
+        .gears .gear-2 i { width: 40px; height: 40px; }
+        .gears .gear-3 { left: 58px; top: 38px; color: var(--color-accent-tertiary); animation: spin 2s linear infinite; }
+        .gears .gear-3 i { width: 28px; height: 28px; }
+
+        /* 15 – Neural Brain */
+        .neural-brain { width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; position: relative; }
+        .neural-brain .brain-icon { color: var(--color-accent); animation: brain-think 2s var(--ease-in-out) infinite; }
+        .neural-brain .brain-icon i { width: 48px; height: 48px; }
+        .neural-brain .spark { position: absolute; width: 4px; height: 4px; background: var(--color-accent-secondary); border-radius: 50%; animation: spark-float 2s var(--ease-in-out) infinite; }
+        .neural-brain .spark-1 { top: 10%; left: 20%; animation-delay: 0s; }
+        .neural-brain .spark-2 { top: 20%; right: 15%; animation-delay: 0.3s; }
+        .neural-brain .spark-3 { bottom: 25%; left: 15%; animation-delay: 0.6s; }
+        .neural-brain .spark-4 { bottom: 15%; right: 20%; animation-delay: 0.9s; background: var(--color-accent-tertiary); }
+        @keyframes brain-think { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 4px var(--color-accent-glow)); } 50% { transform: scale(1.05); filter: drop-shadow(0 0 12px var(--color-accent)); } }
+        @keyframes spark-float { 0%, 100% { opacity: 0; transform: scale(0.5); } 50% { opacity: 1; transform: scale(1.5); } }
+
+        /* 16 – Hourglass */
+        .hourglass { width: 48px; height: 80px; display: flex; align-items: center; justify-content: center; color: var(--color-accent); }
+        .hourglass i { width: 48px; height: 48px; animation: hourglass-flip 2s var(--ease-in-out) infinite; }
+        @keyframes hourglass-flip { 0%, 40% { transform: rotate(0deg); } 50%, 90% { transform: rotate(180deg); } 100% { transform: rotate(360deg); } }
+
+        /* 17 – Map Pulse */
+        .map-pulse { width: 80px; height: 80px; position: relative; display: flex; align-items: center; justify-content: center; }
+        .map-pulse .pin { color: var(--color-accent); z-index: 2; animation: pin-bounce 2s var(--ease-in-out) infinite; }
+        .map-pulse .pin i { width: 40px; height: 40px; }
+        .map-pulse .ring { position: absolute; border: 2px solid var(--color-accent); border-radius: 50%; animation: ring-expand 2s ease-out infinite; }
+        .map-pulse .ring-1 { width: 30px; height: 30px; animation-delay: 0s; }
+        .map-pulse .ring-2 { width: 30px; height: 30px; animation-delay: 0.5s; }
+        .map-pulse .ring-3 { width: 30px; height: 30px; animation-delay: 1s; }
+        @keyframes pin-bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        @keyframes ring-expand { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(2.5); opacity: 0; } }
+
+        /* 18 – Conveyor Bars */
+        .conveyor-bars { height: 45px; aspect-ratio: 1.2; --c: no-repeat repeating-linear-gradient(90deg, var(--color-accent) 0 20%, transparent 0 40%); background: var(--c) 50% 0, var(--c) 50% 100%; background-size: calc(500%/6) 50%; animation: conveyor 1s infinite linear; }
+        @keyframes conveyor { 33% { background-position: 0 0, 100% 100%; } 66% { background-position: 0 100%, 100% 0; } 100% { background-position: 50% 100%, 50% 0; } }
+
+        /* 19 – Signal Burst */
+        .signal-burst { width: 48px; height: 48px; position: relative; }
+        .signal-burst::before, .signal-burst::after { content: ''; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 48em; height: 48em; background-image: radial-gradient(circle 10px, var(--color-accent) 100%, transparent 0), radial-gradient(circle 10px, var(--color-accent) 100%, transparent 0), radial-gradient(circle 10px, var(--color-accent-secondary) 100%, transparent 0), radial-gradient(circle 10px, var(--color-accent-secondary) 100%, transparent 0), radial-gradient(circle 10px, var(--color-accent-tertiary) 100%, transparent 0), radial-gradient(circle 10px, var(--color-accent-tertiary) 100%, transparent 0), radial-gradient(circle 10px, var(--color-accent) 100%, transparent 0), radial-gradient(circle 10px, var(--color-accent) 100%, transparent 0); background-position: 0em -18em, 0em 18em, 18em 0em, -18em 0em, 13em -13em, -13em -13em, 13em 13em, -13em 13em; background-repeat: no-repeat; font-size: 0.5px; border-radius: 50%; animation: burst-expand 1s ease-in infinite; }
+        .signal-burst::after { font-size: 1px; background: var(--color-accent); animation: burst-core 1s ease-in infinite; }
+        @keyframes burst-core { 0%, 100% { font-size: 0.75px; } 50% { font-size: 1.5px; } }
+        @keyframes burst-expand { 0%, 40% { font-size: 0.5px; } 70% { opacity: 1; font-size: 4px; } 100% { font-size: 6px; opacity: 0; } }
+
+        /* 20 – Dual Squares */
+        .dual-squares { width: 48px; height: 48px; display: inline-block; position: relative; }
+        .dual-squares::after, .dual-squares::before { content: ''; width: 48px; height: 48px; border: 3px solid var(--color-accent); position: absolute; left: 0; top: 0; box-sizing: border-box; animation: dual-rotate 2s ease-in-out infinite; }
+        .dual-squares::after { border-color: var(--color-accent-secondary); animation-delay: 1s; }
+        @keyframes dual-rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* ── NO RESULTS ── */
+        .no-results {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--color-text-muted);
+            font-size: 0.9375rem;
+            display: none;
+        }
+        .no-results svg { display: block; margin: 0 auto 0.75rem; opacity: 0.3; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- Header -->
+    <div class="page-header">
+        <h1>AI Loading Animation Options</h1>
+        <p class="subtitle">Design study for the Tender Scout processing indicator — click any card to select, compare, pause, or adjust speed.</p>
+    </div>
+
+    <!-- Search -->
+    <div class="search-bar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="search-input" placeholder="Search animations…" autocomplete="off" />
+    </div>
+
+    <!-- Filter Pills -->
+    <div class="filter-row">
+        <button class="filter-pill is-active" data-filter="all">All (20)</button>
+        <button class="filter-pill" data-filter="scout">Scout &amp; Discovery</button>
+        <button class="filter-pill" data-filter="data">Data &amp; Processing</button>
+        <button class="filter-pill" data-filter="ai">AI &amp; Assistant</button>
+        <button class="filter-pill" data-filter="creative">Creative &amp; Abstract</button>
+        <button class="filter-pill" data-filter="featured">⭐ Featured</button>
+    </div>
+
+    <!-- Results count -->
+    <div class="results-count" id="results-count">Showing all 20 animations</div>
+
+    <!-- Context Banner -->
+    <div class="context-banner">
+        <i data-lucide="info" style="width: 20px; height: 20px;"></i>
+        <p>
+            This page explores animation alternatives to replace the current <code>.ai-orb</code> component
+            used in the AI Loading Overlay (<code>index.html:606</code>). Animations are themed around
+            <strong>Tender Scout's</strong> brand identity: scouting, discovery, data analysis, and AI assistance.
+            <br><strong>Tip:</strong> Click a card to select it for comparison. Use ⏸ to pause. Drag the speed slider to control animation speed.
+        </p>
+    </div>
+
+    <!-- SCOUT / DISCOVERY THEME -->
+    <div class="section-header" data-section="scout">
+        <h2><i data-lucide="compass" style="width: 20px; height: 20px;"></i> Scout &amp; Discovery</h2>
+        <p>Animations that evoke exploration, searching, and finding opportunities</p>
+    </div>
+    <div class="grid" id="grid-scout">
+
+        <!-- 1 – Scout Bot -->
+        <div class="card featured" data-id="1" data-category="scout" data-name="Scout Bot" data-tags="mascot brand robot scan">
+            <div class="selected-badge">Selected</div>
+            <h3>1. Scout Bot</h3>
+            <p>Friendly robot scout with scanning antenna</p>
+            <div class="demo-area">
+                <div class="scout-bot">
+                    <div class="scan-wave"></div>
+                    <div class="antenna"></div>
+                    <div class="head">
+                        <div class="eye eye-left"></div>
+                        <div class="eye eye-right"></div>
+                    </div>
+                    <div class="body"></div>
+                </div>
+            </div>
+            <div class="label">Mascot / Brand</div>
+            <div class="design-intent">
+                <strong>Intent:</strong> A friendly scout robot that could become the Tender Scout mascot. The scanning waves show active discovery while the character adds personality.
+            </div>
+            <div class="speed-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                <input type="range" class="speed-slider" min="0.2" max="3" step="0.1" value="1">
+                <span class="speed-value">1×</span>
+            </div>
+            <div class="card-actions">
+                <button class="btn-action btn-pause">⏸ Pause</button>
+                <button class="btn-action btn-select">☑ Compare</button>
+            </div>
+        </div>
+
+        <!-- 2 – Binoculars -->
+        <div class="card" data-id="2" data-category="scout" data-name="Binoculars Scan" data-tags="scout search lens sweep">
+            <div class="selected-badge">Selected</div>
+            <h3>2. Binoculars Scan</h3>
+            <p>Classic scouting imagery with lens sweep</p>
+            <div class="demo-area">
+                <div class="binoculars">
+                    <div class="barrel barrel-left"><div class="lens"></div></div>
+                    <div class="barrel barrel-right"><div class="lens"></div></div>
+                    <div class="bridge"></div>
+                    <div class="focus-ring"></div>
+                </div>
+            </div>
+            <div class="label">Scout / Search</div>
+            <div class="design-intent">
+                <strong>Intent:</strong> Instantly recognizable scouting symbol. The lens sweep effect suggests actively scanning the horizon for tender opportunities.
+            </div>
+            <div class="speed-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                <input type="range" class="speed-slider" min="0.2" max="3" step="0.1" value="1">
+                <span class="speed-value">1×</span>
+            </div>
+            <div class="card-actions">
+                <button class="btn-action btn-pause">⏸ Pause</button>
+                <button class="btn-action btn-select">☑ Compare</button>
+            </div>
+        </div>
+
+        <!-- 3 – Compass -->
+        <div class="card" data-id="3" data-category="scout" data-name="Compass Navigation" data-tags="compass direction guidance needle">
+            <div class="selected-badge">Selected</div>
+            <h3>3. Compass Navigation</h3>
+            <p>Finding the right direction</p>
+            <div class="demo-area">
+                <div class="compass">
+                    <div class="ring"></div>
+                    <div class="directions">
+                        <span class="dir dir-n">N</span>
+                        <span class="dir dir-s">S</span>
+                        <span class="dir dir-e">E</span>
+                        <span class="dir dir-w">W</span>
+                    </div>
+                    <div class="needle"></div>
+                    <div class="center-dot"></div>
+                </div>
+            </div>
+            <div class="label">Direction / Guidance</div>
+            <div class="design-intent">
+                <strong>Intent:</strong> Navigation through the tender landscape. The seeking needle suggests the AI is calibrating to find the perfect match.
+            </div>
+            <div class="speed-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                <input type="range" class="speed-slider" min="0.2" max="3" step="0.1" value="1">
+                <span class="speed-value">1×</span>
+            </div>
+            <div class="card-actions">
+                <button class="btn-action btn-pause">⏸ Pause</button>
+                <button class="btn-action btn-select">☑ Compare</button>
+            </div>
+        </div>
+
+        <!-- 4 – Radar -->
+        <div class="card featured" data-id="4" data-category="scout" data-name="Radar Sweep" data-tags="radar detection scan blip">
+            <div class="selected-badge">Selected</div>
+            <h3>4. Radar Sweep</h3>
+            <p>Scanning with blip detection</p>
+            <div class="demo-area">
+                <div class="radar">
+                    <div class="grid-line grid-1"></div>
+                    <div class="grid-line grid-2"></div>
+                    <div class="crosshair-h"></div>
+                    <div class="crosshair-v"></div>
+                    <div class="sweep"></div>
+                    <div class="blip blip-1"></div>
+                    <div class="blip blip-2"></div>
+                    <div class="blip blip-3"></div>
+                    <div class="center"></div>
+                </div>
+            </div>
+            <div class="label">Detection / Scanning</div>
+            <div class="design-intent">
+                <strong>Intent:</strong> Military-grade tender detection. Blips represent found opportunities, making the abstract process of searching concrete and visual.
+            </div>
+            <div class="speed-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                <input type="range" class="speed-slider" min="0.2" max="3" step="0.1" value="1">
+                <span class="speed-value">1×</span>
+            </div>
+            <div class="card-actions">
+                <button class="btn-action btn-pause">⏸ Pause</button>
+                <button class="btn-action btn-select">☑ Compare</button>
+            </div>
+        </div>
+
+        <!-- 5 – Telescope -->
+        <div class="card" data-id="5" data-category="scout" data-name="Telescope" data-tags="telescope vision foresight stars">
+            <div class="selected-badge">Selected</div>
+            <h3>5. Telescope</h3>
+            <p>Looking for distant opportunities</p>
+            <div class="demo-area">
+                <div class="telescope">
+                    <div class="star star-1"></div>
+                    <div class="star star-2"></div>
+                    <div class="star star-3"></div>
+                    <div class="tube">
+                        <div class="lens">
+                            <div class="lens-flare"></div>
+                        </div>
+                    </div>
+                    <div class="tripod">
+                        <div class="tripod-leg"></div>
+                        <div class="tripod-leg"></div>
+                        <div class="tripod-leg"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="label">Vision / Foresight</div>
+            <div class="design-intent">
+                <strong>Intent:</strong> Looking beyond the obvious to find hidden opportunities. The twinkling stars represent undiscovered tenders waiting to be found.
+            </div>
+            <div class="speed-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                <input type="range" class="speed-slider" min="0.2" max="3" step="0.1" value="1">
+                <span class="speed-value">1×</span>
+            </div>
+            <div class="card-actions">
+                <button class="btn-action btn-pause">⏸ Pause</button>
+                <button class="btn-action btn-select">☑ Compare</button>
+            </div>
+        </div>
+
+        <!-- 6 – Magnifier -->
+        <div class="card" data-id="6" data-category="scout" data-name="Magnifying Glass" data-tags="magnify search detail focus">
+            <div class="selected-badge">Selected</div>
+            <h3>6. Magnifying Glass</h3>
+            <p>Searching through documents</p>
+            <div class="demo-area">
+                <div class="magnifier">
+                    <div class="glass"></div>
+                    <div class="handle"></div>
+                    <div class="search-target"></div>
+                </div>
+            </div>
+            <div class="label">Search / Detail</div>
+            <div class="design-intent">
+                <strong>Intent:</strong> Focused searching and attention to detail. The pulsing target shows active discovery of relevant information.
+            </div>
+            <div class="speed-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                <input type="range" class="speed-slider" min="0.2" max="3" step="0.1" value="1">
+                <span class="speed-value">1×</span>
+            </div>
+            <div class="card-actions">
+                <button class="btn-action btn-pause">⏸ Pause</button>
+                <button class="btn-action btn-select">☑ Compare</button>
+            </div>
+        </div>
+    </div><!-- /grid-scout -->
+
+    <!-- DATA / PROCESSING THEME -->
+    <div class="section-header" data-section="data">
+        <h2><i data-lucide="database" style="width: 20px; height: 20px;"></i> Data &amp; Processing</h2>
+        <p>Animations that represent data analysis, document processing, and computation</p>
+    </div>
+    <div class="grid" id="grid-data">
+
+        <!-- 7 – Document Scanner -->
+        <div class="card featured" data-id="7" data-category="data" data-name="Document Scanner" data-tags="document scan highlight extract">
+            <div class="selected-badge">Selected</div>
+            <h3>7. Document Scanner</h3>
+            <p>Processing tender documents</p>
+            <div class="demo-area">
+                <div class="doc-scanner">
+                    <div class="document">
+                        <div class="doc-line"></div>
+                        <div class="doc-line"></div>
+                        <div class="doc-line"></div>
+                        <div class="doc-line"></div>
+                        <div class="doc-line"></div>
+                    </div>
+                    <div class="scan-line"></div>
+                    <div class="highlight highlight-1"></div>
+                    <div class="highlight highlight-2"></div>
+                </div>
+            </div>
+            <div class="label">Document / Analysis</div>
+            <div class="design-intent">
+                <strong>Intent:</strong> Directly represents the core function — scanning and analyzing tender documents. Highlights show key information being extracted.
+            </div>
+            <div class="speed-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                <input type="range" class="speed-slider" min="0.2" max="3" step="0.1" value="1">
+                <span class="speed-value">1×</span>
+            </div>
+            <div class="card-actions">
+                <button class="btn-action btn-pause">⏸ Pause</button>
+                <button class="btn-action btn-select">☑ Compare</button>
+            </div>
+        </div>
+
+        <!-- 8 – Data Mining -->
+        <div class="card" data-id="8" data-category="data" data-name="Data Mining" data-tags="data bar chart analytics insights">
+            <div class="selected-badge">Selected</div>
+            <h3>8. Data Mining</h3>
+            <p>Extracting insights from raw data</p>
+            <div class="demo-area">
+                <div class="data-mining">
+                    <div class="data-bar"></div>
+                    <div class="data-bar"></div>
+                    <div class="data-bar"></div>
+                    <div class="data-bar"></div>
+                    <div class="data-bar"></div>
+                    <div class="sparkle sparkle-1"></div>
+                    <div class="sparkle sparkle-2"></div>
+                    <div class="sparkle sparkle-3"></div>
+                </div>
+            </div>
+            <div class="label">Analytics / Insights</div>
+            <div class="design-intent">
+                <strong>Intent:</strong> Visualizes data being processed and valuable insights (sparkles) emerging. Dynamic bars show active computation.
+            </div>
+            <div class="speed-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                <input type="range" class="speed-slider" min="0.2" max="3" step="0.1" value="1">
+                <span class="speed-value">1×</span>
+            </div>
+            <div class="card-actions">
+                <button class="btn-action btn-pause">⏸ Pause</button>
+                <button class="btn-action btn-select">☑ Compare</button>
+            </div>
+        </div>
+
+        <!-- 9 – Satellite -->
+        <div class="card" data-id="9" data-category="data" data-name="Satellite View" data-tags="satellite orbit coverage technology">
+            <div class="selected-badge">Selected</div>
+            <h3>9. Satellite View</h3>
+            <p>Orbital data scanning</p>
+            <div class="demo-area">
+                <div class="satellite">
+                    <div class="earth"></div>
+                    <div class="sat-body">
+                        <div class="panel panel-left"></div>
+                        <div class="panel panel-right"></div>
+                        <div class="dish"></div>
+                    </div>
+                    <div class="scan-beam"></div>
+                </div>
+            </div>
+            <div class="label">Overhead / Coverage</div>
+            <div class="design-intent">
+                <strong>Intent:</strong> Big-picture view of the tender landscape. The satellite suggests comprehensive market coverage and advanced technology.
+            </div>
+            <div class="speed-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                <input type="range" class="speed-slider" min="0.2" max="3" step="0.1" value="1">
+                <span class="speed-value">1×</span>
+            </div>
+            <div class="card-actions">
+                <button class="btn-action btn-pause">⏸ Pause</button>
+                <button class="btn-action btn-select">☑ Compare</button>
+            </div>
+        </div>
+
+        <!-- 10 – Processing Rings -->
+        <div class="card" data-id="10" data-category="data" data-name="Processing Rings" data-tags="rings layers parallel technical">
+            <div class="selected-badge">Selected</div>
+            <h3>10. Processing Rings</h3>
+            <p>Layered data computation</p>
+            <div class="demo-area">
+                <div class="processing-rings">
+                    <div class="ring ring-1"></div>
+                    <div class="ring ring-2"></div>
+                    <div class="ring ring-3"></div>
+                    <div class="core"></div>
+                </div>
+            </div>
+            <div class="label">Technical / Layers</div>
+            <div class="design-intent">
+                <strong>Intent:</strong> Multiple processing layers working in parallel. Each ring represents a stage: ingestion, analysis, matching.
+            </div>
+            <div class="speed-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                <input type="range" class="speed-slider" min="0.2" max="3" step="0.1" value="1">
+                <span class="speed-value">1×</span>
+            </div>
+            <div class="card-actions">
+                <button class="btn-action btn-pause">⏸ Pause</button>
+                <button class="btn-action btn-select">☑ Compare</button>
+            </div>
+        </div>
+
+        <!-- 11 – Gears -->
+        <div class="card" data-id="11" data-category="data" data-name="Spinning Gears" data-tags="gears mechanical reliable precision">
+            <div class="selected-badge">Selected</div>
+            <h3>11. Spinning Gears</h3>
+            <p>Mechanical data processing</p>
+            <div class="demo-area">
+                <div class="gears">
+                    <div class="gear gear-1"><i data-lucide="cog"></i></div>
+                    <div class="gear gear-2"><i data-lucide="cog"></i></div>
+                    <div class="gear gear-3"><i data-lucide="cog"></i></div>
+                </div>
+            </div>
+            <div class="label">Mechanical / Reliable</div>
+            <div class="design-intent">
+                <strong>Intent:</strong> The machinery of matching. Interlocking gears convey precision, reliability, and complex orchestration.
+            </div>
+            <div class="speed-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                <input type="range" class="speed-slider" min="0.2" max="3" step="0.1" value="1">
+                <span class="speed-value">1×</span>
+            </div>
+            <div class="card-actions">
+                <button class="btn-action btn-pause">⏸ Pause</button>
+                <button class="btn-action btn-select">☑ Compare</button>
+            </div>
+        </div>
+
+        <!-- 12 – Map Pulse -->
+        <div class="card" data-id="12" data-category="data" data-name="Location Pulse" data-tags="map pin location regional geographic">
+            <div class="selected-badge">Selected</div>
+            <h3>12. Location Pulse</h3>
+            <p>Geographic tender discovery</p>
+            <div class="demo-area">
+                <div class="map-pulse">
+                    <div class="ring ring-1"></div>
+                    <div class="ring ring-2"></div>
+                    <div class="ring ring-3"></div>
+                    <div class="pin"><i data-lucide="map-pin"></i></div>
+                </div>
+            </div>
+            <div class="label">Location / Regional</div>
+            <div class="design-intent">
+                <strong>Intent:</strong> Finding tenders in your area. The expanding rings suggest widening search radius and geographic coverage.
+            </div>
+            <div class="speed-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                <input type="range" class="speed-slider" min="0.2" max="3" step="0.1" value="1">
+                <span class="speed-value">1×</span>
+            </div>
+            <div class="card-actions">
+                <button class="btn-action btn-pause">⏸ Pause</button>
+                <button class="btn-action btn-select">☑ Compare</button>
+            </div>
+        </div>
+    </div><!-- /grid-data -->
+
+    <!-- AI / ASSISTANT THEME -->
+    <div class="section-header" data-section="ai">
+        <h2><i data-lucide="bot" style="width: 20px; height: 20px;"></i> AI &amp; Assistant</h2>
+        <p>Animations that represent intelligent assistance and AI processing</p>
+    </div>
+    <div class="grid" id="grid-ai">
+
+        <!-- 13 – Smart Bot -->
+        <div class="card" data-id="13" data-category="ai" data-name="Smart Assistant" data-tags="bot assistant friendly thinking face">
+            <div class="selected-badge">Selected</div>
+            <h3>13. Smart Assistant</h3>
+            <p>Friendly AI helper thinking</p>
+            <div class="demo-area">
+                <div class="smart-bot">
+                    <div class="thinking-bubble">
+                        <div class="bubble"></div>
+                        <div class="bubble"></div>
+                        <div class="bubble"></div>
+                    </div>
+                    <div class="ear ear-left"></div>
+                    <div class="ear ear-right"></div>
+                    <div class="face">
+                        <div class="eye-container">
+                            <div class="eye"></div>
+                            <div class="eye"></div>
+                        </div>
+                        <div class="mouth"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="label">Assistant / Friendly</div>
+            <div class="design-intent">
+                <strong>Intent:</strong> A friendly AI face that's actively thinking. The thought bubbles show cognitive activity while maintaining approachability.
+            </div>
+            <div class="speed-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                <input type="range" class="speed-slider" min="0.2" max="3" step="0.1" value="1">
+                <span class="speed-value">1×</span>
+            </div>
+            <div class="card-actions">
+                <button class="btn-action btn-pause">⏸ Pause</button>
+                <button class="btn-action btn-select">☑ Compare</button>
+            </div>
+        </div>
+
+        <!-- 14 – Neural Brain -->
+        <div class="card" data-id="14" data-category="ai" data-name="Neural Brain" data-tags="brain neural ai intelligence spark">
+            <div class="selected-badge">Selected</div>
+            <h3>14. Neural Brain</h3>
+            <p>AI thinking with spark effects</p>
+            <div class="demo-area">
+                <div class="neural-brain">
+                    <div class="brain-icon"><i data-lucide="brain"></i></div>
+                    <div class="spark spark-1"></div>
+                    <div class="spark spark-2"></div>
+                    <div class="spark spark-3"></div>
+                    <div class="spark spark-4"></div>
+                </div>
+            </div>
+            <div class="label">Intelligence / Neural</div>
+            <div class="design-intent">
+                <strong>Intent:</strong> Directly represents AI architecture. Sparks show neurons firing, making the invisible process of AI thinking visible.
+            </div>
+            <div class="speed-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                <input type="range" class="speed-slider" min="0.2" max="3" step="0.1" value="1">
+                <span class="speed-value">1×</span>
+            </div>
+            <div class="card-actions">
+                <button class="btn-action btn-pause">⏸ Pause</button>
+                <button class="btn-action btn-select">☑ Compare</button>
+            </div>
+        </div>
+
+        <!-- 15 – Typing Dots -->
+        <div class="card" data-id="15" data-category="ai" data-name="Typing Indicator" data-tags="typing chat dots response">
+            <div class="selected-badge">Selected</div>
+            <h3>15. Typing Indicator</h3>
+            <p>Classic chat-style response</p>
+            <div class="demo-area">
+                <div class="typing-dots">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+            <div class="label">Chat / Response</div>
+            <div class="design-intent">
+                <strong>Intent:</strong> Universally recognized "thinking" indicator. Creates anticipation and human-like presence while composing a response.
+            </div>
+            <div class="speed-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                <input type="range" class="speed-slider" min="0.2" max="3" step="0.1" value="1">
+                <span class="speed-value">1×</span>
+            </div>
+            <div class="card-actions">
+                <button class="btn-action btn-pause">⏸ Pause</button>
+                <button class="btn-action btn-select">☑ Compare</button>
+            </div>
+        </div>
+
+        <!-- 16 – Pulse Orb -->
+        <div class="card" data-id="16" data-category="ai" data-name="Pulse Orb" data-tags="orb pulse living organic current">
+            <div class="selected-badge">Selected</div>
+            <h3>16. Pulse Orb</h3>
+            <p>Current ai-orb implementation</p>
+            <div class="demo-area">
+                <div class="pulse-orb"></div>
+            </div>
+            <div class="label">Current / Organic</div>
+            <div class="design-intent">
+                <strong>Intent:</strong> The existing implementation. Conveys a living, breathing intelligence with gentle pulsing and orbiting ring.
+            </div>
+            <div class="speed-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                <input type="range" class="speed-slider" min="0.2" max="3" step="0.1" value="1">
+                <span class="speed-value">1×</span>
+            </div>
+            <div class="card-actions">
+                <button class="btn-action btn-pause">⏸ Pause</button>
+                <button class="btn-action btn-select">☑ Compare</button>
+            </div>
+        </div>
+
+        <!-- 17 – Hourglass -->
+        <div class="card" data-id="17" data-category="ai" data-name="Hourglass" data-tags="hourglass time patience wait">
+            <div class="selected-badge">Selected</div>
+            <h3>17. Hourglass</h3>
+            <p>Time-based patience indicator</p>
+            <div class="demo-area">
+                <div class="hourglass">
+                    <i data-lucide="hourglass"></i>
+                </div>
+            </div>
+            <div class="label">Time / Patience</div>
+            <div class="design-intent">
+                <strong>Intent:</strong> Acknowledges that quality matching takes time. Sets expectations while suggesting the process is worthwhile.
+            </div>
+            <div class="speed-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                <input type="range" class="speed-slider" min="0.2" max="3" step="0.1" value="1">
+                <span class="speed-value">1×</span>
+            </div>
+            <div class="card-actions">
+                <button class="btn-action btn-pause">⏸ Pause</button>
+                <button class="btn-action btn-select">☑ Compare</button>
+            </div>
+        </div>
+    </div><!-- /grid-ai -->
+
+    <!-- CREATIVE / ABSTRACT THEME -->
+    <div class="section-header" data-section="creative">
+        <h2><i data-lucide="sparkles" style="width: 20px; height: 20px;"></i> Creative &amp; Abstract</h2>
+        <p>Modern, minimalist animations with unique visual patterns</p>
+    </div>
+    <div class="grid" id="grid-creative">
+
+        <!-- 18 – Conveyor Bars -->
+        <div class="card" data-id="18" data-category="creative" data-name="Conveyor Bars" data-tags="conveyor flow stream data minimal">
+            <div class="selected-badge">Selected</div>
+            <h3>18. Conveyor Bars</h3>
+            <p>Data stream with flowing segments</p>
+            <div class="demo-area">
+                <div class="conveyor-bars"></div>
+            </div>
+            <div class="label">Stream / Flow</div>
+            <div class="design-intent">
+                <strong>Intent:</strong> Represents continuous data processing like a conveyor belt. The flowing bars suggest steady, reliable throughput of tender information.
+            </div>
+            <div class="speed-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                <input type="range" class="speed-slider" min="0.2" max="3" step="0.1" value="1">
+                <span class="speed-value">1×</span>
+            </div>
+            <div class="card-actions">
+                <button class="btn-action btn-pause">⏸ Pause</button>
+                <button class="btn-action btn-select">☑ Compare</button>
+            </div>
+        </div>
+
+        <!-- 19 – Signal Burst -->
+        <div class="card featured" data-id="19" data-category="creative" data-name="Signal Burst" data-tags="signal burst broadcast alert particles">
+            <div class="selected-badge">Selected</div>
+            <h3>19. Signal Burst</h3>
+            <p>Expanding broadcast pulse with particles</p>
+            <div class="demo-area">
+                <div class="signal-burst"></div>
+            </div>
+            <div class="label">Broadcast / Alert</div>
+            <div class="design-intent">
+                <strong>Intent:</strong> A discovery moment — when new tenders are found. The expanding burst with particles creates excitement and conveys active broadcasting.
+            </div>
+            <div class="speed-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                <input type="range" class="speed-slider" min="0.2" max="3" step="0.1" value="1">
+                <span class="speed-value">1×</span>
+            </div>
+            <div class="card-actions">
+                <button class="btn-action btn-pause">⏸ Pause</button>
+                <button class="btn-action btn-select">☑ Compare</button>
+            </div>
+        </div>
+
+        <!-- 20 – Dual Squares -->
+        <div class="card" data-id="20" data-category="creative" data-name="Dual Squares" data-tags="squares rotate minimal modern abstract">
+            <div class="selected-badge">Selected</div>
+            <h3>20. Dual Squares</h3>
+            <p>Overlapping rotating frames</p>
+            <div class="demo-area">
+                <div class="dual-squares"></div>
+            </div>
+            <div class="label">Minimal / Modern</div>
+            <div class="design-intent">
+                <strong>Intent:</strong> Clean, modern aesthetic with two intersecting perspectives. Suggests analyzing data from multiple angles simultaneously.
+            </div>
+            <div class="speed-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                <input type="range" class="speed-slider" min="0.2" max="3" step="0.1" value="1">
+                <span class="speed-value">1×</span>
+            </div>
+            <div class="card-actions">
+                <button class="btn-action btn-pause">⏸ Pause</button>
+                <button class="btn-action btn-select">☑ Compare</button>
+            </div>
+        </div>
+    </div><!-- /grid-creative -->
+
+    <!-- No results message -->
+    <div class="no-results" id="no-results">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        No animations match your search.
+    </div>
+
+</div><!-- /container -->
+
+<!-- Compare Bar (fixed bottom) -->
+<div class="compare-bar" id="compare-bar">
+    <span class="compare-label">Compare:</span>
+    <div class="compare-chips" id="compare-chips"></div>
+    <button class="btn-compare-action btn-open-modal" onclick="openCompareModal()">View Side-by-Side</button>
+    <button class="btn-compare-action btn-clear-compare" onclick="clearCompare()">Clear All</button>
+</div>
+
+<!-- Compare Modal -->
+<div class="modal-backdrop" id="modal-compare" onclick="if(event.target===this)closeCompareModal()">
+    <div class="modal">
+        <div class="modal-header">
+            <h2>Side-by-Side Comparison</h2>
+            <button class="modal-close" onclick="closeCompareModal()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="compare-grid" id="compare-grid"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+    lucide.createIcons();
+
+    /* ─── STATE ─── */
+    const selectedIds = new Set();
+
+    /* ─── SPEED SLIDER ─── */
+    document.querySelectorAll('.speed-slider').forEach(slider => {
+        slider.addEventListener('input', e => {
+            e.stopPropagation();
+            const card = slider.closest('.card');
+            const speed = parseFloat(slider.value);
+            slider.nextElementSibling.textContent = speed.toFixed(1) + '×';
+            card.querySelectorAll('.demo-area *').forEach(el => {
+                el.style.animationDuration = '';
+                const computed = getComputedStyle(el).animationDuration;
+                if (computed && computed !== '0s') {
+                    const base = parseFloat(computed);
+                    if (!isNaN(base) && base > 0) {
+                        el.style.animationDuration = (base / speed) + 's';
+                    }
+                }
+            });
+        });
+        // prevent card click from firing when using slider
+        slider.addEventListener('click', e => e.stopPropagation());
+    });
+
+    /* ─── PAUSE BUTTON ─── */
+    document.querySelectorAll('.btn-pause').forEach(btn => {
+        btn.addEventListener('click', e => {
+            e.stopPropagation();
+            const card = btn.closest('.card');
+            const isPaused = card.classList.toggle('is-paused');
+            btn.textContent = isPaused ? '▶ Resume' : '⏸ Pause';
+        });
+    });
+
+    /* ─── SELECT / COMPARE BUTTON ─── */
+    document.querySelectorAll('.btn-select').forEach(btn => {
+        btn.addEventListener('click', e => {
+            e.stopPropagation();
+            const card = btn.closest('.card');
+            const id = parseInt(card.dataset.id);
+            if (selectedIds.has(id)) {
+                selectedIds.delete(id);
+                card.classList.remove('is-selected');
+                btn.className = 'btn-action btn-select';
+                btn.textContent = '☑ Compare';
+            } else {
+                if (selectedIds.size >= 6) { showToast('Max 6 animations can be compared at once.'); return; }
+                selectedIds.add(id);
+                card.classList.add('is-selected');
+                btn.className = 'btn-action btn-deselect';
+                btn.textContent = '✕ Remove';
+            }
+            updateCompareBar();
+        });
+    });
+
+    /* ─── CARD CLICK (select toggle) ─── */
+    document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('click', e => {
+            if (e.target.closest('.btn-action') || e.target.closest('.speed-slider') || e.target.closest('.speed-row')) return;
+            const selectBtn = card.querySelector('.btn-select, .btn-deselect');
+            if (selectBtn) selectBtn.click();
+        });
+    });
+
+    /* ─── COMPARE BAR ─── */
+    function updateCompareBar() {
+        const bar = document.getElementById('compare-bar');
+        const chips = document.getElementById('compare-chips');
+        bar.classList.toggle('is-visible', selectedIds.size > 0);
+        chips.innerHTML = '';
+        selectedIds.forEach(id => {
+            const card = document.querySelector(`.card[data-id="${id}"]`);
+            if (!card) return;
+            const chip = document.createElement('div');
+            chip.className = 'compare-chip';
+            chip.innerHTML = `<span>${card.dataset.name}</span><span class="remove">✕</span>`;
+            chip.querySelector('.remove').addEventListener('click', e => {
+                e.stopPropagation();
+                selectedIds.delete(id);
+                card.classList.remove('is-selected');
+                const btn = card.querySelector('.btn-deselect');
+                if (btn) { btn.className = 'btn-action btn-select'; btn.textContent = '☑ Compare'; }
+                updateCompareBar();
+            });
+            chips.appendChild(chip);
+        });
+    }
+
+    function clearCompare() {
+        selectedIds.forEach(id => {
+            const card = document.querySelector(`.card[data-id="${id}"]`);
+            if (card) {
+                card.classList.remove('is-selected');
+                const btn = card.querySelector('.btn-deselect');
+                if (btn) { btn.className = 'btn-action btn-select'; btn.textContent = '☑ Compare'; }
+            }
+        });
+        selectedIds.clear();
+        updateCompareBar();
+    }
+
+    /* ─── COMPARE MODAL ─── */
+    function openCompareModal() {
+        if (selectedIds.size === 0) return;
+        const grid = document.getElementById('compare-grid');
+        grid.innerHTML = '';
+        selectedIds.forEach(id => {
+            const src = document.querySelector(`.card[data-id="${id}"]`);
+            if (!src) return;
+            const item = document.createElement('div');
+            item.className = 'compare-item';
+            const demoSrc = src.querySelector('.demo-area').cloneNode(true);
+            const demoWrap = document.createElement('div');
+            demoWrap.className = 'compare-demo';
+            demoWrap.appendChild(demoSrc.firstElementChild.cloneNode(true));
+            item.innerHTML = `<h4>${src.dataset.name}</h4>`;
+            item.insertAdjacentElement('afterbegin', demoWrap);
+            const lbl = src.querySelector('.label').cloneNode(true);
+            lbl.style.marginTop = '0.25rem';
+            item.appendChild(lbl);
+            grid.appendChild(item);
+        });
+        document.getElementById('modal-compare').classList.add('is-open');
+        lucide.createIcons();
+    }
+
+    function closeCompareModal() {
+        document.getElementById('modal-compare').classList.remove('is-open');
+    }
+
+    /* ─── SEARCH ─── */
+    const allCards = Array.from(document.querySelectorAll('.card'));
+
+    document.getElementById('search-input').addEventListener('input', applyFilters);
+
+    /* ─── FILTER PILLS ─── */
+    document.querySelectorAll('.filter-pill').forEach(pill => {
+        pill.addEventListener('click', () => {
+            document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('is-active'));
+            pill.classList.add('is-active');
+            applyFilters();
+        });
+    });
+
+    function applyFilters() {
+        const query = document.getElementById('search-input').value.toLowerCase().trim();
+        const activeFilter = document.querySelector('.filter-pill.is-active')?.dataset.filter || 'all';
+        let visible = 0;
+
+        allCards.forEach(card => {
+            const matchSearch = !query ||
+                card.dataset.name.toLowerCase().includes(query) ||
+                (card.dataset.tags || '').toLowerCase().includes(query) ||
+                card.querySelector('.design-intent')?.textContent.toLowerCase().includes(query);
+            const matchFilter =
+                activeFilter === 'all' ||
+                card.dataset.category === activeFilter ||
+                (activeFilter === 'featured' && card.classList.contains('featured'));
+
+            const show = matchSearch && matchFilter;
+            card.classList.toggle('is-hidden', !show);
+            if (show) visible++;
+        });
+
+        // Section headers: hide if no visible cards in grid
+        document.querySelectorAll('.section-header').forEach(hdr => {
+            const section = hdr.dataset.section;
+            const grid = document.getElementById('grid-' + section);
+            if (!grid) return;
+            const hasVisible = Array.from(grid.querySelectorAll('.card:not(.is-hidden)')).length > 0;
+            hdr.style.display = hasVisible ? '' : 'none';
+            grid.style.display = hasVisible ? '' : 'none';
+        });
+
+        const countEl = document.getElementById('results-count');
+        countEl.textContent = visible === 20
+            ? 'Showing all 20 animations'
+            : `Showing ${visible} of 20 animations`;
+
+        document.getElementById('no-results').style.display = visible === 0 ? 'block' : 'none';
+    }
+
+    /* ─── TOAST ─── */
+    function showToast(msg) {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.textContent = msg;
+        container.appendChild(toast);
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => toast.classList.add('is-visible'));
+        });
+        setTimeout(() => {
+            toast.classList.remove('is-visible');
+            setTimeout(() => toast.remove(), 300);
+        }, 2800);
+    }
+</script>
+</body>
+</html>

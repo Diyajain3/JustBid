@@ -1,0 +1,856 @@
+{
+  "metadata": {
+    "source": "Common Procurement Vocabulary (CPV) 2008",
+    "version": "2008",
+    "lastUpdated": "2026-01-15"
+  },
+  "industries": {
+    "construction": ["45", "44", "71"],
+    "it": ["72", "48", "30", "32"],
+    "health": ["85", "33"],
+    "consulting": ["79", "73"],
+    "environment": ["90", "09"],
+    "transport": ["60", "63", "34"],
+    "education": ["80", "22"],
+    "supplies": ["30", "39", "18", "15"],
+    "other": ["50", "98", "92"]
+  },
+  "divisions": [
+    {
+      "code": "03000000",
+      "name": "Landwirtschaftliche Erzeugnisse",
+      "children": [
+        { "code": "03100000", "name": "Landwirtschaftliche Erzeugnisse und Gartenbau" },
+        { "code": "03200000", "name": "Getreide, Kartoffeln, Gemüse, Früchte" },
+        { "code": "03300000", "name": "Erzeugnisse der Tierhaltung" }
+      ]
+    },
+    {
+      "code": "09000000",
+      "name": "Erdöl, Brennstoffe, Elektrizität",
+      "children": [
+        { "code": "09100000", "name": "Brennstoffe" },
+        { "code": "09200000", "name": "Erdöl, Kohle und Ölprodukte" },
+        { "code": "09300000", "name": "Elektrizität, Heizung, Solar- und Kernenergie" },
+        { "code": "09310000", "name": "Elektrizität" },
+        { "code": "09320000", "name": "Dampf, Warmwasser und zugehörige Produkte" },
+        { "code": "09330000", "name": "Solarenergie" },
+        { "code": "09340000", "name": "Kernbrennstoffe" }
+      ]
+    },
+    {
+      "code": "14000000",
+      "name": "Bergbau, Basismetalle",
+      "children": [
+        { "code": "14200000", "name": "Sand und Ton" },
+        { "code": "14300000", "name": "Chemische Mineralien und Düngemittel" },
+        { "code": "14400000", "name": "Salz und reines Natriumchlorid" },
+        { "code": "14500000", "name": "Bergbauprodukte" },
+        { "code": "14600000", "name": "Metallerze und Legierungen" },
+        { "code": "14700000", "name": "Basismetalle" }
+      ]
+    },
+    {
+      "code": "15000000",
+      "name": "Nahrungsmittel, Getränke, Tabak",
+      "children": [
+        { "code": "15100000", "name": "Tierische Produkte, Fleisch" },
+        { "code": "15200000", "name": "Fisch und Fischerzeugnisse" },
+        { "code": "15300000", "name": "Obst, Gemüse und Erzeugnisse" },
+        { "code": "15400000", "name": "Tierische oder pflanzliche Öle" },
+        { "code": "15500000", "name": "Milchprodukte" },
+        { "code": "15600000", "name": "Mühlenerzeugnisse, Stärke" },
+        { "code": "15800000", "name": "Verschiedene Nahrungsmittel" },
+        { "code": "15900000", "name": "Getränke, Tabak" }
+      ]
+    },
+    {
+      "code": "18000000",
+      "name": "Kleidung, Schuhe, Reiseartikel",
+      "children": [
+        { "code": "18100000", "name": "Berufskleidung, Arbeitskleidung" },
+        { "code": "18200000", "name": "Oberbekleidung" },
+        { "code": "18300000", "name": "Kleidungsstücke" },
+        { "code": "18400000", "name": "Spezialkleidung und Zubehör" },
+        { "code": "18800000", "name": "Schuhe" },
+        { "code": "18900000", "name": "Reiseartikel, Sattlerwaren" }
+      ]
+    },
+    {
+      "code": "22000000",
+      "name": "Druckereierzeugnisse",
+      "children": [
+        { "code": "22100000", "name": "Gedruckte Bücher, Broschüren" },
+        { "code": "22200000", "name": "Zeitungen, Zeitschriften" },
+        { "code": "22300000", "name": "Postkarten, Grußkarten" },
+        { "code": "22400000", "name": "Briefmarken, Steuerzeichen" },
+        { "code": "22500000", "name": "Druckplatten oder -zylinder" },
+        { "code": "22800000", "name": "Register, Geschäftsbücher" },
+        { "code": "22900000", "name": "Verschiedene Druckerzeugnisse" }
+      ]
+    },
+    {
+      "code": "30000000",
+      "name": "Büromaschinen, EDV-Anlagen",
+      "children": [
+        { "code": "30100000", "name": "Büromaschinen, Büromaterialien" },
+        { "code": "30120000", "name": "Fotokopiergeräte und Zubehör" },
+        { "code": "30190000", "name": "Bürobedarf und Zubehör" },
+        { "code": "30200000", "name": "Computeranlagen und Zubehör" },
+        { "code": "30210000", "name": "Datenverarbeitungsgeräte (Hardware)" },
+        { "code": "30230000", "name": "Computerbezogene Geräte" },
+        { "code": "30232000", "name": "Peripheriegeräte" },
+        { "code": "30233000", "name": "Speichermedien und Lesegeräte" },
+        { "code": "30236000", "name": "Diverse Computerausrüstungen" }
+      ]
+    },
+    {
+      "code": "31000000",
+      "name": "Elektrische Maschinen",
+      "children": [
+        { "code": "31100000", "name": "Elektromotoren, Generatoren" },
+        { "code": "31200000", "name": "Stromverteiler- und Steuergeräte" },
+        { "code": "31300000", "name": "Isolierte Drähte und Kabel" },
+        { "code": "31400000", "name": "Akkumulatoren, Primärzellen" },
+        { "code": "31500000", "name": "Leuchtmittel, Lampen" },
+        { "code": "31600000", "name": "Elektrische Ausrüstungen" },
+        { "code": "31700000", "name": "Elektronische Komponenten" }
+      ]
+    },
+    {
+      "code": "32000000",
+      "name": "Rundfunk, Fernsehen, Kommunikation",
+      "children": [
+        { "code": "32200000", "name": "Sende- und Übertragungsgeräte" },
+        { "code": "32300000", "name": "Rundfunk- und Fernsehgeräte" },
+        { "code": "32400000", "name": "Netzwerke" },
+        { "code": "32500000", "name": "Telekommunikationsausrüstung" },
+        { "code": "32510000", "name": "Drahtlose Telekommunikation" },
+        { "code": "32520000", "name": "Telekommunikationskabel" },
+        { "code": "32550000", "name": "Telefonanlagen" },
+        { "code": "32570000", "name": "Kommunikationsanlage" }
+      ]
+    },
+    {
+      "code": "33000000",
+      "name": "Medizinische Ausrüstungen",
+      "children": [
+        { "code": "33100000", "name": "Medizinische Geräte" },
+        { "code": "33110000", "name": "Bildgebende Geräte (Medizin)" },
+        { "code": "33120000", "name": "Aufzeichnungs- und Untersuchungsgeräte" },
+        { "code": "33130000", "name": "Dental- und zahnärztliche Geräte" },
+        { "code": "33140000", "name": "Medizinische Verbrauchsartikel" },
+        { "code": "33150000", "name": "Radiologische Geräte" },
+        { "code": "33160000", "name": "Operationstechnik" },
+        { "code": "33170000", "name": "Anästhesie und Reanimation" },
+        { "code": "33180000", "name": "Funktionsunterstützung" },
+        { "code": "33190000", "name": "Diverse medizinische Geräte" },
+        { "code": "33600000", "name": "Arzneimittel" },
+        { "code": "33700000", "name": "Körperpflegeprodukte" }
+      ]
+    },
+    {
+      "code": "34000000",
+      "name": "Transportmittel",
+      "children": [
+        { "code": "34100000", "name": "Kraftfahrzeuge" },
+        { "code": "34110000", "name": "Personenkraftwagen" },
+        { "code": "34130000", "name": "Lastkraftwagen" },
+        { "code": "34140000", "name": "Schwerlastfahrzeuge" },
+        { "code": "34200000", "name": "Fahrzeugkarosserien, Anhänger" },
+        { "code": "34300000", "name": "Teile und Zubehör für Fahrzeuge" },
+        { "code": "34400000", "name": "Motorräder, Fahrräder" },
+        { "code": "34500000", "name": "Schiffe und Boote" },
+        { "code": "34600000", "name": "Eisenbahn- und Straßenbahnlokomotiven" },
+        { "code": "34700000", "name": "Luftfahrzeuge" },
+        { "code": "34900000", "name": "Verschiedene Transportausrüstungen" }
+      ]
+    },
+    {
+      "code": "35000000",
+      "name": "Sicherheit, Feuerlöschung, Polizei",
+      "children": [
+        { "code": "35100000", "name": "Notfall- und Sicherheitsausrüstung" },
+        { "code": "35110000", "name": "Feuerlöschausrüstung" },
+        { "code": "35120000", "name": "Überwachungssysteme" },
+        { "code": "35200000", "name": "Polizeiausrüstung" },
+        { "code": "35300000", "name": "Waffen, Munition" },
+        { "code": "35500000", "name": "Kriegsschiffe und zugehörige Teile" },
+        { "code": "35600000", "name": "Militärflugzeuge" },
+        { "code": "35700000", "name": "Militärische Elektronik" },
+        { "code": "35800000", "name": "Individuelle und Unterstützungsausrüstung" }
+      ]
+    },
+    {
+      "code": "37000000",
+      "name": "Musikinstrumente, Sport, Spiele",
+      "children": [
+        { "code": "37300000", "name": "Musikinstrumente" },
+        { "code": "37400000", "name": "Sportartikel und -ausrüstung" },
+        { "code": "37500000", "name": "Spiele und Spielzeug" }
+      ]
+    },
+    {
+      "code": "38000000",
+      "name": "Laborgeräte, optische Geräte",
+      "children": [
+        { "code": "38100000", "name": "Navigationsgeräte" },
+        { "code": "38200000", "name": "Geologische und geophysikalische Instrumente" },
+        { "code": "38300000", "name": "Messgeräte" },
+        { "code": "38400000", "name": "Geräte für Physik" },
+        { "code": "38500000", "name": "Prüf- und Kontrollgeräte" },
+        { "code": "38600000", "name": "Optische Instrumente" },
+        { "code": "38900000", "name": "Verschiedene Mess- und Prüfgeräte" }
+      ]
+    },
+    {
+      "code": "39000000",
+      "name": "Möbel, Einrichtungsgegenstände",
+      "children": [
+        { "code": "39100000", "name": "Möbel" },
+        { "code": "39110000", "name": "Sitzmöbel, Stühle" },
+        { "code": "39120000", "name": "Tische, Schränke" },
+        { "code": "39130000", "name": "Büromöbel" },
+        { "code": "39140000", "name": "Wohnmöbel" },
+        { "code": "39150000", "name": "Diverse Möbel und Einrichtungen" },
+        { "code": "39200000", "name": "Ausstattung" },
+        { "code": "39300000", "name": "Diverse Ausrüstung" },
+        { "code": "39500000", "name": "Textilwaren" },
+        { "code": "39700000", "name": "Haushaltsgeräte" },
+        { "code": "39800000", "name": "Reinigungsmittel" }
+      ]
+    },
+    {
+      "code": "42000000",
+      "name": "Industriemaschinen",
+      "children": [
+        { "code": "42100000", "name": "Maschinen zur Energieerzeugung" },
+        { "code": "42200000", "name": "Maschinen für Lebensmittel, Getränke" },
+        { "code": "42300000", "name": "Industrie- oder Laboröfen" },
+        { "code": "42400000", "name": "Hebezeuge, Förderanlagen" },
+        { "code": "42500000", "name": "Kühlanlagen und Lüftung" },
+        { "code": "42600000", "name": "Werkzeugmaschinen" },
+        { "code": "42900000", "name": "Diverse Maschinen" }
+      ]
+    },
+    {
+      "code": "43000000",
+      "name": "Bergbau- und Baumaschinen",
+      "children": [
+        { "code": "43200000", "name": "Erdbewegungsmaschinen" },
+        { "code": "43300000", "name": "Baumaschinen und -ausrüstung" },
+        { "code": "43400000", "name": "Aufbereitungs- und Bergbaumaschinen" },
+        { "code": "43600000", "name": "Strassenbaumaschinen" },
+        { "code": "43800000", "name": "Werkstattausrüstung" }
+      ]
+    },
+    {
+      "code": "44000000",
+      "name": "Baukonstruktionen, Baustoffe",
+      "children": [
+        { "code": "44100000", "name": "Baustoffe und zugehörige Produkte" },
+        { "code": "44110000", "name": "Baumaterialien" },
+        { "code": "44111000", "name": "Baustoffe" },
+        { "code": "44112000", "name": "Diverse Baustrukturen" },
+        { "code": "44114000", "name": "Beton" },
+        { "code": "44115000", "name": "Gebäudeausrüstung" },
+        { "code": "44130000", "name": "Abwasserrohre" },
+        { "code": "44160000", "name": "Rohrleitungen, Verrohrung" },
+        { "code": "44200000", "name": "Bauprodukte" },
+        { "code": "44300000", "name": "Kabel, Draht" },
+        { "code": "44400000", "name": "Diverse Metallwaren" },
+        { "code": "44500000", "name": "Werkzeuge, Schlösser, Schlüssel" },
+        { "code": "44600000", "name": "Tanks, Behälter, Container" },
+        { "code": "44800000", "name": "Farben, Lacke, Druckfarben" },
+        { "code": "44900000", "name": "Naturstein, Ziegel" }
+      ]
+    },
+    {
+      "code": "45000000",
+      "name": "Bauarbeiten",
+      "children": [
+        { "code": "45100000", "name": "Baureifmachung" },
+        { "code": "45110000", "name": "Abbruch, Erdarbeiten" },
+        { "code": "45111000", "name": "Abbrucharbeiten, Erdarbeiten" },
+        { "code": "45112000", "name": "Aushub- und Erdbewegungsarbeiten" },
+        { "code": "45200000", "name": "Komplett- oder Teilbauleistungen" },
+        { "code": "45210000", "name": "Hochbauarbeiten" },
+        { "code": "45211000", "name": "Mehrfamilienhäuser und Einfamilienhäuser" },
+        { "code": "45212000", "name": "Gebäude für Sport, Freizeit" },
+        { "code": "45213000", "name": "Gewerbliche Gebäude, Lagerhäuser" },
+        { "code": "45214000", "name": "Schulen, Universitäten" },
+        { "code": "45215000", "name": "Gesundheitsgebäude" },
+        { "code": "45216000", "name": "Gefängnisse, Sicherheitseinrichtungen" },
+        { "code": "45220000", "name": "Ingenieur- und Hochbauarbeiten" },
+        { "code": "45230000", "name": "Leitungen und Pipeline-Bau" },
+        { "code": "45231000", "name": "Bauarbeiten für Rohrleitungen" },
+        { "code": "45232000", "name": "Nebenarbeiten für Rohrleitungen" },
+        { "code": "45233000", "name": "Strassenbauarbeiten" },
+        { "code": "45234000", "name": "Eisenbahn- und Seilbahnbau" },
+        { "code": "45240000", "name": "Wasserbau" },
+        { "code": "45250000", "name": "Anlagebauarbeiten" },
+        { "code": "45260000", "name": "Dachdeckarbeiten" },
+        { "code": "45261000", "name": "Dachstuhlarbeiten" },
+        { "code": "45262000", "name": "Spezialbauarbeiten" },
+        { "code": "45300000", "name": "Bauinstallationsarbeiten" },
+        { "code": "45310000", "name": "Elektroinstallationsarbeiten" },
+        { "code": "45311000", "name": "Installation von Kabeln und Leitungen" },
+        { "code": "45312000", "name": "Alarm- und Antenneninstallation" },
+        { "code": "45314000", "name": "Installation von Telekommunikation" },
+        { "code": "45315000", "name": "Elektroheizung und andere Elektroinstallation" },
+        { "code": "45320000", "name": "Dämmarbeiten" },
+        { "code": "45330000", "name": "Klempnerarbeiten, Sanitärinstallation" },
+        { "code": "45331000", "name": "Heizungs-, Lüftungs- und Klimainstallation" },
+        { "code": "45332000", "name": "Sanitärinstallation" },
+        { "code": "45333000", "name": "Gasinstallation" },
+        { "code": "45340000", "name": "Installation von Zäunen, Geländern, Sicherheit" },
+        { "code": "45350000", "name": "Maschinentechnische Installationen" },
+        { "code": "45400000", "name": "Baufertigstellung" },
+        { "code": "45410000", "name": "Verputzarbeiten" },
+        { "code": "45420000", "name": "Tischlerarbeiten, Schreinerarbeiten" },
+        { "code": "45421000", "name": "Schreinerarbeiten" },
+        { "code": "45422000", "name": "Zimmerarbeiten" },
+        { "code": "45430000", "name": "Bodenbeläge" },
+        { "code": "45431000", "name": "Verlegen von Fliesen" },
+        { "code": "45432000", "name": "Bodenverlegen, -abdecken" },
+        { "code": "45440000", "name": "Maler- und Glaserarbeiten" },
+        { "code": "45441000", "name": "Glaserarbeiten" },
+        { "code": "45442000", "name": "Malerarbeiten" },
+        { "code": "45450000", "name": "Sonstige Baufertigstellungsarbeiten" },
+        { "code": "45500000", "name": "Vermietung von Baumaschinen" }
+      ]
+    },
+    {
+      "code": "48000000",
+      "name": "Softwarepaket und Informationssysteme",
+      "children": [
+        { "code": "48100000", "name": "Branchenspezifisches Softwarepaket" },
+        { "code": "48110000", "name": "Verkaufsstellensoftware (POS)" },
+        { "code": "48120000", "name": "Software für die Flugkontrolle" },
+        { "code": "48130000", "name": "Flugunterstuetzungssoftware" },
+        { "code": "48140000", "name": "Eisenbahnverkehrssteuerung" },
+        { "code": "48150000", "name": "Software für die Fertigungssteuerung" },
+        { "code": "48160000", "name": "Bibliothekssoftware" },
+        { "code": "48170000", "name": "Compliance-Software" },
+        { "code": "48180000", "name": "Medizinische Software" },
+        { "code": "48190000", "name": "Bildungssoftware" },
+        { "code": "48200000", "name": "Softwarepaket für Vernetzung, Internet" },
+        { "code": "48210000", "name": "Netzwerksoftware" },
+        { "code": "48220000", "name": "Internet- und Intranet-Softwarepaket" },
+        { "code": "48300000", "name": "Dokumentenerstellung, Grafik, Planung" },
+        { "code": "48310000", "name": "Textverarbeitungssoftware" },
+        { "code": "48320000", "name": "Grafik- und Bildbearbeitungssoftware" },
+        { "code": "48330000", "name": "Terminplaner, Produktivitätssoftware" },
+        { "code": "48400000", "name": "Transaktions- und Geschäftssoftware" },
+        { "code": "48410000", "name": "Anlageverwaltungssoftware" },
+        { "code": "48420000", "name": "Facility-Management-Software" },
+        { "code": "48440000", "name": "Finanzanalysesoftware" },
+        { "code": "48450000", "name": "Zeiterfassung, Personalwesen" },
+        { "code": "48460000", "name": "Analytische oder wissenschaftliche Software" },
+        { "code": "48480000", "name": "Vertriebs- und Marketingsoftware" },
+        { "code": "48490000", "name": "Beschaffungssoftware" },
+        { "code": "48500000", "name": "Kommunikations- und Multimedia-Software" },
+        { "code": "48600000", "name": "Datenbank- und Betriebssystemsoftware" },
+        { "code": "48610000", "name": "Datenbanksysteme" },
+        { "code": "48620000", "name": "Betriebssysteme" },
+        { "code": "48700000", "name": "Softwaredienstprogramme" },
+        { "code": "48800000", "name": "Informationssysteme und Server" },
+        { "code": "48900000", "name": "Diverse Softwarepakete" }
+      ]
+    },
+    {
+      "code": "50000000",
+      "name": "Reparatur- und Wartungsdienste",
+      "children": [
+        { "code": "50100000", "name": "Reparatur, Wartung von Fahrzeugen" },
+        { "code": "50200000", "name": "Reparatur von Luftfahrzeugen" },
+        { "code": "50300000", "name": "Reparatur, Wartung von IT-Ausrüstung" },
+        { "code": "50400000", "name": "Reparatur von medizinischen Geräten" },
+        { "code": "50500000", "name": "Reparatur von Maschinen" },
+        { "code": "50600000", "name": "Reparatur von Sicherheitsausrüstung" },
+        { "code": "50700000", "name": "Reparatur, Wartung von Gebäuden" },
+        { "code": "50710000", "name": "Reparatur von elektrischen Gebäudesystemen" },
+        { "code": "50720000", "name": "Reparatur von Heizungsanlagen" },
+        { "code": "50800000", "name": "Diverse Reparatur und Wartung" }
+      ]
+    },
+    {
+      "code": "51000000",
+      "name": "Installationsdienstleistungen",
+      "children": [
+        { "code": "51100000", "name": "Installation elektrischer Geräte" },
+        { "code": "51200000", "name": "Installation von Mess- und Kontrollgeräten" },
+        { "code": "51300000", "name": "Installation von Kommunikationsgeräten" },
+        { "code": "51400000", "name": "Installation von medizinischen Geräten" },
+        { "code": "51500000", "name": "Installation von Maschinen" },
+        { "code": "51600000", "name": "Installation von Computern" },
+        { "code": "51700000", "name": "Installation von Brandschutzausrüstung" }
+      ]
+    },
+    {
+      "code": "55000000",
+      "name": "Hotel- und Gaststättengewerbe",
+      "children": [
+        { "code": "55100000", "name": "Hoteldienstleistungen" },
+        { "code": "55200000", "name": "Campingplätze und Unterkünfte" },
+        { "code": "55300000", "name": "Restaurant und Bewirtung" },
+        { "code": "55400000", "name": "Getränkeausschank" },
+        { "code": "55500000", "name": "Kantine und Catering" },
+        { "code": "55900000", "name": "Einzelhandelsdienstleistungen" }
+      ]
+    },
+    {
+      "code": "60000000",
+      "name": "Verkehrsdienstleistungen",
+      "children": [
+        { "code": "60100000", "name": "Strassentransport" },
+        { "code": "60112000", "name": "Öffentlicher Strassenverkehr" },
+        { "code": "60120000", "name": "Taxidienste" },
+        { "code": "60130000", "name": "Güterbeförderung auf der Strasse" },
+        { "code": "60140000", "name": "Personenbeförderung (kein Linienverkehr)" },
+        { "code": "60200000", "name": "Schienentransport" },
+        { "code": "60210000", "name": "Personenbeförderung auf der Schiene" },
+        { "code": "60220000", "name": "Güterbeförderung auf der Schiene" },
+        { "code": "60300000", "name": "Rohrfernleitung" },
+        { "code": "60400000", "name": "Luftverkehr" },
+        { "code": "60410000", "name": "Linienflugverkehr" },
+        { "code": "60420000", "name": "Charterflugverkehr" },
+        { "code": "60440000", "name": "Flugzeuge und Luftfahrzeuge" },
+        { "code": "60500000", "name": "Raumtransport" },
+        { "code": "60600000", "name": "Schifffahrt" },
+        { "code": "60610000", "name": "Fährverkehr" },
+        { "code": "60650000", "name": "Vermietung von Wasserfahrzeugen" }
+      ]
+    },
+    {
+      "code": "63000000",
+      "name": "Unterstützende Verkehrsdienstleistungen",
+      "children": [
+        { "code": "63100000", "name": "Frachtumschlag und -lagerung" },
+        { "code": "63110000", "name": "Frachtumschlag" },
+        { "code": "63120000", "name": "Lagerung und Lagerhaltung" },
+        { "code": "63500000", "name": "Reisebüros und ähnliche Dienste" },
+        { "code": "63510000", "name": "Reisebürodienste" },
+        { "code": "63520000", "name": "Transportvermittlung" },
+        { "code": "63700000", "name": "Unterstützende Dienste für Land-, Wasser- und Luftverkehr" },
+        { "code": "63710000", "name": "Unterstützung im Landverkehr" },
+        { "code": "63720000", "name": "Unterstützung im Wasserverkehr" },
+        { "code": "63730000", "name": "Unterstützung im Luftverkehr" }
+      ]
+    },
+    {
+      "code": "64000000",
+      "name": "Post- und Fernmeldedienste",
+      "children": [
+        { "code": "64100000", "name": "Post- und Kurierdienste" },
+        { "code": "64110000", "name": "Postdienste" },
+        { "code": "64120000", "name": "Kurierdienste" },
+        { "code": "64200000", "name": "Fernmeldedienste" },
+        { "code": "64210000", "name": "Telefondienste" },
+        { "code": "64212000", "name": "Mobiltelefondienste" },
+        { "code": "64214000", "name": "Firmentelefonnetzdienste" },
+        { "code": "64216000", "name": "Elektronische Nachrichtenübermittlung" },
+        { "code": "64220000", "name": "Fernmeldedienste (außer Telefon)" },
+        { "code": "64221000", "name": "Netzanbindungsdienste" },
+        { "code": "64222000", "name": "Telearbeits-Dienste" },
+        { "code": "64224000", "name": "Telekonferenzdienste" },
+        { "code": "64225000", "name": "Luft-Boden-Fernmeldedienste" },
+        { "code": "64226000", "name": "Telematikdienste" },
+        { "code": "64227000", "name": "Integrierte Fernmeldedienste" },
+        { "code": "64228000", "name": "Rundfunk- und Fernsehübertragung" }
+      ]
+    },
+    {
+      "code": "65000000",
+      "name": "Versorgungsunternehmen",
+      "children": [
+        { "code": "65100000", "name": "Wasserversorgung und zugehörige Dienstleistungen" },
+        { "code": "65200000", "name": "Gasversorgung und zugehörige Dienstleistungen" },
+        { "code": "65300000", "name": "Strom- und Wärmeversorgung" },
+        { "code": "65400000", "name": "Andere Energiequellen und Verteilung" },
+        { "code": "65500000", "name": "Zählerablesung" }
+      ]
+    },
+    {
+      "code": "66000000",
+      "name": "Finanz- und Versicherungsdienstleistungen",
+      "children": [
+        { "code": "66100000", "name": "Bankdienstleistungen und Investment" },
+        { "code": "66110000", "name": "Bankdienstleistungen" },
+        { "code": "66120000", "name": "Investmentbanking" },
+        { "code": "66130000", "name": "Maklergeschäfte und Wertpapierverwaltung" },
+        { "code": "66140000", "name": "Portfolioverwaltung" },
+        { "code": "66150000", "name": "Finanzverwaltung" },
+        { "code": "66170000", "name": "Finanzberatung, Finanzwesen" },
+        { "code": "66180000", "name": "Devisenhandel" },
+        { "code": "66190000", "name": "Kreditvermittlung" },
+        { "code": "66500000", "name": "Versicherungen und Pensionskassen" },
+        { "code": "66510000", "name": "Versicherungsdienstleistungen" },
+        { "code": "66520000", "name": "Rückversicherung" },
+        { "code": "66600000", "name": "Vermögensverwaltung" },
+        { "code": "66700000", "name": "Rückversicherungsdienstleistungen" }
+      ]
+    },
+    {
+      "code": "70000000",
+      "name": "Immobiliendienste",
+      "children": [
+        { "code": "70100000", "name": "Immobiliendienste: eigene Immobilien" },
+        { "code": "70200000", "name": "Vermietung eigener Immobilien" },
+        { "code": "70300000", "name": "Immobilienmakler- und -verwaltungsdienste" },
+        { "code": "70310000", "name": "Gebäudeverwaltung" },
+        { "code": "70320000", "name": "Grundstücksvermietung" },
+        { "code": "70330000", "name": "Immobilienverwaltung" },
+        { "code": "70340000", "name": "Wohnungsbaugenossenschaftsdienste" }
+      ]
+    },
+    {
+      "code": "71000000",
+      "name": "Architektur-, Konstruktions-, Ingenieur- und Prüfdienstleistungen",
+      "children": [
+        { "code": "71200000", "name": "Dienstleistungen von Architekturbüros" },
+        { "code": "71210000", "name": "Beratungsdienste von Architekten" },
+        { "code": "71220000", "name": "Architekturentwurf" },
+        { "code": "71240000", "name": "Architektur-, Ingenieur- und Planungsdienstleistungen" },
+        { "code": "71250000", "name": "Architektur-, Ingenieurdienstleistungen, Vermessung" },
+        { "code": "71300000", "name": "Ingenieurtechnische Dienstleistungen" },
+        { "code": "71310000", "name": "Technische Beratung und Konstruktion" },
+        { "code": "71320000", "name": "Planungsleistungen im Bauwesen" },
+        { "code": "71330000", "name": "Verschiedene technische Dienstleistungen" },
+        { "code": "71340000", "name": "Integrierte technische Dienstleistungen" },
+        { "code": "71350000", "name": "Wissenschaftliche und technische Dienstleistungen" },
+        { "code": "71400000", "name": "Stadtplanung und Landschaftsgestaltung" },
+        { "code": "71410000", "name": "Stadtplanung" },
+        { "code": "71420000", "name": "Landschaftsgestaltung" },
+        { "code": "71500000", "name": "Dienstleistungen im Bauwesen" },
+        { "code": "71510000", "name": "Standortuntersuchung" },
+        { "code": "71520000", "name": "Bauaufsicht" },
+        { "code": "71530000", "name": "Bauberatung" },
+        { "code": "71540000", "name": "Bauleitung" },
+        { "code": "71600000", "name": "Technische Tests, Analysen und Beratung" },
+        { "code": "71610000", "name": "Zusammensetzungs- und Reinheitsprüfung" },
+        { "code": "71620000", "name": "Analysen" },
+        { "code": "71630000", "name": "Technische Kontrolle und Tests" },
+        { "code": "71700000", "name": "Überwachungs- und Kontrolldienste" }
+      ]
+    },
+    {
+      "code": "72000000",
+      "name": "IT-Dienstleistungen",
+      "children": [
+        { "code": "72100000", "name": "Hardwareberatung" },
+        { "code": "72110000", "name": "Hardwareauswahl-Beratung" },
+        { "code": "72120000", "name": "Hardwarenotfall-Beratung" },
+        { "code": "72130000", "name": "Computerstandortplanung-Beratung" },
+        { "code": "72140000", "name": "Hardwareabnahme-Beratung" },
+        { "code": "72150000", "name": "Computerprüfung-Beratung" },
+        { "code": "72200000", "name": "Softwareprogrammierung und -beratung" },
+        { "code": "72210000", "name": "Programmierung von Softwareprodukten" },
+        { "code": "72220000", "name": "Systemberatung und technische Beratung" },
+        { "code": "72230000", "name": "Entwicklung kundenspezifischer Software" },
+        { "code": "72240000", "name": "Systemanalyse und Programmierung" },
+        { "code": "72250000", "name": "Systemwartung und Unterstützung" },
+        { "code": "72260000", "name": "Softwarebezogene Dienstleistungen" },
+        { "code": "72300000", "name": "Datendienste" },
+        { "code": "72310000", "name": "Datenverarbeitung" },
+        { "code": "72320000", "name": "Datenbankdienste" },
+        { "code": "72330000", "name": "Inhalts- oder Datenstandadisierung" },
+        { "code": "72400000", "name": "Internetdienste" },
+        { "code": "72410000", "name": "Anbieterdienstleistungen" },
+        { "code": "72420000", "name": "Internet-Entwicklungsdienste" },
+        { "code": "72500000", "name": "Computerdienste" },
+        { "code": "72510000", "name": "EDV-Verwaltung" },
+        { "code": "72600000", "name": "Computerunterstützung und -beratung" },
+        { "code": "72610000", "name": "Computerunterstützung" },
+        { "code": "72700000", "name": "Computernetzwerkdienste" },
+        { "code": "72710000", "name": "LAN-Dienste" },
+        { "code": "72720000", "name": "WAN-Dienste" },
+        { "code": "72800000", "name": "Computerprüfung und Beratung" },
+        { "code": "72900000", "name": "Computersicherung und Datenumwandlung" },
+        { "code": "72910000", "name": "Back-up- und Wiederherstellungsdienste" }
+      ]
+    },
+    {
+      "code": "73000000",
+      "name": "Forschung und Entwicklung",
+      "children": [
+        { "code": "73100000", "name": "Forschung und experimentelle Entwicklung" },
+        { "code": "73110000", "name": "Forschungsdienste" },
+        { "code": "73120000", "name": "Experimentelle Entwicklung" },
+        { "code": "73200000", "name": "Beratung im Bereich Forschung und Entwicklung" },
+        { "code": "73300000", "name": "Planung und Ausführung von Forschung" },
+        { "code": "73400000", "name": "Forschungsdienste für Verteidigung" },
+        { "code": "73420000", "name": "Vormachbarkeitsstudie und Demonstration" },
+        { "code": "73430000", "name": "Prüfung und Bewertung" }
+      ]
+    },
+    {
+      "code": "75000000",
+      "name": "Dienstleistungen der öffentlichen Verwaltung, Verteidigung, Sozialversicherung",
+      "children": [
+        { "code": "75100000", "name": "Verwaltungsdienste" },
+        { "code": "75110000", "name": "Dienstleistungen der allgemeinen öffentlichen Verwaltung" },
+        { "code": "75120000", "name": "Verwaltungsdienste von Behörden" },
+        { "code": "75130000", "name": "Unterstützende Dienste für die öffentliche Verwaltung" },
+        { "code": "75200000", "name": "Gemeinnützige Dienste" },
+        { "code": "75210000", "name": "Aussenpolitik und auswärtige Dienste" },
+        { "code": "75220000", "name": "Verteidigungsdienste" },
+        { "code": "75230000", "name": "Justizdienste" },
+        { "code": "75240000", "name": "Öffentliche Sicherheit und Ordnung" },
+        { "code": "75250000", "name": "Feuerwehr- und Rettungsdienste" },
+        { "code": "75300000", "name": "Obligatorische Sozialversicherung" }
+      ]
+    },
+    {
+      "code": "76000000",
+      "name": "Dienstleistungen der Erdöl- und Erdgasindustrie",
+      "children": [
+        { "code": "76100000", "name": "Dienstleistungen für die Erdgasindustrie" },
+        { "code": "76200000", "name": "Dienstleistungen für die Erdölindustrie" },
+        { "code": "76300000", "name": "Bohrdienstleistungen" },
+        { "code": "76400000", "name": "Aufstellung von Geräten für Bohrarbeiten" },
+        { "code": "76500000", "name": "On- und Offshore-Dienstleistungen" },
+        { "code": "76600000", "name": "Rohrleitungsprüfung" }
+      ]
+    },
+    {
+      "code": "77000000",
+      "name": "Dienstleistungen der Land- und Forstwirtschaft, des Gartenbaus",
+      "children": [
+        { "code": "77100000", "name": "Dienstleistungen im Bereich Landwirtschaft" },
+        { "code": "77110000", "name": "Nebendienstleistungen in der Landwirtschaft" },
+        { "code": "77120000", "name": "Kompostierung" },
+        { "code": "77200000", "name": "Dienstleistungen der Forstwirtschaft" },
+        { "code": "77210000", "name": "Holzschlag" },
+        { "code": "77300000", "name": "Dienstleistungen des Gartenbaus" },
+        { "code": "77310000", "name": "Anpflanzungs- und Pflegearbeiten" },
+        { "code": "77320000", "name": "Sportplatzpflege" },
+        { "code": "77340000", "name": "Baum- und Heckenschnitt" },
+        { "code": "77400000", "name": "Zoologische Dienstleistungen" },
+        { "code": "77500000", "name": "Tierzucht" },
+        { "code": "77600000", "name": "Jagd" }
+      ]
+    },
+    {
+      "code": "79000000",
+      "name": "Dienstleistungen für Unternehmen",
+      "children": [
+        { "code": "79100000", "name": "Rechtsberatung" },
+        { "code": "79110000", "name": "Rechtsberatung und -vertretung" },
+        { "code": "79130000", "name": "Rechtliche Dokumentations- und Beglaubigungsdienste" },
+        { "code": "79140000", "name": "Rechtsberatung und Auskunft" },
+        { "code": "79200000", "name": "Buchführung, Wirtschaftsprüfung und Steuerwesen" },
+        { "code": "79210000", "name": "Buchführung und Wirtschaftsprüfung" },
+        { "code": "79220000", "name": "Steuerberatung" },
+        { "code": "79300000", "name": "Markt- und Wirtschaftsforschung, Umfragen" },
+        { "code": "79310000", "name": "Marktforschung" },
+        { "code": "79320000", "name": "Meinungsforschung" },
+        { "code": "79330000", "name": "Statistische Dienste" },
+        { "code": "79400000", "name": "Unternehmens- und Managementberatung" },
+        { "code": "79410000", "name": "Unternehmens- und Managementberatung" },
+        { "code": "79411000", "name": "Allgemeine Managementberatung" },
+        { "code": "79412000", "name": "Finanzmanagementberatung" },
+        { "code": "79413000", "name": "Marketingmanagementberatung" },
+        { "code": "79414000", "name": "Personalmanagementberatung" },
+        { "code": "79415000", "name": "Produktionsmanagementberatung" },
+        { "code": "79416000", "name": "Öffentlichkeitsarbeit" },
+        { "code": "79420000", "name": "Managementdienste" },
+        { "code": "79421000", "name": "Projektmanagement" },
+        { "code": "79500000", "name": "Büroarbeiten" },
+        { "code": "79510000", "name": "Telefonzentrale" },
+        { "code": "79520000", "name": "Reprografiedienste" },
+        { "code": "79530000", "name": "Übersetzung" },
+        { "code": "79540000", "name": "Dolmetschen" },
+        { "code": "79600000", "name": "Personaldienstleistungen" },
+        { "code": "79610000", "name": "Personalvermittlung" },
+        { "code": "79620000", "name": "Überlassung von Personal" },
+        { "code": "79700000", "name": "Ermittlungsdienste und Sicherheitsdienste" },
+        { "code": "79710000", "name": "Sicherheitsdienste" },
+        { "code": "79800000", "name": "Druckereidienstleistungen" },
+        { "code": "79900000", "name": "Verschiedene Geschäftsdienstleistungen" },
+        { "code": "79930000", "name": "Spezielle Designdienstleistungen" },
+        { "code": "79940000", "name": "Inkassodienste" },
+        { "code": "79950000", "name": "Veranstaltung von Ausstellungen und Messen" },
+        { "code": "79960000", "name": "Fotografische Dienstleistungen" },
+        { "code": "79990000", "name": "Verschiedene geschäftsbezogene Dienstleistungen" }
+      ]
+    },
+    {
+      "code": "80000000",
+      "name": "Erziehungs- und Unterrichtswesen",
+      "children": [
+        { "code": "80100000", "name": "Grundschulunterricht" },
+        { "code": "80110000", "name": "Vorschulunterricht" },
+        { "code": "80200000", "name": "Sekundarschulunterricht" },
+        { "code": "80210000", "name": "Technischer und berufsbezogener Sekundarunterricht" },
+        { "code": "80300000", "name": "Hochschulbildung" },
+        { "code": "80310000", "name": "Jugendbildung" },
+        { "code": "80400000", "name": "Erwachsenen- und sonstige Bildung" },
+        { "code": "80410000", "name": "Verschiedene schulische Dienstleistungen" },
+        { "code": "80420000", "name": "E-Learning" },
+        { "code": "80430000", "name": "Hochschulausbildung für Erwachsene" },
+        { "code": "80500000", "name": "Ausbildung" },
+        { "code": "80510000", "name": "Fachausbildung" },
+        { "code": "80520000", "name": "Ausbildungseinrichtungen" },
+        { "code": "80530000", "name": "Berufliche Ausbildung" },
+        { "code": "80550000", "name": "Sicherheitsausbildung" },
+        { "code": "80560000", "name": "Gesundheits- und Erste-Hilfe-Ausbildung" },
+        { "code": "80570000", "name": "Personalentwicklungsausbildung" },
+        { "code": "80580000", "name": "Sprachkurse" },
+        { "code": "80590000", "name": "Tutorielle Dienste" },
+        { "code": "80600000", "name": "Ausbildung für Sicherheits- und Verteidigungspersonal" }
+      ]
+    },
+    {
+      "code": "85000000",
+      "name": "Gesundheits- und Sozialwesen",
+      "children": [
+        { "code": "85100000", "name": "Dienstleistungen des Gesundheitswesens" },
+        { "code": "85110000", "name": "Dienstleistungen von Krankenhäusern" },
+        { "code": "85111000", "name": "Dienstleistungen von Krankenhäusern" },
+        { "code": "85112000", "name": "Krankenhauspflegedienste" },
+        { "code": "85120000", "name": "Ärztliche Praxen und Dienstleistungen" },
+        { "code": "85130000", "name": "Zahnärztliche Praxen und Dienstleistungen" },
+        { "code": "85140000", "name": "Verschiedene Dienstleistungen im Gesundheitswesen" },
+        { "code": "85141000", "name": "Dienstleistungen von medizinischem Personal" },
+        { "code": "85142000", "name": "Paramedizinische Dienste" },
+        { "code": "85143000", "name": "Rettungsdienste" },
+        { "code": "85144000", "name": "Klinische Dienstleistungen" },
+        { "code": "85145000", "name": "Dienstleistungen medizinischer Labors" },
+        { "code": "85146000", "name": "Blutbank" },
+        { "code": "85147000", "name": "Betriebsärztliche Dienste" },
+        { "code": "85148000", "name": "Medizinische Analysedienste" },
+        { "code": "85149000", "name": "Apothekendienste" },
+        { "code": "85150000", "name": "Bildgebende Diagnostikdienste" },
+        { "code": "85160000", "name": "Optikerdienste" },
+        { "code": "85170000", "name": "Akupunktur und Chiropraktik" },
+        { "code": "85200000", "name": "Veterinärdienste" },
+        { "code": "85300000", "name": "Dienstleistungen des Sozialwesens" },
+        { "code": "85310000", "name": "Sozialarbeit" },
+        { "code": "85311000", "name": "Sozialarbeit mit Unterkunft" },
+        { "code": "85312000", "name": "Sozialarbeit ohne Unterkunft" },
+        { "code": "85320000", "name": "Soziale Betreuungsdienste" },
+        { "code": "85321000", "name": "Verwaltungsdienste im sozialen Bereich" },
+        { "code": "85322000", "name": "Kommunale Programme" },
+        { "code": "85323000", "name": "Gesundheitsfürsorgedienste der Gemeinden" }
+      ]
+    },
+    {
+      "code": "90000000",
+      "name": "Abwasser- und Abfallbeseitigung, Umweltdienste",
+      "children": [
+        { "code": "90400000", "name": "Abwasserbeseitigung" },
+        { "code": "90410000", "name": "Abwassersammlung" },
+        { "code": "90420000", "name": "Abwasserbehandlung" },
+        { "code": "90430000", "name": "Abwasserentsorgung" },
+        { "code": "90440000", "name": "Klärgrubenentleerung" },
+        { "code": "90450000", "name": "Desinfektion" },
+        { "code": "90460000", "name": "Leerung von Sickergruben" },
+        { "code": "90470000", "name": "Kanalreinigung" },
+        { "code": "90480000", "name": "Entwässerungsdienste" },
+        { "code": "90490000", "name": "Abwasseraufsicht und Abwasserberatung" },
+        { "code": "90500000", "name": "Dienstleistungen im Zusammenhang mit Siedlungsabfällen" },
+        { "code": "90510000", "name": "Abfallbeseitigung und -behandlung" },
+        { "code": "90511000", "name": "Abfallsammeldienste" },
+        { "code": "90512000", "name": "Abfalltransport" },
+        { "code": "90513000", "name": "Behandlung und Entsorgung von Abfällen" },
+        { "code": "90520000", "name": "Dienstleistungen für Radioaktive, giftige und Sonderabfälle" },
+        { "code": "90530000", "name": "Betrieb einer Mülldeponie" },
+        { "code": "90540000", "name": "Sanierung" },
+        { "code": "90550000", "name": "Lagerung von Abfällen" },
+        { "code": "90560000", "name": "Biomedizinische Abfälle" },
+        { "code": "90600000", "name": "Reinigung und Sanierung" },
+        { "code": "90610000", "name": "Strassenreinigung und Strassenkehrdienste" },
+        { "code": "90620000", "name": "Schneeräumung" },
+        { "code": "90630000", "name": "Eisbeseitigung" },
+        { "code": "90640000", "name": "Reinigung von Wasserabläufen" },
+        { "code": "90650000", "name": "Asbestbeseitigung" },
+        { "code": "90660000", "name": "Bleibeseitigung" },
+        { "code": "90670000", "name": "Desinfektion und Desinfestation" },
+        { "code": "90680000", "name": "Strandreinigung" },
+        { "code": "90690000", "name": "Graffiti-Entfernung" },
+        { "code": "90700000", "name": "Umweltdienste" },
+        { "code": "90710000", "name": "Umweltmanagement" },
+        { "code": "90711000", "name": "Umweltverträglichkeitsprüfung" },
+        { "code": "90712000", "name": "Umweltplanung" },
+        { "code": "90713000", "name": "Umweltberatung" },
+        { "code": "90714000", "name": "Umweltprüfung" },
+        { "code": "90715000", "name": "Dienstleistungen zur Verschmutzungsüberwachung" },
+        { "code": "90720000", "name": "Umweltschutz" },
+        { "code": "90721000", "name": "Umweltsicherheit" },
+        { "code": "90722000", "name": "Umweltsanierung" },
+        { "code": "90730000", "name": "Umweltverschmutzung: Verfolgung, Überwachung und Sanierung" },
+        { "code": "90731000", "name": "Luftverschmutzungsüberwachung" },
+        { "code": "90732000", "name": "Bodensanierung" },
+        { "code": "90733000", "name": "Gewässersanierung" },
+        { "code": "90740000", "name": "Beseitigung und Sanierung von Kontaminationsschäden" }
+      ]
+    },
+    {
+      "code": "92000000",
+      "name": "Erholung, Kultur und Sport",
+      "children": [
+        { "code": "92100000", "name": "Dienstleistungen von Film- und Videofilmproduktion" },
+        { "code": "92110000", "name": "Film- und Videoproduktion" },
+        { "code": "92120000", "name": "Filmverleih" },
+        { "code": "92130000", "name": "Filmvorführung" },
+        { "code": "92140000", "name": "Video-Dienstleistungen" },
+        { "code": "92200000", "name": "Radio- und Fernsehdienstleistungen" },
+        { "code": "92210000", "name": "Radiodienstleistungen" },
+        { "code": "92220000", "name": "Fernsehdienstleistungen" },
+        { "code": "92300000", "name": "Unterhaltungsdienstleistungen" },
+        { "code": "92310000", "name": "Künstlerische und literarische Schöpfung" },
+        { "code": "92320000", "name": "Betrieb von kulturellen Einrichtungen" },
+        { "code": "92330000", "name": "Erholungsgebiet" },
+        { "code": "92340000", "name": "Tanz- und Unterhaltungsdienstleistungen" },
+        { "code": "92350000", "name": "Glücksspiel und Wetten" },
+        { "code": "92360000", "name": "Feuerwerk" },
+        { "code": "92370000", "name": "Tontechnische Dienstleistungen" },
+        { "code": "92400000", "name": "Nachrichtenagenturen" },
+        { "code": "92500000", "name": "Bibliotheks-, Archiv-, Museums- und sonstige kulturelle Dienstleistungen" },
+        { "code": "92510000", "name": "Bibliotheks- und Archivdienste" },
+        { "code": "92520000", "name": "Museumsdienstleistungen und Erhaltung historischer Stätten" },
+        { "code": "92530000", "name": "Botanische und zoologische Gärten und Naturschutzgebiete" },
+        { "code": "92600000", "name": "Sportdienstleistungen" },
+        { "code": "92610000", "name": "Betrieb von Sportanlagen" },
+        { "code": "92620000", "name": "Sportveranstaltungen" },
+        { "code": "92700000", "name": "Dienstleistungen von Internetcafés" }
+      ]
+    },
+    {
+      "code": "98000000",
+      "name": "Sonstige gemeinschaftliche, soziale und persönliche Dienste",
+      "children": [
+        { "code": "98100000", "name": "Interessenvertretung" },
+        { "code": "98110000", "name": "Dienstleistungen von Arbeitgeberverbänden" },
+        { "code": "98120000", "name": "Dienstleistungen von Gewerkschaften" },
+        { "code": "98130000", "name": "Dienstleistungen religiöser Vereinigungen" },
+        { "code": "98131000", "name": "Religiöse Dienstleistungen" },
+        { "code": "98200000", "name": "Beratungsdienste für Chancengleichheit" },
+        { "code": "98300000", "name": "Diverse Dienstleistungen" },
+        { "code": "98310000", "name": "Wäscherei und Reinigung" },
+        { "code": "98311000", "name": "Wäscheabholdienst" },
+        { "code": "98312000", "name": "Textilreinigung" },
+        { "code": "98315000", "name": "Bügelidienste" },
+        { "code": "98316000", "name": "Färbedienstleistungen" },
+        { "code": "98320000", "name": "Friseur- und Kosmetikdienste" },
+        { "code": "98330000", "name": "Dienstleistungen für das körperliche Wohlbefinden" },
+        { "code": "98340000", "name": "Unterkunft und Bürodienstleistungen" },
+        { "code": "98341000", "name": "Beherbergungsdienste" },
+        { "code": "98342000", "name": "Arbeitsumgebungsdienstleistungen" },
+        { "code": "98350000", "name": "Dienstleistungen zur Unterstützung öffentlicher Einrichtungen" },
+        { "code": "98351000", "name": "Dienstleistungen für die Verwaltung von Parkplätzen" },
+        { "code": "98360000", "name": "Meeresdienste" },
+        { "code": "98370000", "name": "Bestattungsdienstleistungen" },
+        { "code": "98380000", "name": "Hundebetreuung" },
+        { "code": "98390000", "name": "Sonstige Dienstleistungen" },
+        { "code": "98391000", "name": "Stilllegung" },
+        { "code": "98392000", "name": "Verlegung" },
+        { "code": "98393000", "name": "Schneiderdienste" },
+        { "code": "98394000", "name": "Polsterdienste" },
+        { "code": "98395000", "name": "Schlosserdienste" },
+        { "code": "98396000", "name": "Instrumentenstimmung" }
+      ]
+    }
+  ]
+}

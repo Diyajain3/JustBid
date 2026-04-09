@@ -1,0 +1,458 @@
+{
+  "metadata": {
+    "description": "Test data for Tender Scout prototype",
+    "version": "1.0.0",
+    "lastUpdated": "2026-01-18"
+  },
+  "companies": [
+    {
+      "id": "muller-bau",
+      "name": "Müller Bau AG",
+      "uid": "CHE-123.456.789",
+      "city": "Zürich",
+      "type": "AG",
+      "address": "Bahnhofstrasse 42, 8001 Zürich",
+      "searchKey": "Müller"
+    },
+    {
+      "id": "muller-basel",
+      "name": "Müller Bauunternehmung GmbH",
+      "uid": "CHE-987.654.321",
+      "city": "Basel",
+      "type": "GmbH",
+      "address": "Steinenvorstadt 18, 4051 Basel",
+      "searchKey": "Müller"
+    },
+    {
+      "id": "hans-muller",
+      "name": "Hans Müller Bau",
+      "uid": "CHE-111.222.333",
+      "city": "Bern",
+      "type": "Einzelunternehmen",
+      "address": "Kramgasse 7, 3011 Bern",
+      "searchKey": "Hans"
+    },
+    {
+      "id": "techsolutions",
+      "name": "TechSolutions AG",
+      "uid": "CHE-444.555.666",
+      "city": "Zug",
+      "type": "AG",
+      "address": "Baarerstrasse 135, 6300 Zug",
+      "searchKey": "Tech"
+    },
+    {
+      "id": "greengardens",
+      "name": "GreenGardens GmbH",
+      "uid": "CHE-777.888.999",
+      "city": "Luzern",
+      "type": "GmbH",
+      "address": "Hirschengraben 12, 6003 Luzern",
+      "searchKey": "Green"
+    },
+    {
+      "id": "alpha-security",
+      "name": "Alpha Security",
+      "uid": "CHE-222.333.444",
+      "city": "St. Gallen",
+      "type": "AG",
+      "address": "Marktgasse 25, 9000 St. Gallen",
+      "searchKey": "Alpha"
+    }
+  ],
+  "aiRecommendations": {
+    "muller-bau": {
+      "industry": "Baugewerbe / Hochbau",
+      "size": "10-49 Mitarbeitende",
+      "keywords": ["Schulhaus", "Sanierung", "Fassaden", "Energetisch", "Renovierung"],
+      "excludeKeywords": ["Tiefbau", "Strassenbau", "Gartenbau"],
+      "npk": [
+        { "code": "211", "name": "Abbrucharbeiten" },
+        { "code": "215", "name": "Maurerarbeiten" },
+        { "code": "221", "name": "Betonarbeiten" },
+        { "code": "352", "name": "Gipserarbeiten" }
+      ],
+      "cpv": [
+        { "code": "45210000", "label": "Hochbauarbeiten" },
+        { "code": "45260000", "label": "Dachdeckarbeiten" },
+        { "code": "45410000", "label": "Verputzarbeiten" },
+        { "code": "45420000", "label": "Schreinerarbeiten" }
+      ],
+      "region": "Zürich, Aargau, Zug"
+    },
+    "muller-basel": {
+      "industry": "Baugewerbe / Hochbau",
+      "size": "50-249 Mitarbeitende",
+      "keywords": ["Wohnungsbau", "Gewerbe", "Umbau", "Neubau", "Beton"],
+      "excludeKeywords": ["IT", "Software", "Garten"],
+      "npk": [
+        { "code": "221", "name": "Betonarbeiten" },
+        { "code": "222", "name": "Stahlbetonarbeiten" },
+        { "code": "241", "name": "Stahlbauarbeiten" },
+        { "code": "215", "name": "Maurerarbeiten" }
+      ],
+      "cpv": [
+        { "code": "45210000", "label": "Hochbauarbeiten" },
+        { "code": "45211000", "label": "Mehrfamilienhäuser" },
+        { "code": "45213000", "label": "Gewerbliche Gebäude" },
+        { "code": "45220000", "label": "Ingenieur- und Hochbauarbeiten" }
+      ],
+      "region": "Basel-Stadt, Basel-Landschaft, Solothurn"
+    },
+    "hans-muller": {
+      "industry": "Baugewerbe / Tiefbau",
+      "size": "1-9 Mitarbeitende",
+      "keywords": ["Rohrleitungen", "Tiefbau", "Strassenbau", "Kanalisationen", "Erdbau"],
+      "excludeKeywords": ["Hochbau", "Fassade", "Innenausbau"],
+      "npk": [
+        { "code": "212", "name": "Aushub- und Erdarbeiten" },
+        { "code": "214", "name": "Kanalarbeiten" },
+        { "code": "213", "name": "Spezialtiefbau" }
+      ],
+      "cpv": [
+        { "code": "45230000", "label": "Leitungen und Pipeline-Bau" },
+        { "code": "45231000", "label": "Bauarbeiten für Rohrleitungen" },
+        { "code": "45233000", "label": "Strassenbauarbeiten" },
+        { "code": "45112000", "label": "Aushub- und Erdbewegungsarbeiten" }
+      ],
+      "region": "Bern, Solothurn, Freiburg"
+    },
+    "techsolutions": {
+      "industry": "IT-Dienstleistungen",
+      "size": "10-49 Mitarbeitende",
+      "keywords": ["Software", "Entwicklung", "Cloud", "Beratung", "Digitalisierung", "Web"],
+      "excludeKeywords": ["Hardware", "Netzwerk-Infrastruktur", "Support vor Ort"],
+      "npk": [],
+      "cpv": [
+        { "code": "72000000", "label": "IT-Dienstleistungen" },
+        { "code": "72200000", "label": "Softwareprogrammierung und -beratung" },
+        { "code": "72210000", "label": "Programmierung von Softwareprodukten" },
+        { "code": "72220000", "label": "Systemberatung und technische Beratung" },
+        { "code": "72230000", "label": "Entwicklung kundenspezifischer Software" },
+        { "code": "48000000", "label": "Softwarepaket und Informationssysteme" }
+      ],
+      "region": "Ganze Schweiz"
+    },
+    "greengardens": {
+      "industry": "Gartenbau & Landschaftspflege",
+      "size": "1-9 Mitarbeitende",
+      "keywords": ["Gartenpflege", "Bepflanzung", "Unterhalt", "Grünanlagen", "Baumpflege"],
+      "excludeKeywords": ["Bau", "Beton", "Hochbau", "IT"],
+      "npk": [
+        { "code": "511", "name": "Gärtnerarbeiten" },
+        { "code": "512", "name": "Bepflanzungen" },
+        { "code": "513", "name": "Rasenflächen" },
+        { "code": "514", "name": "Aussenbeläge" }
+      ],
+      "cpv": [
+        { "code": "77300000", "label": "Dienstleistungen des Gartenbaus" },
+        { "code": "77310000", "label": "Anpflanzungs- und Pflegearbeiten" },
+        { "code": "77340000", "label": "Baum- und Heckenschnitt" },
+        { "code": "77320000", "label": "Sportplatzpflege" }
+      ],
+      "region": "Zentralschweiz"
+    },
+    "alpha-security": {
+      "industry": "Sicherheitsdienste",
+      "size": "50-249 Mitarbeitende",
+      "keywords": ["Sicherheit", "Bewachung", "Zutrittskontrolle", "Objektschutz", "Veranstaltungen"],
+      "excludeKeywords": ["Reinigung", "Bau", "IT-Sicherheit"],
+      "npk": [],
+      "cpv": [
+        { "code": "79710000", "label": "Sicherheitsdienste" },
+        { "code": "79713000", "label": "Bewachungsdienste" },
+        { "code": "79714000", "label": "Überwachungsdienste" },
+        { "code": "35120000", "label": "Überwachungssysteme" }
+      ],
+      "region": "Ostschweiz, Zürich"
+    }
+  },
+  "tenders": [
+    {
+      "id": 1,
+      "title": "Sanierung Schulhaus Mattenhof",
+      "authority": "Gemeinde Zürich",
+      "price": "CHF 2.5 - 3.0 Mio.",
+      "deadline": "Heute",
+      "deadlineDate": "2026-01-29",
+      "status": "Offen",
+      "match": 94,
+      "region": "ZH",
+      "cpv": ["45210000", "45260000"],
+      "relevantFor": ["muller-bau", "muller-basel"],
+      "description": "Gesamtsanierung des Schulhauses Mattenhof inkl. energetischer Erneuerung, Fassadensanierung und Innenausbau. Der Auftrag umfasst Baumeisterarbeiten, Gipserarbeiten und Montagebau in Stahl.",
+      "details": {
+        "baustart": "Juni 2026",
+        "dauer": "18 Monate",
+        "bkp": ["211", "221", "352"]
+      },
+      "bookmarked": true,
+      "applied": false,
+      "hidden": false
+    },
+    {
+      "id": 2,
+      "title": "IT-Infrastruktur Modernisierung Kantonsverwaltung",
+      "authority": "Kanton Aargau",
+      "price": "CHF 500k - 750k",
+      "deadline": "3 Tage",
+      "deadlineDate": "2026-01-21",
+      "status": "Bald fällig",
+      "match": 92,
+      "region": "AG",
+      "cpv": ["72000000", "72200000"],
+      "relevantFor": ["techsolutions"],
+      "description": "Modernisierung der IT-Infrastruktur der Kantonsverwaltung. Entwicklung einer neuen Cloud-basierten Dokumentenverwaltung inkl. Migration bestehender Daten.",
+      "details": {
+        "baustart": "März 2026",
+        "dauer": "12 Monate",
+        "bkp": []
+      },
+      "bookmarked": false,
+      "applied": true,
+      "hidden": false
+    },
+    {
+      "id": 3,
+      "title": "Strassenbau und Kanalsanierung Nord",
+      "authority": "Stadt Winterthur",
+      "price": "CHF 1.2 - 1.8 Mio.",
+      "deadline": "28 Tage",
+      "deadlineDate": "2026-02-15",
+      "status": "Offen",
+      "match": 88,
+      "region": "ZH",
+      "cpv": ["45230000", "45233000"],
+      "relevantFor": ["hans-muller"],
+      "description": "Sanierung der Hauptstrasse Nord inkl. Erneuerung der Kanalisation. Tiefbauarbeiten, Leitungsverlegung und Strassenbelag.",
+      "details": {
+        "baustart": "April 2026",
+        "dauer": "8 Monate",
+        "bkp": ["212", "214"]
+      },
+      "bookmarked": true,
+      "applied": false,
+      "hidden": false
+    },
+    {
+      "id": 4,
+      "title": "Neubau Verwaltungsgebäude Zug",
+      "authority": "Stadt Zug",
+      "price": "CHF 8.0 - 10.0 Mio.",
+      "deadline": "14 Tage",
+      "deadlineDate": "2026-02-01",
+      "status": "Offen",
+      "match": 91,
+      "region": "ZG",
+      "cpv": ["45210000", "45211000"],
+      "relevantFor": ["muller-bau", "muller-basel"],
+      "description": "Neubau eines modernen Verwaltungsgebäudes im Zentrum von Zug. 5 Stockwerke, energieeffizient nach Minergie-P Standard.",
+      "details": {
+        "baustart": "September 2026",
+        "dauer": "24 Monate",
+        "bkp": ["221", "222", "241"]
+      },
+      "bookmarked": false,
+      "applied": false,
+      "hidden": false
+    },
+    {
+      "id": 5,
+      "title": "Fassadensanierung Kantonsschule Zürich",
+      "authority": "Kanton Zürich",
+      "price": "CHF 1.5 - 2.0 Mio.",
+      "deadline": "2 Tage",
+      "deadlineDate": "2026-01-20",
+      "status": "Bald fällig",
+      "match": 89,
+      "region": "ZH",
+      "cpv": ["45260000", "45410000"],
+      "relevantFor": ["muller-bau"],
+      "description": "Umfassende Fassadensanierung der denkmalgeschützten Kantonsschule. Fensterersatz, Wärmedämmung und Verputzarbeiten.",
+      "details": {
+        "baustart": "Juli 2026",
+        "dauer": "6 Monate",
+        "bkp": ["322", "323", "352"]
+      },
+      "bookmarked": true,
+      "applied": true,
+      "hidden": false
+    },
+    {
+      "id": 6,
+      "title": "Renovierung Gemeindehaus Baar",
+      "authority": "Gemeinde Baar",
+      "price": "CHF 800k - 1.2 Mio.",
+      "deadline": "21 Tage",
+      "deadlineDate": "2026-02-08",
+      "status": "Offen",
+      "match": 65,
+      "region": "ZG",
+      "cpv": ["45210000", "45400000"],
+      "relevantFor": ["muller-bau", "muller-basel"],
+      "description": "Innenrenovierung des historischen Gemeindehauses. Neue Sanitäranlagen, Elektroinstallationen und Malerarbeiten.",
+      "details": {
+        "baustart": "Mai 2026",
+        "dauer": "4 Monate",
+        "bkp": ["353", "411", "441"]
+      },
+      "bookmarked": false,
+      "applied": false,
+      "hidden": true
+    },
+    {
+      "id": 7,
+      "title": "Grünflächenpflege Stadtpark Luzern",
+      "authority": "Stadt Luzern",
+      "price": "CHF 150k - 200k",
+      "deadline": "10 Tage",
+      "deadlineDate": "2026-01-28",
+      "status": "Offen",
+      "match": 95,
+      "region": "LU",
+      "cpv": ["77310000", "77340000"],
+      "relevantFor": ["greengardens"],
+      "description": "Mehrjähriger Pflegevertrag für den Stadtpark Luzern. Ganzjährige Pflege der Grünanlagen, Baumpflege und saisonale Bepflanzungen.",
+      "details": {
+        "baustart": "März 2026",
+        "dauer": "36 Monate (Rahmenvertrag)",
+        "bkp": ["511", "512"]
+      },
+      "bookmarked": true,
+      "applied": false,
+      "hidden": false
+    },
+    {
+      "id": 8,
+      "title": "Sicherheitsdienste Messe Zürich",
+      "authority": "Messe Zürich AG",
+      "price": "CHF 300k - 400k",
+      "deadline": "7 Tage",
+      "deadlineDate": "2026-01-25",
+      "status": "Offen",
+      "match": 93,
+      "region": "ZH",
+      "cpv": ["79710000", "79713000"],
+      "relevantFor": ["alpha-security"],
+      "description": "Sicherheitsdienstleistungen für alle Veranstaltungen der Messe Zürich. Einlasskontrolle, Objektschutz und Veranstaltungssicherheit.",
+      "details": {
+        "baustart": "April 2026",
+        "dauer": "24 Monate",
+        "bkp": []
+      },
+      "bookmarked": false,
+      "applied": false,
+      "hidden": false
+    },
+    {
+      "id": 9,
+      "title": "Webanwendung Bewilligungswesen",
+      "authority": "Kanton St. Gallen",
+      "price": "CHF 200k - 350k",
+      "deadline": "18 Tage",
+      "deadlineDate": "2026-02-05",
+      "status": "Offen",
+      "match": 87,
+      "region": "SG",
+      "cpv": ["72230000", "72220000"],
+      "relevantFor": ["techsolutions"],
+      "description": "Entwicklung einer Webanwendung zur Digitalisierung des Bewilligungswesens. Online-Antragstellung, Statusverfolgung und Integration mit bestehenden Systemen.",
+      "details": {
+        "baustart": "Mai 2026",
+        "dauer": "10 Monate",
+        "bkp": []
+      },
+      "bookmarked": true,
+      "applied": false,
+      "hidden": false
+    },
+    {
+      "id": 10,
+      "title": "Aussenanlage Neubausiedlung Emmen",
+      "authority": "Gemeinde Emmen",
+      "price": "CHF 180k - 250k",
+      "deadline": "25 Tage",
+      "deadlineDate": "2026-02-12",
+      "status": "Offen",
+      "match": 91,
+      "region": "LU",
+      "cpv": ["77310000", "77300000"],
+      "relevantFor": ["greengardens"],
+      "description": "Gestaltung und Bepflanzung der Aussenanlagen einer neuen Wohnsiedlung. Spielplatz, Grünanlagen und Wege.",
+      "details": {
+        "baustart": "April 2026",
+        "dauer": "3 Monate",
+        "bkp": ["511", "512", "513", "516"]
+      },
+      "bookmarked": false,
+      "applied": false,
+      "hidden": false
+    },
+    {
+      "id": 11,
+      "title": "Objektbewachung Bundesamt",
+      "authority": "Bundesamt für Bauten und Logistik",
+      "price": "CHF 500k - 700k",
+      "deadline": "12 Tage",
+      "deadlineDate": "2026-01-30",
+      "status": "Offen",
+      "match": 90,
+      "region": "BE",
+      "cpv": ["79710000", "79714000"],
+      "relevantFor": ["alpha-security"],
+      "description": "24/7 Objektbewachung und Zutrittskontrolle für Bundesgebäude in Bern. Hohe Sicherheitsanforderungen, Sicherheitsüberprüfung erforderlich.",
+      "details": {
+        "baustart": "Juni 2026",
+        "dauer": "48 Monate (Rahmenvertrag)",
+        "bkp": []
+      },
+      "bookmarked": true,
+      "applied": false,
+      "hidden": false
+    },
+    {
+      "id": 12,
+      "title": "Kanal- und Leitungsbau Gewerbegebiet",
+      "authority": "Gemeinde Worb",
+      "price": "CHF 600k - 900k",
+      "deadline": "20 Tage",
+      "deadlineDate": "2026-02-07",
+      "status": "Offen",
+      "match": 85,
+      "region": "BE",
+      "cpv": ["45231000", "45232000"],
+      "relevantFor": ["hans-muller"],
+      "description": "Erschliessung eines neuen Gewerbegebiets. Kanalisations-, Wasser- und Stromleitungen verlegen.",
+      "details": {
+        "baustart": "Mai 2026",
+        "dauer": "5 Monate",
+        "bkp": ["212", "214"]
+      },
+      "bookmarked": false,
+      "applied": false,
+      "hidden": false
+    }
+  ],
+  "userProfiles": [
+    {
+      "id": 1,
+      "name": "Müller Bau AG",
+      "role": "Administrator",
+      "company": "Müller Bau AG",
+      "companyId": "muller-bau",
+      "createdAt": "2026-01-15"
+    },
+    {
+      "id": 2,
+      "name": "Immo Zürich AG",
+      "role": "Mitglied",
+      "company": "Immo Zürich AG",
+      "companyId": null,
+      "createdAt": "2026-01-10"
+    }
+  ],
+  "demoCredentials": {
+    "email": "demo@tenderscout.ch",
+    "password": "password123"
+  }
+}

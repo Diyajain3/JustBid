@@ -1,0 +1,21 @@
+{
+  "name": "justbid",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/Diyajain3/JustBid/blob/main/README.md",
+  "bugs": {
+    "url": "https://github.com/mekhushi/JustBid/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Diyajain3/JustBid"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "landing.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": []
+}

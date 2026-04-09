@@ -1,0 +1,246 @@
+/* ========================================
+   Design Tokens - Tender Scout
+   ======================================== */
+
+:root {
+  /* ========== Colors ========== */
+
+  /* Background */
+  --color-bg-base: #ffffff;
+  --color-bg-raised: #f8fafc;
+  --color-bg-muted: #f1f5f9;
+  --color-bg-subtle: #f8fafc;
+  --color-bg-blur: rgba(255, 255, 255, 0.85);
+  --color-bg-overlay: rgba(15, 23, 42, 0.6);
+
+  /* Borders (improved contrast) */
+  --color-border: #94a3b8;
+  --color-border-strong: #64748b;
+  --color-border-subtle: #cbd5e1;
+
+  /* Text */
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-muted: #64748b;
+  --color-text-inverse: #ffffff;
+
+  /* Brand / Accent */
+  --color-accent: #2563eb;
+  --color-accent-hover: #1d4ed8;
+  --color-accent-dark: #1e40af;
+  --color-accent-subtle: #eff6ff;
+  --color-accent-glow: rgba(37, 99, 235, 0.12);
+  --color-accent-border: rgba(37, 99, 235, 0.2);
+  --color-accent-shadow: rgba(37, 99, 235, 0.1);
+
+  /* Secondary accent (violet/purple) */
+  --color-accent-secondary: #8b5cf6;
+  --color-accent-secondary-glow: rgba(139, 92, 246, 0.08);
+  --color-accent-tertiary: #06b6d4;
+
+  /* Gradient colors */
+  --gradient-hero: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-secondary) 50%, var(--color-accent-tertiary) 100%);
+  --gradient-accent: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
+  --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+
+  /* Status */
+  --color-success: #16a34a;
+  --color-success-bg: #dcfce7;
+  --color-warning: #ea580c;
+  --color-warning-bg: #ffedd5;
+  --color-error: #dc2626;
+  --color-error-hover: #b91c1c;
+  --color-error-bg: #fee2e2;
+  --color-info: #2563eb;
+  --color-info-bg: #dbeafe;
+
+  /* ========== Typography ========== */
+
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", "Consolas", monospace;
+
+  /* Font Sizes */
+  --text-xs: 0.75rem;     /* 12px - WCAG minimum */
+  --text-sm: 0.875rem;    /* 14px */
+  --text-base: 1rem;      /* 16px */
+  --text-lg: 1.125rem;    /* 18px */
+  --text-xl: 1.25rem;     /* 20px */
+  --text-2xl: 1.5rem;     /* 24px */
+  --text-3xl: 2rem;       /* 32px */
+  --text-4xl: 2.5rem;     /* 40px */
+  --text-5xl: 3.5rem;     /* 56px */
+  --text-6xl: 4rem;       /* 64px */
+
+  /* Font Weights */
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* Line Heights */
+  --leading-none: 1;
+  --leading-tight: 1.1;
+  --leading-snug: 1.2;
+  --leading-normal: 1.6;
+  --leading-relaxed: 1.7;
+
+  /* Letter Spacing */
+  --tracking-tighter: -0.03em;
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.05em;
+  --tracking-wider: 0.1em;
+
+  /* ========== Spacing ========== */
+
+  --space-0: 0;
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.25rem;   /* 20px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-8: 2rem;      /* 32px */
+  --space-10: 2.5rem;   /* 40px */
+  --space-12: 3rem;     /* 48px */
+  --space-16: 4rem;     /* 64px */
+  --space-20: 5rem;     /* 80px */
+  --space-24: 6rem;     /* 96px */
+
+  /* ========== Sizing ========== */
+
+  /* Icon sizes */
+  --icon-sm: 1rem;      /* 16px */
+  --icon-md: 1.25rem;   /* 20px */
+  --icon-lg: 1.5rem;    /* 24px */
+
+  /* Component sizes */
+  --size-btn-sm: 2.5rem;   /* 40px */
+  --size-btn-md: 3rem;     /* 48px */
+  --size-btn-lg: 3.5rem;   /* 56px */
+  --size-icon-box-sm: 2.5rem;  /* 40px */
+  --size-icon-box-md: 3rem;    /* 48px */
+  --size-icon-box-lg: 3.5rem;  /* 56px */
+
+  /* ========== Layout ========== */
+
+  --container-max: 1200px;
+  --header-height: 72px;
+  --sidebar-width: 280px;
+  --content-max: 680px;
+  --content-narrow: 600px;
+  --content-wide: 800px;
+  --pricing-max: 880px;
+  --footer-brand-max: 320px;
+  --section-header-max: 640px;
+  --cta-content-max: 600px;
+
+  /* ========== Borders ========== */
+
+  --border-width: 1px;
+  --border-width-2: 2px;
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* ========== Shadows ========== */
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04), 0 1px 4px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.04), 0 10px 20px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.05), 0 20px 40px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.06), 0 40px 60px rgba(0, 0, 0, 0.12);
+  --shadow-glow: 0 0 50px var(--color-accent-glow);
+  --shadow-glow-sm: 0 0 25px var(--color-accent-glow);
+  --shadow-glow-lg: 0 0 60px rgba(37, 99, 235, 0.25);
+  --shadow-card: 0 0 0 1px rgba(0, 0, 0, 0.03), 0 2px 4px rgba(0, 0, 0, 0.04), 0 12px 24px rgba(0, 0, 0, 0.06);
+  --shadow-card-hover: 0 0 0 1px rgba(37, 99, 235, 0.1), 0 4px 8px rgba(0, 0, 0, 0.06), 0 20px 40px rgba(0, 0, 0, 0.1);
+
+  /* ========== Transitions ========== */
+
+  --duration-instant: 0ms;
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 350ms;
+  --duration-entrance: 700ms;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ========== Z-Index ========== */
+
+  --z-base: 1;
+  --z-raised: 10;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-modal-backdrop: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+
+  /* ========== Opacity ========== */
+
+  --opacity-muted: 0.9;
+  --opacity-disabled: 0.5;
+
+  /* ========== Blur ========== */
+
+  --blur-sm: 8px;
+  --blur-md: 12px;
+  --blur-lg: 16px;
+}
+
+/* ========== Dark Mode ========== */
+
+[data-theme="dark"] {
+  /* Background */
+  --color-bg-base: #0a0f1a;
+  --color-bg-raised: #151d30;
+  --color-bg-muted: #1e293b;
+  --color-bg-subtle: #0f172a;
+  --color-bg-blur: rgba(10, 15, 26, 0.85);
+  --color-bg-overlay: rgba(0, 0, 0, 0.7);
+
+  /* Borders (improved contrast) */
+  --color-border: #475569;
+  --color-border-strong: #64748b;
+  --color-border-subtle: #334155;
+
+  /* Text */
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #94a3b8;
+
+  /* Brand / Accent */
+  --color-accent: #3b82f6;
+  --color-accent-hover: #60a5fa;
+  --color-accent-dark: #2563eb;
+  --color-accent-subtle: rgba(59, 130, 246, 0.15);
+  --color-accent-glow: rgba(59, 130, 246, 0.25);
+  --color-accent-border: rgba(59, 130, 246, 0.3);
+  --color-accent-shadow: rgba(59, 130, 246, 0.15);
+  --color-accent-secondary: #a78bfa;
+  --color-accent-secondary-glow: rgba(167, 139, 250, 0.12);
+  --color-accent-tertiary: #22d3ee;
+
+  /* Status (darker backgrounds for dark mode) */
+  --color-success: #22c55e;
+  --color-success-bg: rgba(34, 197, 94, 0.15);
+  --color-warning: #f97316;
+  --color-warning-bg: rgba(249, 115, 22, 0.15);
+  --color-error: #ef4444;
+  --color-error-hover: #dc2626;
+  --color-error-bg: rgba(239, 68, 68, 0.15);
+  --color-info: #3b82f6;
+  --color-info-bg: rgba(59, 130, 246, 0.15);
+
+  /* Shadows (darker for dark mode) */
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.2), 0 10px 20px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.2), 0 20px 40px rgba(0, 0, 0, 0.3);
+  --shadow-card: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 2px 4px rgba(0, 0, 0, 0.2), 0 12px 24px rgba(0, 0, 0, 0.25);
+  --shadow-card-hover: 0 0 0 1px rgba(59, 130, 246, 0.2), 0 4px 8px rgba(0, 0, 0, 0.25), 0 20px 40px rgba(0, 0, 0, 0.35);
+}

@@ -1,0 +1,183 @@
+{
+  "metadata": {
+    "source": "NPK - Normpositionen-Katalog (Swiss Construction Standards)",
+    "version": "2024",
+    "description": "Standardized positions catalog for Swiss construction industry",
+    "lastUpdated": "2026-01-15"
+  },
+  "industries": {
+    "construction": ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+  },
+  "chapters": [
+    {
+      "code": "1",
+      "name": "Vorbereitungsarbeiten",
+      "nameDE": "Vorbereitungsarbeiten",
+      "children": [
+        { "code": "111", "name": "Baustelleneinrichtung" },
+        { "code": "112", "name": "Gerüste" },
+        { "code": "113", "name": "Baugrubensicherung" },
+        { "code": "114", "name": "Wasserhaltung" },
+        { "code": "115", "name": "Provisorien" },
+        { "code": "116", "name": "Schutzmassnahmen" },
+        { "code": "117", "name": "Signaletik und Absperrungen" },
+        { "code": "118", "name": "Entsorgung und Recycling" }
+      ]
+    },
+    {
+      "code": "2",
+      "name": "Rohbau 1",
+      "nameDE": "Rohbau 1",
+      "children": [
+        { "code": "211", "name": "Abbrucharbeiten" },
+        { "code": "212", "name": "Aushub- und Erdarbeiten" },
+        { "code": "213", "name": "Spezialtiefbau" },
+        { "code": "214", "name": "Kanalarbeiten" },
+        { "code": "215", "name": "Maurerarbeiten" },
+        { "code": "216", "name": "Natursteinarbeiten" },
+        { "code": "217", "name": "Kunststeinarbeiten" },
+        { "code": "218", "name": "Verputzarbeiten" },
+        { "code": "219", "name": "Dämmarbeiten Rohbau" }
+      ]
+    },
+    {
+      "code": "3",
+      "name": "Rohbau 2",
+      "nameDE": "Rohbau 2",
+      "children": [
+        { "code": "221", "name": "Betonarbeiten" },
+        { "code": "222", "name": "Stahlbetonarbeiten" },
+        { "code": "223", "name": "Spannbetonarbeiten" },
+        { "code": "224", "name": "Bewehrungsarbeiten" },
+        { "code": "225", "name": "Elementbau Beton" },
+        { "code": "231", "name": "Zimmerarbeiten" },
+        { "code": "232", "name": "Holzbau" },
+        { "code": "233", "name": "Holzleimbau" },
+        { "code": "234", "name": "Holzschutzmassnahmen" },
+        { "code": "241", "name": "Stahlbauarbeiten" },
+        { "code": "242", "name": "Metallbauarbeiten" },
+        { "code": "243", "name": "Schlosserarbeiten" }
+      ]
+    },
+    {
+      "code": "4",
+      "name": "Fassade und Dach",
+      "nameDE": "Fassade und Dach",
+      "children": [
+        { "code": "311", "name": "Bedachungsarbeiten" },
+        { "code": "312", "name": "Flachdacharbeiten" },
+        { "code": "313", "name": "Steildacharbeiten" },
+        { "code": "314", "name": "Dachbegrünung" },
+        { "code": "321", "name": "Spenglerarbeiten" },
+        { "code": "322", "name": "Fassadenbekleidung" },
+        { "code": "323", "name": "Wärmedämmverbundsysteme" },
+        { "code": "324", "name": "Hinterlüftete Fassaden" },
+        { "code": "325", "name": "Glasfassaden" },
+        { "code": "326", "name": "Aussenwand-Verkleidungen" }
+      ]
+    },
+    {
+      "code": "5",
+      "name": "Ausbau 1 - Fenster und Türen",
+      "nameDE": "Ausbau 1 - Fenster und Türen",
+      "children": [
+        { "code": "331", "name": "Fenster aus Holz" },
+        { "code": "332", "name": "Fenster aus Kunststoff" },
+        { "code": "333", "name": "Fenster aus Aluminium" },
+        { "code": "334", "name": "Fenster aus Holz/Metall" },
+        { "code": "335", "name": "Pfosten-Riegel-Fassaden" },
+        { "code": "336", "name": "Sonnenschutzanlagen" },
+        { "code": "341", "name": "Innentüren" },
+        { "code": "342", "name": "Aussentüren" },
+        { "code": "343", "name": "Schiebetüren" },
+        { "code": "344", "name": "Spezial- und Brandschutztüren" },
+        { "code": "345", "name": "Automatiktüren" },
+        { "code": "346", "name": "Tore" }
+      ]
+    },
+    {
+      "code": "6",
+      "name": "Ausbau 2 - Innenausbau",
+      "nameDE": "Ausbau 2 - Innenausbau",
+      "children": [
+        { "code": "351", "name": "Trockenbauarbeiten" },
+        { "code": "352", "name": "Gipserarbeiten" },
+        { "code": "353", "name": "Malerarbeiten" },
+        { "code": "354", "name": "Tapetenarbeiten" },
+        { "code": "355", "name": "Stuckarbeiten" },
+        { "code": "361", "name": "Bodenbeläge hart" },
+        { "code": "362", "name": "Bodenbeläge elastisch" },
+        { "code": "363", "name": "Parkett" },
+        { "code": "364", "name": "Textilbeläge" },
+        { "code": "365", "name": "Unterlagsböden" },
+        { "code": "366", "name": "Beschichtungen" },
+        { "code": "371", "name": "Plattenarbeiten" },
+        { "code": "372", "name": "Natursteinbeläge" },
+        { "code": "373", "name": "Mosaikarbeiten" }
+      ]
+    },
+    {
+      "code": "7",
+      "name": "Ausbau 3 - Schreiner und Küche",
+      "nameDE": "Ausbau 3 - Schreiner und Küche",
+      "children": [
+        { "code": "381", "name": "Schreinerarbeiten allgemein" },
+        { "code": "382", "name": "Einbaumöbel" },
+        { "code": "383", "name": "Holztreppen" },
+        { "code": "384", "name": "Innenausbau Holz" },
+        { "code": "385", "name": "Wandverkleidungen" },
+        { "code": "386", "name": "Deckenverkleidungen" },
+        { "code": "391", "name": "Kücheneinrichtungen" },
+        { "code": "392", "name": "Laboreinrichtungen" },
+        { "code": "393", "name": "Ladeneinrichtungen" },
+        { "code": "394", "name": "Büroeinrichtungen" },
+        { "code": "395", "name": "Garderobenanlagen" }
+      ]
+    },
+    {
+      "code": "8",
+      "name": "Haustechnik",
+      "nameDE": "Haustechnik",
+      "children": [
+        { "code": "411", "name": "Sanitäranlagen" },
+        { "code": "412", "name": "Sanitärinstallationen" },
+        { "code": "413", "name": "Sanitärgeräte" },
+        { "code": "421", "name": "Heizungsanlagen" },
+        { "code": "422", "name": "Wärmeerzeugung" },
+        { "code": "423", "name": "Wärmeverteilung" },
+        { "code": "424", "name": "Wärmeabgabe" },
+        { "code": "431", "name": "Lüftungsanlagen" },
+        { "code": "432", "name": "Klimaanlagen" },
+        { "code": "433", "name": "Kälteanlagen" },
+        { "code": "441", "name": "Elektroinstallationen" },
+        { "code": "442", "name": "Beleuchtungsanlagen" },
+        { "code": "443", "name": "Kommunikationsanlagen" },
+        { "code": "444", "name": "Sicherheitsanlagen" },
+        { "code": "451", "name": "Aufzugsanlagen" },
+        { "code": "452", "name": "Fahrtreppen" },
+        { "code": "453", "name": "Förderanlagen" },
+        { "code": "461", "name": "Gebäudeautomation" }
+      ]
+    },
+    {
+      "code": "9",
+      "name": "Umgebung und Sonderbereiche",
+      "nameDE": "Umgebung und Sonderbereiche",
+      "children": [
+        { "code": "511", "name": "Gärtnerarbeiten" },
+        { "code": "512", "name": "Bepflanzungen" },
+        { "code": "513", "name": "Rasenflächen" },
+        { "code": "514", "name": "Aussenbeläge" },
+        { "code": "515", "name": "Einfriedungen" },
+        { "code": "516", "name": "Spielplatzgeräte" },
+        { "code": "521", "name": "Schwimmbadanlagen" },
+        { "code": "522", "name": "Wellnessanlagen" },
+        { "code": "531", "name": "Tiefgaragenausstattung" },
+        { "code": "532", "name": "Parkierungsanlagen" },
+        { "code": "541", "name": "Brandschutzsysteme" },
+        { "code": "542", "name": "Entrauchungsanlagen" },
+        { "code": "543", "name": "Sprinkleranlagen" }
+      ]
+    }
+  ]
+}

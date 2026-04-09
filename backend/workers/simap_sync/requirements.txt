@@ -1,0 +1,10 @@
+# SIMAP Sync Worker Dependencies
+
+# Supabase client
+supabase>=2.0.0
+
+# HTTP client with better async support
+httpx>=0.25.0
+
+# Type hints support (Python 3.9+)
+typing-extensions>=4.0.0

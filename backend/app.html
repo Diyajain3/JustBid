@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JustBid - App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container navbar-container">
+            <!-- Logo -->
+            <div class="navbar-logo" onclick="window.location.href='index.html'">
+                <div class="navbar-logo-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                        <polyline points="14,2 14,8 20,8"/>
+                    </svg>
+                </div>
+                <span>JustBid</span>
+            </div>
+
+            <!-- Center Nav Links (Auth) -->
+            <div id="nav-links-auth" class="navbar-center">
+                <button class="nav-link" data-goto="dashboard">Dashboard</button>
+                <button class="nav-link" onclick="navigateTo('settings')">Settings</button>
+            </div>
+
+            <!-- Right Actions -->
+            <div class="navbar-actions">
+                <!-- Theme Toggle -->
+                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode" aria-label="Toggle dark mode">
+                    <svg class="theme-icon-light" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"/>
+                        <line x1="12" y1="1" x2="12" y2="3"/>
+                        <line x1="12" y1="21" x2="12" y2="23"/>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                        <line x1="1" y1="12" x2="3" y2="12"/>
+                        <line x1="21" y1="12" x2="23" y2="12"/>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                    <svg class="theme-icon-dark" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+                <!-- Language Dropdown -->
+                <div class="lang-dropdown">
+                    <button class="lang-dropdown-btn" onclick="toggleLangDropdown()">
+                        <span class="lang-current">EN</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </button>
+                    <div class="lang-dropdown-menu" id="lang-menu">
+                        <button class="lang-option is-active" onclick="selectLang('DE')">
+                            <span class="lang-code">DE</span> Deutsch
+                        </button>
+                        <button class="lang-option" onclick="selectLang('FR')">
+                            <span class="lang-code">FR</span> Français
+                        </button>
+                        <button class="lang-option" onclick="selectLang('IT')">
+                            <span class="lang-code">IT</span> Italiano
+                        </button>
+                        <button class="lang-option" onclick="selectLang('EN')">
+                            <span class="lang-code">EN</span> English
+                        </button>
+                    </div>
+                </div>
+                <!-- CTA: Sign Out -->
+                <div id="nav-cta-auth">
+                    <button class="btn btn-ghost btn-sm" onclick="logout()">Sign Out</button>
+                </div>
+                <!-- Mobile Theme Toggle -->
+                <button class="mobile-theme-toggle" onclick="toggleTheme()" title="Toggle dark mode" aria-label="Toggle dark mode">
+                    <svg class="theme-icon-light" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"/>
+                        <line x1="12" y1="1" x2="12" y2="3"/>
+                        <line x1="12" y1="21" x2="12" y2="23"/>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                        <line x1="1" y1="12" x2="3" y2="12"/>
+                        <line x1="21" y1="12" x2="23" y2="12"/>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                    <svg class="theme-icon-dark" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+                <!-- Mobile Menu Toggle -->
+                <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Open menu">
+                    <svg class="menu-icon-open" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <line x1="3" y1="12" x2="21" y2="12"/>
+                        <line x1="3" y1="18" x2="21" y2="18"/>
+                    </svg>
+                    <svg class="menu-icon-close" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Drawer -->
+    <div class="mobile-menu-backdrop" onclick="toggleMobileMenu()"></div>
+    <div class="mobile-menu">
+        <!-- User Profile Section -->
+        <div id="mobile-menu-profile" class="mobile-menu-profile">
+            <div class="mobile-menu-avatar">AB</div>
+            <div class="mobile-menu-user-info">
+                <span class="mobile-menu-user-name">Anna Example</span>
+                <span class="mobile-menu-user-email">anna@company.com</span>
+                <span class="mobile-menu-user-plan">Professional Plan</span>
+            </div>
+        </div>
+
+        <nav class="mobile-menu-nav">
+            <!-- Auth Links -->
+            <div id="mobile-nav-auth" class="mobile-menu-links">
+                <button class="mobile-menu-link" data-goto="dashboard" onclick="toggleMobileMenu()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="7"/>
+                        <rect x="14" y="3" width="7" height="7"/>
+                        <rect x="14" y="14" width="7" height="7"/>
+                        <rect x="3" y="14" width="7" height="7"/>
+                    </svg>
+                    Dashboard
+                </button>
+                <button class="mobile-menu-link" onclick="navigateTo('settings'); toggleMobileMenu()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                    Settings
+                </button>
+            </div>
+
+            <!-- Logout -->
+            <div id="mobile-nav-logout" class="mobile-menu-section">
+                <button class="mobile-menu-link mobile-menu-link-muted" onclick="logout(); toggleMobileMenu()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                    Sign Out
+                </button>
+            </div>
+
+            <!-- Language Selection -->
+            <div id="mobile-nav-lang" class="mobile-menu-section">
+                <div class="mobile-menu-pref-section">
+                    <span class="mobile-menu-pref-label">Language</span>
+                    <div class="mobile-menu-pref-list">
+                        <button class="mobile-menu-pref-option is-active" onclick="selectLang('DE'); updateMobileLangSelection('DE')" data-lang="DE">
+                            <span class="mobile-menu-pref-radio"></span>
+                            Deutsch
+                        </button>
+                        <button class="mobile-menu-pref-option" onclick="selectLang('FR'); updateMobileLangSelection('FR')" data-lang="FR">
+                            <span class="mobile-menu-pref-radio"></span>
+                            Français
+                        </button>
+                        <button class="mobile-menu-pref-option" onclick="selectLang('IT'); updateMobileLangSelection('IT')" data-lang="IT">
+                            <span class="mobile-menu-pref-radio"></span>
+                            Italiano
+                        </button>
+                        <button class="mobile-menu-pref-option" onclick="selectLang('EN'); updateMobileLangSelection('EN')" data-lang="EN">
+                            <span class="mobile-menu-pref-radio"></span>
+                            English
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- VIEWS -->
+
+    <!-- Profile Selection View -->
+    <div id="view-profile-selection" class="view view--centered active">
+        <div class="container container--narrow">
+            <div class="text-center mb-8">
+                <h2 class="text-h1">Search Profiles</h2>
+                <p class="text-secondary">Select a profile or create a new one.</p>
+            </div>
+
+            <div id="profile-list" class="flex flex-col gap-4">
+                <!-- Profiles injected by JS -->
+            </div>
+
+            <button class="btn btn-lg btn-secondary w-full mt-4 border-dashed" onclick="navigateTo('company-search')">
+                + Create New Search Profile
+            </button>
+        </div>
+    </div>
+
+    <!-- Company Search View -->
+    <div id="view-company-search" class="view view--centered">
+        <div class="container container--narrow pt-12 pb-12">
+            <div class="wizard-steps">
+                <div class="step-dot active"></div>
+                <div class="step-dot"></div>
+                <div class="step-dot"></div>
+            </div>
+
+            <div class="text-center mb-8">
+                <h2 class="text-h1">Find Your Company</h2>
+                <p class="text-secondary">We will automatically analyse your company profile.</p>
+            </div>
+
+            <div class="card">
+                <div class="form-group">
+                    <label class="form-label">Company Name or UID</label>
+                    <input type="text" id="company-search-input" class="input" placeholder="e.g. Miller Construction..."
+                        autofocus>
+                    <div class="mt-2 text-xs text-secondary">
+                        Demo companies:
+                        <span class="badge badge-gray cursor-pointer" onclick="setSearch('Müller')">Müller</span>
+                        <span class="badge badge-gray cursor-pointer" onclick="setSearch('Tech')">Tech</span>
+                        <span class="badge badge-gray cursor-pointer" onclick="setSearch('Green')">Green</span>
+                        <span class="badge badge-gray cursor-pointer" onclick="setSearch('Alpha')">Alpha</span>
+                    </div>
+                </div>
+
+                <div id="company-search-results" class="flex flex-col gap-2">
+                    <!-- Results injected by JS -->
+                </div>
+
+                <div class="text-center text-sm text-muted mt-6">
+                    Company not found? <a href="#" class="text-accent" onclick="navigateTo('manual-entry'); return false;">Enter manually</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manual Entry View -->
+    <div id="view-manual-entry" class="view view--centered">
+        <div class="container container--narrow pt-12 pb-12">
+            <div class="wizard-steps">
+                <div class="step-dot active"></div>
+                <div class="step-dot"></div>
+                <div class="step-dot"></div>
+            </div>
+
+            <div class="text-center mb-8">
+                <h2 class="text-h1">Enter Company Manually</h2>
+                <p class="text-secondary">Enter your company details below.</p>
+            </div>
+
+            <div class="card">
+                <div class="settings-form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Company Name *</label>
+                        <input type="text" id="manual-name" class="input" placeholder="My Company Ltd">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">UID Number (optional)</label>
+                        <input type="text" class="input" placeholder="CHE-123.456.789">
+                    </div>
+                </div>
+                <div class="settings-form-grid">
+                    <div class="form-group">
+                        <label class="form-label">City *</label>
+                        <input type="text" id="manual-city" class="input" placeholder="Zurich">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Industry</label>
+                        <select class="input">
+                            <option value="">Please select...</option>
+                            <option>Construction / Above Ground</option>
+                            <option>Construction / Civil Engineering</option>
+                            <option>IT Services</option>
+                            <option>Landscaping & Horticulture</option>
+                            <option>Security Services</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex gap-3 mt-6">
+                    <button class="btn btn-secondary" onclick="navigateTo('company-search')">Back</button>
+                    <button class="btn btn-primary flex-1" onclick="submitManualEntry()">Continue to AI Analysis</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Review View -->
+    <div id="view-ai-review" class="view">
+        <!-- AI Loading Overlay -->
+        <div id="ai-loading-overlay" class="flex flex-col items-center justify-center hidden h-60vh">
+            <div class="conveyor-bars"></div>
+            <div class="text-h3 mt-8 text-accent" id="ai-loading-text">Searching registry...</div>
+            <div class="text-sm text-secondary mt-2">Please wait while we build your profile</div>
+        </div>
+
+        <div id="ai-results-content" class="container container--narrow pt-12 pb-12 hidden">
+            <div class="wizard-steps">
+                <div class="step-dot completed"></div>
+                <div class="step-dot active"></div>
+                <div class="step-dot"></div>
+            </div>
+
+            <div class="text-center mb-8">
+                <div class="badge badge-blue mb-2">AI Analysis Complete</div>
+                <h2 class="text-h1">Is This Your Profile?</h2>
+                <p class="text-secondary">Based on <strong id="ai-company-name">...</strong></p>
+            </div>
+
+            <div class="flex flex-col gap-4">
+                <!-- Industry -->
+                <div class="card">
+                    <div class="flex justify-between items-center mb-2">
+                        <div class="text-sm text-muted">Industry</div>
+                        <button class="btn btn-sm btn-ghost text-accent"
+                            onclick="openEditModal('industry')">Edit</button>
+                    </div>
+                    <div id="ai-industry" class="text-h3">Construction / Above Ground</div>
+                </div>
+
+                <!-- Company Size -->
+                <div class="card">
+                    <div class="flex justify-between items-center mb-2">
+                        <div class="text-sm text-muted">Company Size</div>
+                        <button class="btn btn-sm btn-ghost text-accent" onclick="openEditModal('size')">Edit</button>
+                    </div>
+                    <div id="ai-size" class="text-h3">10–49 Employees</div>
+                </div>
+
+                <!-- Keywords -->
+                <div class="card">
+                    <div class="flex justify-between items-center mb-2">
+                        <div class="text-sm text-muted">Keywords (Include / Exclude)</div>
+                        <button class="btn btn-sm btn-ghost text-accent"
+                            onclick="openEditModal('keywords')">Edit</button>
+                    </div>
+                    <div id="ai-keywords" class="flex flex-wrap gap-2">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- CPV Codes -->
+                <div class="card">
+                    <div class="flex justify-between items-center mb-2">
+                        <div class="text-sm text-muted">Recommended CPV Codes</div>
+                        <button class="btn btn-sm btn-ghost text-accent" onclick="openEditModal('cpv')">Edit</button>
+                    </div>
+                    <div id="ai-cpv-codes" class="flex flex-col gap-2">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- NPK Codes (Conditional) -->
+                <div id="ai-npk-section" class="card" style="display: none;">
+                    <div class="flex justify-between items-center mb-2">
+                        <div class="text-sm text-muted">NPK Codes (Construction)</div>
+                        <button class="btn btn-sm btn-ghost text-accent" onclick="openEditModal('npk')">Edit</button>
+                    </div>
+                    <div id="ai-npk-codes" class="flex flex-col gap-2">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Region -->
+                <div class="card">
+                    <div class="flex justify-between items-center mb-2">
+                        <div class="text-sm text-muted">Region</div>
+                        <button class="btn btn-sm btn-ghost text-accent"
+                            onclick="openEditModal('region')">Edit</button>
+                    </div>
+                    <div id="ai-region" class="text-h3">Zurich, Aargau, Zug</div>
+                </div>
+
+                <button class="btn btn-lg btn-primary mt-4" onclick="navigateTo('dashboard')">
+                    Confirm Profile &amp; View Matches
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard View -->
+    <div id="view-dashboard" class="view">
+        <div class="container pt-8 pb-8">
+            <!-- Breadcrumb -->
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <span class="breadcrumb-item is-clickable" onclick="navigateTo('profile-selection')">My Profiles</span>
+                <span class="breadcrumb-separator">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </span>
+                <span class="breadcrumb-item is-current">Acpe Corpe</span>
+            </nav>
+
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-h2">Tenders</h2>
+                <button class="btn btn-sm btn-secondary" onclick="openProfileSettings()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                    Search Profile
+                </button>
+            </div>
+
+            <div id="filter-tabs" class="flex justify-between items-center gap-2 mb-6">
+                <div class="flex gap-2 overflow-x-auto pb-1">
+                    <button class="btn btn-sm btn-primary" data-filter="all" onclick="filterTenders('all')"><span>All (<span id="count-all">0</span>)</span></button>
+                    <button class="btn btn-sm btn-ghost" data-filter="open" onclick="filterTenders('open')"><span>Open (<span id="count-open">0</span>)</span></button>
+                    <button class="btn btn-sm btn-ghost" data-filter="closing" onclick="filterTenders('closing')"><span>Closing Soon (<span id="count-closing">0</span>)</span></button>
+                    <button class="btn btn-sm btn-ghost" data-filter="bookmarked" onclick="filterTenders('bookmarked')"><span>Saved (<span id="count-bookmarked">0</span>)</span></button>
+                    <button class="btn btn-sm btn-ghost" data-filter="applied" onclick="filterTenders('applied')"><span>Applied (<span id="count-applied">0</span>)</span></button>
+                    <button class="btn btn-sm btn-ghost" data-filter="hidden" onclick="filterTenders('hidden')"><span>Hidden (<span id="count-hidden">0</span>)</span></button>
+                </div>
+                <div class="flex gap-2 flex-shrink-0">
+                    <button class="btn btn-sm btn-secondary" onclick="toggleModal('filter', true)">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+                        </svg>
+                        Filter
+                    </button>
+                    <div class="sort-dropdown">
+                        <button class="btn btn-sm btn-secondary" onclick="toggleSortDropdown()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m3 16 4 4 4-4"/>
+                                <path d="M7 20V4"/>
+                                <path d="m21 8-4-4-4 4"/>
+                                <path d="M17 4v16"/>
+                            </svg>
+                            <span id="sort-label">Match</span>
+                        </button>
+                        <div class="sort-dropdown-menu" id="sort-menu">
+                            <button class="sort-option is-active" onclick="sortTenders('match')">Match %</button>
+                            <button class="sort-option" onclick="sortTenders('deadline')">Deadline</button>
+                            <button class="sort-option" onclick="sortTenders('title')">Title A–Z</button>
+                            <button class="sort-option" onclick="sortTenders('price')">Contract Value</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tender-feed" class="tender-grid">
+                <!-- Feed injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Tender Detail View -->
+    <div id="view-tender-detail" class="view">
+        <div class="container pt-8 pb-8">
+            <nav id="tender-detail-breadcrumbs" class="breadcrumb" aria-label="Breadcrumb">
+                <!-- Injected via JS -->
+            </nav>
+
+            <div class="card" id="tender-detail-content">
+                <!-- Content injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings View -->
+    <div id="view-settings" class="view">
+        <div class="container container--wide pt-8 pb-8">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <span class="breadcrumb-item is-clickable" onclick="navigateTo('profile-selection')">My Profiles</span>
+                <span class="breadcrumb-separator">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </span>
+                <span class="breadcrumb-item is-current">Settings</span>
+            </nav>
+
+            <h1 class="text-h1 mb-8">Settings</h1>
+
+            <div class="settings-layout">
+                <!-- Sidebar Navigation -->
+                <div class="settings-nav card">
+                    <button class="settings-nav-item is-active" onclick="showSettingsTab('billing')">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="20" height="14" x="2" y="5" rx="2"/>
+                            <line x1="2" x2="22" y1="10" y2="10"/>
+                        </svg>
+                        Subscription &amp; Billing
+                    </button>
+                    <button class="settings-nav-item" onclick="showSettingsTab('profile')">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        Account Details
+                    </button>
+                    <button class="settings-nav-item" onclick="showSettingsTab('notifications')">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+                            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+                        </svg>
+                        Notifications
+                    </button>
+                    <button class="settings-nav-item" onclick="showSettingsTab('team')">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                        Manage Team
+                    </button>
+                    <button class="settings-nav-item" onclick="showSettingsTab('security')">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                        Security &amp; Account
+                    </button>
+                </div>
+
+                <!-- Content Panels -->
+                <div class="settings-content">
+                    <!-- Billing Tab -->
+                    <div id="settings-billing" class="settings-panel is-active">
+                        <div class="card">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="text-h3 mb-1">Your Plan: Professional</h3>
+                                    <p class="text-secondary text-sm">Next billing date: 01.02.2026</p>
+                                </div>
+                                <span class="badge badge-green">Active</span>
+                            </div>
+                            <div class="price-display">CHF 49.<span class="price-period">/month</span></div>
+                            <div class="flex gap-3 mt-6">
+                                <button class="btn btn-secondary btn-sm">Cancel Plan</button>
+                                <button class="btn btn-primary btn-sm">Upgrade to Enterprise</button>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3 class="text-h3 mb-4">Payment Method</h3>
+                            <div class="settings-payment-card">
+                                <div class="flex items-center gap-4">
+                                    <div class="settings-card-icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect width="20" height="14" x="2" y="5" rx="2"/>
+                                            <line x1="2" x2="22" y1="10" y2="10"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium">•••• •••• •••• 4242</div>
+                                        <div class="text-xs text-secondary">Visa • Expires 12/28</div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-ghost btn-sm">Edit</button>
+                            </div>
+                            <button class="btn btn-ghost text-accent mt-3 pl-0">+ Add New Card</button>
+                        </div>
+
+                        <div class="card">
+                            <h3 class="text-h3 mb-4">Invoices</h3>
+                            <div class="settings-invoice-list">
+                                <div class="settings-invoice-item">
+                                    <div>
+                                        <div class="font-medium">January 2026</div>
+                                        <div class="text-xs text-secondary">01.01.2026 • #INV-2026-001</div>
+                                    </div>
+                                    <div class="flex items-center gap-4">
+                                        <span class="text-sm font-medium">CHF 49.00</span>
+                                        <button class="btn btn-ghost btn-sm text-accent">PDF</button>
+                                    </div>
+                                </div>
+                                <div class="settings-invoice-item">
+                                    <div>
+                                        <div class="font-medium">December 2025</div>
+                                        <div class="text-xs text-secondary">01.12.2025 • #INV-2025-012</div>
+                                    </div>
+                                    <div class="flex items-center gap-4">
+                                        <span class="text-sm font-medium">CHF 49.00</span>
+                                        <button class="btn btn-ghost btn-sm text-accent">PDF</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Profile Tab -->
+                    <div id="settings-profile" class="settings-panel">
+                        <div class="card">
+                            <h3 class="text-h3 mb-6">Company Profile</h3>
+                            <div class="settings-form-grid">
+                                <div class="form-group">
+                                    <label class="form-label">Company Name</label>
+                                    <input type="text" class="input" value="Müller Bau AG" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">UID Number</label>
+                                    <input type="text" class="input" value="CHE-123.456.789" disabled />
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Industry</label>
+                                    <select class="input">
+                                        <option selected>Construction / Above Ground</option>
+                                        <option>Construction / Civil Engineering</option>
+                                        <option>IT Services</option>
+                                        <option>Horticulture</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Company Size</label>
+                                    <select class="input">
+                                        <option>1–9 Employees</option>
+                                        <option selected>10–49 Employees</option>
+                                        <option>50–249 Employees</option>
+                                        <option>250+ Employees</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group mt-4">
+                                <label class="form-label">Address</label>
+                                <input type="text" class="input" value="Bahnhofstrasse 42, 8001 Zürich" />
+                            </div>
+                            <button class="btn btn-primary mt-6">Save Changes</button>
+                        </div>
+
+                        <div class="card">
+                            <h3 class="text-h3 mb-6">Contact Person</h3>
+                            <div class="settings-form-grid">
+                                <div class="form-group">
+                                    <label class="form-label">First Name</label>
+                                    <input type="text" class="input" value="Hans" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Last Name</label>
+                                    <input type="text" class="input" value="Müller" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="input" value="hans.mueller@muellerbau.ch" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Phone</label>
+                                    <input type="tel" class="input" value="+41 44 123 45 67" />
+                                </div>
+                            </div>
+                            <button class="btn btn-primary mt-6">Save Changes</button>
+                        </div>
+                    </div>
+
+                    <!-- Notifications Tab -->
+                    <div id="settings-notifications" class="settings-panel">
+                        <div class="card">
+                            <h3 class="text-h3 mb-2">Email Notifications</h3>
+                            <p class="text-secondary text-sm mb-6">Choose which emails you would like to receive.</p>
+
+                            <div class="settings-toggle-list">
+                                <div class="settings-toggle-item">
+                                    <div>
+                                        <div class="font-medium">New Tenders</div>
+                                        <div class="text-sm text-secondary">Receive an email when new matching tenders are published</div>
+                                    </div>
+                                    <label class="toggle">
+                                        <input type="checkbox" checked />
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="settings-toggle-item">
+                                    <div>
+                                        <div class="font-medium">Deadline Reminders</div>
+                                        <div class="text-sm text-secondary">Reminder 3 days before the submission deadline</div>
+                                    </div>
+                                    <label class="toggle">
+                                        <input type="checkbox" checked />
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="settings-toggle-item">
+                                    <div>
+                                        <div class="font-medium">Weekly Digest</div>
+                                        <div class="text-sm text-secondary">Summary of all new tenders every Monday</div>
+                                    </div>
+                                    <label class="toggle">
+                                        <input type="checkbox" />
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="settings-toggle-item">
+                                    <div>
+                                        <div class="font-medium">Product Updates</div>
+                                        <div class="text-sm text-secondary">News about new features and improvements</div>
+                                    </div>
+                                    <label class="toggle">
+                                        <input type="checkbox" checked />
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3 class="text-h3 mb-2">Notification Frequency</h3>
+                            <p class="text-secondary text-sm mb-6">How often would you like to be notified about new tenders?</p>
+
+                            <div class="settings-radio-group">
+                                <label class="settings-radio-item">
+                                    <input type="radio" name="frequency" value="instant" checked />
+                                    <div>
+                                        <div class="font-medium">Instantly</div>
+                                        <div class="text-sm text-secondary">For every new tender</div>
+                                    </div>
+                                </label>
+                                <label class="settings-radio-item">
+                                    <input type="radio" name="frequency" value="daily" />
+                                    <div>
+                                        <div class="font-medium">Daily</div>
+                                        <div class="text-sm text-secondary">Once a day at 08:00</div>
+                                    </div>
+                                </label>
+                                <label class="settings-radio-item">
+                                    <input type="radio" name="frequency" value="weekly" />
+                                    <div>
+                                        <div class="font-medium">Weekly</div>
+                                        <div class="text-sm text-secondary">Every Monday at 08:00</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Team Tab -->
+                    <div id="settings-team" class="settings-panel">
+                        <div class="card">
+                            <div class="flex justify-between items-center mb-6">
+                                <div>
+                                    <h3 class="text-h3 mb-1">Team Members</h3>
+                                    <p class="text-secondary text-sm">3 of 5 seats used</p>
+                                </div>
+                                <button class="btn btn-primary btn-sm">+ Invite Member</button>
+                            </div>
+
+                            <div class="settings-team-list">
+                                <div class="settings-team-member">
+                                    <div class="settings-avatar">HM</div>
+                                    <div class="flex-1">
+                                        <div class="font-medium">Hans Müller</div>
+                                        <div class="text-sm text-secondary">hans.mueller@muellerbau.ch</div>
+                                    </div>
+                                    <span class="badge badge-blue">Admin</span>
+                                </div>
+                                <div class="settings-team-member">
+                                    <div class="settings-avatar">AS</div>
+                                    <div class="flex-1">
+                                        <div class="font-medium">Anna Schmidt</div>
+                                        <div class="text-sm text-secondary">anna.schmidt@muellerbau.ch</div>
+                                    </div>
+                                    <span class="badge badge-gray">Member</span>
+                                    <button class="btn btn-ghost btn-sm">Remove</button>
+                                </div>
+                                <div class="settings-team-member">
+                                    <div class="settings-avatar">PW</div>
+                                    <div class="flex-1">
+                                        <div class="font-medium">Peter Weber</div>
+                                        <div class="text-sm text-secondary">peter.weber@muellerbau.ch</div>
+                                    </div>
+                                    <span class="badge badge-gray">Member</span>
+                                    <button class="btn btn-ghost btn-sm">Remove</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3 class="text-h3 mb-2">Roles &amp; Permissions</h3>
+                            <p class="text-secondary text-sm mb-6">Overview of available roles in your team.</p>
+
+                            <div class="settings-roles-list">
+                                <div class="settings-role-item">
+                                    <div>
+                                        <div class="font-medium">Administrator</div>
+                                        <div class="text-sm text-secondary">Full access to all settings and team members</div>
+                                    </div>
+                                </div>
+                                <div class="settings-role-item">
+                                    <div>
+                                        <div class="font-medium">Member</div>
+                                        <div class="text-sm text-secondary">Can view and manage tenders</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Security Tab -->
+                    <div id="settings-security" class="settings-panel">
+                        <div class="card">
+                            <h3 class="text-h3 mb-2">Change Password</h3>
+                            <p class="text-secondary text-sm mb-6">Update your password regularly for better security.</p>
+                            <div class="form-group">
+                                <label class="form-label">Current Password</label>
+                                <input type="password" class="input" placeholder="••••••••">
+                            </div>
+                            <div class="settings-form-grid">
+                                <div class="form-group">
+                                    <label class="form-label">New Password</label>
+                                    <input type="password" class="input" placeholder="••••••••">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Confirm Password</label>
+                                    <input type="password" class="input" placeholder="••••••••">
+                                </div>
+                            </div>
+                            <button class="btn btn-primary mt-4">Change Password</button>
+                        </div>
+
+                        <div class="card">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-h3 mb-2">Two-Factor Authentication</h3>
+                                    <p class="text-secondary text-sm">Protect your account with an additional security code.</p>
+                                </div>
+                                <span class="badge badge-gray">Inactive</span>
+                            </div>
+                            <button class="btn btn-secondary mt-6">Enable 2FA</button>
+                        </div>
+
+                        <div class="card">
+                            <h3 class="text-h3 mb-2">Manage Search Profiles</h3>
+                            <p class="text-secondary text-sm mb-6">Manage or delete your search profiles.</p>
+                            <div class="settings-team-list">
+                                <div class="settings-team-member">
+                                    <div class="settings-avatar">MB</div>
+                                    <div class="flex-1">
+                                        <div class="font-medium">Müller Bau AG</div>
+                                        <div class="text-sm text-secondary">Created on 15.01.2026</div>
+                                    </div>
+                                    <button class="btn btn-ghost btn-sm text-error" onclick="alert('Demo: Profile would be deleted')">Delete</button>
+                                </div>
+                                <div class="settings-team-member">
+                                    <div class="settings-avatar">IZ</div>
+                                    <div class="flex-1">
+                                        <div class="font-medium">Immo Zürich AG</div>
+                                        <div class="text-sm text-secondary">Created on 10.01.2026</div>
+                                    </div>
+                                    <button class="btn btn-ghost btn-sm text-error" onclick="alert('Demo: Profile would be deleted')">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card card-danger">
+                            <h3 class="text-h3 mb-2">Danger Zone</h3>
+                            <p class="text-secondary text-sm mb-6">These actions cannot be undone.</p>
+                            <div class="flex flex-col gap-4">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <div class="font-medium">Export All Data</div>
+                                        <div class="text-sm text-secondary">Download all your data as a ZIP file</div>
+                                    </div>
+                                    <button class="btn btn-secondary btn-sm">Export</button>
+                                </div>
+                                <div class="flex justify-between items-center divider">
+                                    <div>
+                                        <div class="font-medium">Delete Account</div>
+                                        <div class="text-sm text-secondary">Your account and all data will be permanently deleted</div>
+                                    </div>
+                                    <button class="btn btn-sm btn-danger" onclick="if(confirm('Are you sure? This action cannot be undone.')) alert('Demo: Account would be deleted')">Delete Account</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Filter Modal -->
+    <div id="modal-filter" class="modal-backdrop" onclick="if(event.target === this) toggleModal('filter', false)">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="text-h3">Filter</h3>
+                <button class="btn btn-sm btn-ghost" onclick="toggleModal('filter', false)">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Status</label>
+                    <div class="flex flex-col gap-2">
+                        <label class="flex items-center gap-2">
+                            <input type="checkbox" id="filter-status-open" checked> <span>Open</span>
+                        </label>
+                        <label class="flex items-center gap-2">
+                            <input type="checkbox" id="filter-status-closing" checked> <span>Closing Soon</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Region</label>
+                    <select id="filter-region" class="input">
+                        <option value="all">All Regions</option>
+                        <option value="ZH">Zurich</option>
+                        <option value="BE">Bern</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Min. Contract Value (CHF)</label>
+                    <input type="range" class="w-full">
+                    <div class="flex justify-between text-sm text-muted">
+                        <span>0</span>
+                        <span>5 Mio.+</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" id="filter-matches-only">
+                        <span class="font-medium">High match only (&gt;80%)</span>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="toggleModal('filter', false)">Reset</button>
+                <button class="btn btn-primary" onclick="applyFilters()">Apply</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="modal-edit" class="modal-backdrop" onclick="if(event.target === this) toggleModal('edit', false)">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modal-edit-title" class="text-h3">Edit</h3>
+                <button class="btn btn-sm btn-ghost" onclick="toggleModal('edit', false)">✕</button>
+            </div>
+            <div class="modal-body" id="modal-edit-content">
+                <!-- Content injected by JS -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="toggleModal('edit', false)">Cancel</button>
+                <button class="btn btn-primary" onclick="saveEdit()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+
+</html>

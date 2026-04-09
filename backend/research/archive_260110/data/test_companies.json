@@ -1,0 +1,79 @@
+{
+  "testCompanies": [
+    {
+      "id": "test-construction",
+      "name": "Berger Bau AG",
+      "uid": "CHE-109.234.567",
+      "location": "Winterthur",
+      "canton": "ZH",
+      "legalForm": "Aktiengesellschaft",
+      "status": "active",
+      "purpose": "Hoch- und Tiefbauarbeiten, Sanierungen, Umbauten und Renovationen aller Art",
+      "employeeCount": "25-50",
+      "foundedYear": 1998,
+      "suggestedIndustries": ["construction"],
+      "suggestedCpv": [
+        { "code": "45000000", "name": "Bauarbeiten" },
+        { "code": "45210000", "name": "Hochbauarbeiten" },
+        { "code": "45400000", "name": "Baufertigstellung" }
+      ],
+      "suggestedNpk": [
+        { "code": "211", "name": "Abbrucharbeiten" },
+        { "code": "215", "name": "Maurerarbeiten" },
+        { "code": "221", "name": "Betonarbeiten" }
+      ],
+      "suggestedKeywords": ["BIM", "Holzbau", "Minergie", "Generalunternehmer", "Sanierung"],
+      "suggestedRegions": ["ZH", "AG", "TG", "SG", "SH"],
+      "suggestedExclusions": ["Tiefbau", "Strassenbau", "Brückenbau", "Tunnelbau"]
+    },
+    {
+      "id": "test-it",
+      "name": "CloudTech Solutions GmbH",
+      "uid": "CHE-223.456.789",
+      "location": "Zürich",
+      "canton": "ZH",
+      "legalForm": "Gesellschaft mit beschränkter Haftung",
+      "status": "active",
+      "purpose": "Entwicklung und Betrieb von Cloud-Lösungen, IT-Beratung, Softwareentwicklung",
+      "employeeCount": "10-25",
+      "foundedYear": 2015,
+      "suggestedIndustries": ["it"],
+      "suggestedCpv": [
+        { "code": "72000000", "name": "IT-Dienstleistungen" },
+        { "code": "72200000", "name": "Softwareprogrammierung" },
+        { "code": "72300000", "name": "Datendienste" }
+      ],
+      "suggestedNpk": [],
+      "suggestedKeywords": ["SAP", "CRM", "Cloud", "Analytics", "Microsoft 365", "DevOps"],
+      "suggestedRegions": ["all"],
+      "suggestedExclusions": ["Hardware", "Netzwerk-Infrastruktur", "Telekommunikation", "Legacy-Systeme"]
+    },
+    {
+      "id": "test-consulting",
+      "name": "MedConsult Partner AG",
+      "uid": "CHE-345.678.901",
+      "location": "Bern",
+      "canton": "BE",
+      "legalForm": "Aktiengesellschaft",
+      "status": "active",
+      "purpose": "Unternehmensberatung im Gesundheitswesen, Projektmanagement, Prozessoptimierung",
+      "employeeCount": "5-10",
+      "foundedYear": 2012,
+      "suggestedIndustries": ["consulting", "health"],
+      "suggestedCpv": [
+        { "code": "79400000", "name": "Unternehmens- und Managementberatung" },
+        { "code": "85000000", "name": "Gesundheits- und Sozialwesen" },
+        { "code": "79421000", "name": "Projektmanagement" }
+      ],
+      "suggestedNpk": [],
+      "suggestedKeywords": ["Lean", "Prozessoptimierung", "Digitalisierung", "Change Management", "eHealth"],
+      "suggestedRegions": ["BE", "FR", "SO", "NE"],
+      "suggestedExclusions": ["Pharma", "Labordiagnostik", "Medizintechnik", "Akutversorgung"]
+    }
+  ],
+  "metadata": {
+    "source": "Test data for Tender Scout MVP",
+    "note": "Replace with Zefix API integration",
+    "lastUpdated": "2026-01-15"
+  }
+}
