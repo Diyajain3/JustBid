@@ -34,20 +34,20 @@ export default function Pricing() {
     <section
       id="pricing"
       ref={containerRef}
-      className="py-20 bg-gradient-to-b from-white via-purple-50 to-purple-100 relative border-t border-purple-200"
+      className="py-20 bg-gradient-to-b from-white via-purple-50 to-purple-100 dark:from-black dark:via-slate-900/20 dark:to-slate-950 relative border-t border-purple-200 dark:border-purple-900/30"
     >
       {/* Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-400/10 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-400/10 dark:bg-purple-900/10 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
 
         {/* Heading */}
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-4xl md:text-6xl font-bold mb-8 text-purple-900">
-            Scale your <span className="text-purple-600">acquisition</span>
+          <h2 className="text-4xl md:text-6xl font-bold mb-8 text-purple-900 dark:text-slate-100">
+            Scale your <span className="text-purple-600 dark:text-purple-400">acquisition</span>
           </h2>
 
-          <p className="text-xl text-purple-600">
+          <p className="text-xl text-purple-600 dark:text-slate-400">
             Simple, transparent pricing for growing teams.
           </p>
         </div>
@@ -56,20 +56,20 @@ export default function Pricing() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl mx-auto">
 
           {/* Starter */}
-          <div className="pricing-card bg-white border border-purple-200 rounded-[2.5rem] p-12 flex flex-col transition-all duration-500 hover:border-purple-300 hover:-translate-y-1 shadow-sm">
+          <div className="pricing-card bg-white dark:bg-slate-900 border border-purple-200 dark:border-purple-800/30 rounded-[2.5rem] p-12 flex flex-col transition-all duration-500 hover:border-purple-300 dark:hover:border-purple-700 hover:-translate-y-1 shadow-sm">
 
             <div className="mb-12">
-              <h3 className="text-purple-600 text-xs font-bold uppercase tracking-widest mb-3">
+              <h3 className="text-purple-600 dark:text-purple-400 text-xs font-bold uppercase tracking-widest mb-3">
                 Starter
               </h3>
-              <p className="text-purple-500 text-sm">
+              <p className="text-purple-500 dark:text-slate-400 text-sm">
                 Ideal for startups and non-profits.
               </p>
             </div>
 
             <div className="mb-12 flex items-end gap-2">
-              <span className="text-6xl font-extrabold text-purple-900">$0</span>
-              <span className="text-purple-500 text-sm">/ month</span>
+              <span className="text-6xl font-extrabold text-purple-900 dark:text-slate-100">$0</span>
+              <span className="text-purple-500 dark:text-slate-400 text-sm">/ month</span>
             </div>
 
             <ul className="space-y-5 mb-14 flex-grow">
@@ -80,8 +80,8 @@ export default function Pricing() {
                 "AI matching",
                 "Email notifications",
               ].map((item, i) => (
-                <li key={i} className="flex items-center text-purple-600 text-sm">
-                  <span className="w-5 h-5 mr-3 flex items-center justify-center text-purple-600">
+                <li key={i} className="flex items-center text-purple-600 dark:text-slate-400 text-sm">
+                  <span className="w-5 h-5 mr-3 flex items-center justify-center text-purple-600 dark:text-purple-400">
                     ✓
                   </span>
                   {item}
@@ -100,7 +100,7 @@ export default function Pricing() {
           </div>
 
           {/* Pro */}
-          <div className="pricing-card bg-white/70 backdrop-blur-xl border-2 border-purple-400/60 rounded-[2.5rem] p-12 flex flex-col relative shadow-xl transition-all duration-500 hover:-translate-y-2">
+          <div className="pricing-card bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border-2 border-purple-400/60 dark:border-purple-800/40 rounded-[2.5rem] p-12 flex flex-col relative shadow-xl transition-all duration-500 hover:-translate-y-2">
 
             {/* Badge */}
             <div className="absolute -top-4 right-8">
@@ -110,17 +110,17 @@ export default function Pricing() {
             </div>
 
             <div className="mb-12">
-              <h3 className="text-purple-600 text-xs font-bold uppercase tracking-widest mb-3">
+              <h3 className="text-purple-600 dark:text-purple-400 text-xs font-bold uppercase tracking-widest mb-3">
                 Professional
               </h3>
-              <p className="text-purple-500 text-sm">
+              <p className="text-purple-500 dark:text-slate-400 text-sm">
                 For high-growth scaleups.
               </p>
             </div>
 
             <div className="mb-12 flex items-end gap-2">
-              <span className="text-6xl font-extrabold text-purple-900">$49</span>
-              <span className="text-purple-500 text-sm">/ month</span>
+              <span className="text-6xl font-extrabold text-purple-900 dark:text-slate-100">$49</span>
+              <span className="text-purple-500 dark:text-slate-400 text-sm">/ month</span>
             </div>
 
             <ul className="space-y-5 mb-14 flex-grow">
@@ -131,11 +131,11 @@ export default function Pricing() {
                 "All global sources",
                 "Priority support",
               ].map((item, i) => (
-                <li key={i} className="flex items-center text-purple-600 text-sm">
-                  <span className="w-5 h-5 mr-3 flex items-center justify-center text-purple-500">
+                <li key={i} className="flex items-center text-purple-600 dark:text-slate-400 text-sm">
+                  <span className="w-5 h-5 mr-3 flex items-center justify-center text-purple-500 dark:text-purple-400">
                     ✓
                   </span>
-                  <span className={i === 0 || i === 3 ? "font-semibold text-purple-900" : ""}>
+                  <span className={i === 0 || i === 3 ? "font-semibold text-purple-900 dark:text-slate-100" : ""}>
                     {item}
                   </span>
                 </li>

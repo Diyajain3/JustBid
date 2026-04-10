@@ -28,10 +28,10 @@ export default function Hero() {
   return (
     <div
       ref={heroRef}
-      className="relative pt-20 pb-12 lg:pt-28 lg:pb-24 overflow-hidden text-center z-10 bg-white"
+      className="relative pt-20 pb-12 lg:pt-28 lg:pb-24 overflow-hidden text-center z-10 bg-white dark:bg-black"
     >
       {/* Soft purple background glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-purple-200/60 via-white to-white -z-10"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-purple-200/60 dark:from-purple-900/40 via-white dark:via-black to-white dark:to-black -z-10"></div>
 
       {/* Top line */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-300 to-transparent"></div>
@@ -40,13 +40,13 @@ export default function Hero() {
         <div className="max-w-4xl mx-auto flex flex-col items-center">
 
           {/* Badge */}
-          <div className="hero-badge inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/70 border border-purple-200 text-purple-700 font-medium text-xs mb-6 backdrop-blur-md shadow-sm">
+          <div className="hero-badge inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/70 dark:bg-slate-900/70 border border-purple-200 dark:border-purple-800/30 text-purple-700 dark:text-purple-300 font-medium text-xs mb-6 backdrop-blur-md shadow-sm">
             <span className="flex h-2 w-2 rounded-full bg-purple-500 animate-pulse"></span>
             Intelligence 2.0 is live
           </div>
 
           {/* Title */}
-          <h1 className="hero-title text-6xl md:text-7xl lg:text-[5.5rem] font-bold text-slate-900 tracking-tight leading-[1.1] mb-6">
+          <h1 className="hero-title text-6xl md:text-7xl lg:text-[5.5rem] font-bold text-slate-900 dark:text-slate-100 tracking-tight leading-[1.1] mb-6">
             Capture every <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-fuchsia-500 to-purple-400 text-5xl lg:text-6xl">
               public contract
@@ -54,14 +54,14 @@ export default function Hero() {
           </h1>
 
           {/* Subtitle */}
-          <p className="hero-subtitle text-lg md:text-xl text-slate-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+          <p className="hero-subtitle text-lg md:text-xl text-slate-600 dark:text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
             Automate your tender discovery. Our AI-driven engine monitors thousands of sources to deliver only the opportunities that matter to your business.
           </p>
 
           {/* Buttons */}
           <div className="hero-actions flex flex-col sm:flex-row items-center justify-center gap-6 mb-12">
 
-            <button className="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-purple-500 to-fuchsia-500 text-white rounded-full font-bold text-lg transition-all duration-300 shadow-lg shadow-purple-200 active:scale-95 flex items-center justify-center gap-3">
+            <button className="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-purple-500 to-fuchsia-500 text-white rounded-full font-bold text-lg transition-all duration-300 shadow-lg shadow-purple-200 dark:shadow-purple-900/20 active:scale-95 flex items-center justify-center gap-3">
               Start Free Trial
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14M12 5l7 7-7 7" />
@@ -70,7 +70,7 @@ export default function Hero() {
 
             <a
               href="#how-it-works"
-              className="w-full sm:w-auto px-10 py-4 bg-white text-slate-800 rounded-full font-bold text-lg border border-purple-200 hover:border-purple-300 shadow-sm transition-all duration-300 active:scale-95"
+              className="w-full sm:w-auto px-10 py-4 bg-white dark:bg-slate-950 text-slate-800 dark:text-slate-200 rounded-full font-bold text-lg border border-purple-200 dark:border-purple-800/30 hover:border-purple-300 transition-all duration-300 active:scale-95 shadow-sm"
             >
               Watch Demo
             </a>
@@ -99,25 +99,25 @@ export default function Hero() {
 
       {/* Stats */}
       <div className="max-w-6xl mx-auto px-6 mt-20 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-purple-100 border-t border-b border-purple-100 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-purple-100 dark:divide-purple-900/30 border-t border-b border-purple-100 dark:border-purple-900/30 py-12">
 
           <div className="stat-card pb-10 md:pb-0 md:px-10">
-            <div className="text-4xl font-bold text-slate-900 mb-2">$40B+</div>
-            <div className="text-slate-500 text-sm font-semibold uppercase tracking-widest">
+            <div className="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-2">$40B+</div>
+            <div className="text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-widest">
               Market Size
             </div>
           </div>
 
           <div className="stat-card py-10 md:py-0 md:px-10">
-            <div className="text-4xl font-bold text-slate-900 mb-2">2,400+</div>
-            <div className="text-slate-500 text-sm font-semibold uppercase tracking-widest">
+            <div className="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-2">2,400+</div>
+            <div className="text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-widest">
               Daily Tenders
             </div>
           </div>
 
           <div className="stat-card pt-10 md:pt-0 md:px-10">
-            <div className="text-4xl font-bold text-slate-900 mb-2">12hr</div>
-            <div className="text-slate-500 text-sm font-semibold uppercase tracking-widest">
+            <div className="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-2">12hr</div>
+            <div className="text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-widest">
               Time Saved/wk
             </div>
           </div>

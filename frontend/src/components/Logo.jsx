@@ -12,7 +12,7 @@ export default function Logo() {
           <div className="absolute -inset-1 bg-gradient-to-r from-purple-400 to-fuchsia-400 rounded-xl blur opacity-20 group-hover:opacity-50 transition duration-500"></div>
 
           {/* Main box */}
-          <div className="relative w-12 h-12 bg-white/80 backdrop-blur-xl rounded-xl flex items-center justify-center border border-purple-100 shadow-sm overflow-hidden">
+          <div className="relative w-12 h-12 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-xl flex items-center justify-center border border-purple-100 dark:border-purple-800/30 shadow-sm overflow-hidden">
 
             {/* Minimal premium SVG */}
             <svg
@@ -46,7 +46,7 @@ export default function Logo() {
         <div className="flex flex-col justify-center leading-tight">
 
           <div className="flex items-baseline gap-0.5">
-            <span className="text-2xl font-black tracking-tight text-slate-900 uppercase">
+            <span className="text-2xl font-black tracking-tight text-slate-900 dark:text-slate-100 uppercase">
               Just
             </span>
             <span className="text-2xl font-light tracking-tight text-purple-500 uppercase">
@@ -55,7 +55,7 @@ export default function Logo() {
           </div>
 
           {/* subtle underline */}
-          <div className="h-0.5 w-full bg-purple-100 mt-1 rounded-full overflow-hidden">
+          <div className="h-0.5 w-full bg-purple-100 dark:bg-purple-900/30 mt-1 rounded-full overflow-hidden">
             <div className="h-full w-1/3 bg-gradient-to-r from-purple-400 to-fuchsia-400 group-hover:w-full transition-all duration-700 ease-out" />
           </div>
 

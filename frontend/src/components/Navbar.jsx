@@ -19,9 +19,9 @@ export default function Navbar() {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 
       ${
         isScrolled
-          ? "bg-white/70 backdrop-blur-xl border-b border-purple-100 shadow-md shadow-purple-100/40"
+          ? "bg-white/70 dark:bg-black/70 backdrop-blur-xl border-b border-purple-100 dark:border-purple-900/30 shadow-md shadow-purple-100/40 dark:shadow-purple-900/10"
           : "bg-transparent"
-      } text-slate-700`}
+      } text-slate-700 dark:text-slate-300`}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div className="flex justify-between items-center h-24">
@@ -33,21 +33,21 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-10">
             <a
               href="#solution"
-              className="text-slate-500 hover:text-purple-600 transition-colors duration-300 font-medium text-sm tracking-wide"
+              className="text-slate-500 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-300 font-medium text-sm tracking-wide"
             >
               Features
             </a>
 
             <a
               href="#how-it-works"
-              className="text-slate-500 hover:text-purple-600 transition-colors duration-300 font-medium text-sm tracking-wide"
+              className="text-slate-500 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-300 font-medium text-sm tracking-wide"
             >
               Methodology
             </a>
 
             <a
               href="#pricing"
-              className="text-slate-500 hover:text-purple-600 transition-colors duration-300 font-medium text-sm tracking-wide"
+              className="text-slate-500 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-300 font-medium text-sm tracking-wide"
             >
               Pricing
             </a>
@@ -57,7 +57,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-6">
             <Link
               to="/login"
-              className="text-slate-500 hover:text-purple-600 font-medium text-sm transition-colors duration-300"
+              className="text-slate-500 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 font-medium text-sm transition-colors duration-300"
             >
               Sign In
             </Link>
@@ -91,7 +91,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-white/90 backdrop-blur-xl border-b border-purple-100">
+        <div className="md:hidden bg-white/90 dark:bg-black/90 backdrop-blur-xl border-b border-purple-100 dark:border-purple-900/30">
           <div className="px-6 pt-4 pb-10 space-y-6">
 
             <a
