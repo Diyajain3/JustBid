@@ -1,23 +1,184 @@
-export default function BidPanel() {
+import React, { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
+
+export default function Features() {
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    let ctx = gsap.context(() => {
+      gsap.utils.toArray(".problem-card").forEach((card) => {
+        gsap.from(card, {
+          scrollTrigger: {
+            trigger: card,
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+          opacity: 0,
+          y: 50,
+          scale: 0.95,
+          duration: 0.7,
+          ease: "power3.out",
+        });
+      });
+
+      gsap.utils.toArray(".solution-card").forEach((card) => {
+        gsap.from(card, {
+          scrollTrigger: {
+            trigger: card,
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+          opacity: 0,
+          y: 50,
+          scale: 0.95,
+          duration: 0.7,
+          ease: "power3.out",
+        });
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <div className="bg-white p-4 rounded-xl shadow sticky top-20">
-      <h3 className="font-semibold mb-2">Place Bid</h3>
+    <div
+      ref={sectionRef}
+      className="bg-gradient-to-b from-white via-purple-50 to-purple-100 text-purple-900 py-32 pb-40"
+    >
+      {/* ================= PROBLEM ================= */}
+      <section id="problem" className="relative mb-48">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12">
 
-      <input
-        type="number"
-        placeholder="Enter amount"
-        className="w-full border p-2 rounded mb-3"
-      />
+          {/* Heading */}
+          <div className="text-left max-w-2xl mb-24">
+            <h2 className="text-4xl md:text-5xl font-bold mb-8 tracking-tight leading-tight">
+              Traditional procurement is{" "}
+              <span className="text-purple-500 italic">inefficient</span>
+            </h2>
 
-      <div className="flex gap-2 mb-3">
-        <button className="px-3 py-1 bg-gray-200 rounded">+10</button>
-        <button className="px-3 py-1 bg-gray-200 rounded">+50</button>
-        <button className="px-3 py-1 bg-gray-200 rounded">+100</button>
-      </div>
+            <p className="text-xl text-purple-600 leading-relaxed">
+              Manual searching across fragmented databases leads to missed deadlines and lost revenue.
+            </p>
+          </div>
 
-      <button className="w-full bg-indigo-600 text-white py-2 rounded">
-        Submit Bid
-      </button>
+          {/* Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-purple-100 border border-purple-200 rounded-3xl overflow-hidden shadow-sm">
+
+            {/* Card 1 */}
+            <div className="problem-card bg-white p-12 hover:bg-purple-50 transition-all duration-500 group hover:-translate-y-1">
+
+              <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center text-purple-600 mb-10 border border-purple-200 group-hover:bg-purple-200 transition-all duration-300">
+                🔍
+              </div>
+
+              <h3 className="text-xl font-bold mb-5 text-purple-900">
+                Scattered Sources
+              </h3>
+
+              <p className="text-purple-600 text-sm leading-relaxed">
+                Opportunities are spread across hundreds of platforms. We centralize everything into one feed.
+              </p>
+            </div>
+
+            {/* Card 2 */}
+            <div className="problem-card bg-white p-12 hover:bg-purple-50 transition-all duration-500 group hover:-translate-y-1">
+
+              <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center text-purple-600 mb-10 border border-purple-200 group-hover:bg-purple-200 transition-all duration-300">
+                ⚠️
+              </div>
+
+              <h3 className="text-xl font-bold mb-5 text-purple-900">
+                High Noise
+              </h3>
+
+              <p className="text-purple-600 text-sm leading-relaxed">
+                Relevant contracts get buried in irrelevant data. We filter the noise.
+              </p>
+            </div>
+
+            {/* Card 3 */}
+            <div className="problem-card bg-white p-12 hover:bg-purple-50 transition-all duration-500 group hover:-translate-y-1">
+
+              <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center text-purple-600 mb-10 border border-purple-200 group-hover:bg-purple-200 transition-all duration-300">
+                ⏰
+              </div>
+
+              <h3 className="text-xl font-bold mb-5 text-purple-900">
+                Deadlines
+              </h3>
+
+              <p className="text-purple-600 text-sm leading-relaxed">
+                Late discovery means less prep time. We give real-time alerts.
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* ================= SOLUTION ================= */}
+      <section id="solution" className="relative group">
+
+        {/* Glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-400/10 rounded-full blur-[140px] -z-10 group-hover:bg-purple-500/20 transition-all duration-1000"></div>
+
+        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+
+          {/* Heading */}
+          <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-12">
+
+            <div className="max-w-2xl">
+              <span className="text-purple-500 text-xs tracking-widest uppercase">
+                The Solution
+              </span>
+
+              <h2 className="text-4xl md:text-5xl font-bold mt-6">
+                AI-Native tender <br /> discovery platform
+              </h2>
+            </div>
+
+            <p className="text-purple-600 max-w-sm">
+              Built for modern enterprises. Faster discovery, better decisions.
+            </p>
+
+          </div>
+
+          {/* Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            <div className="solution-card bg-white/70 backdrop-blur-xl border border-purple-200 p-10 rounded-3xl shadow-sm hover:-translate-y-1 transition-all duration-500">
+              <h3 className="text-xl font-bold mb-4">
+                Smart Profiling
+              </h3>
+              <p className="text-purple-600 text-sm">
+                AI understands your business capabilities automatically.
+              </p>
+            </div>
+
+            <div className="solution-card bg-white/70 backdrop-blur-xl border border-purple-200 p-10 rounded-3xl shadow-sm hover:-translate-y-1 transition-all duration-500">
+              <h3 className="text-xl font-bold mb-4">
+                Semantic Search
+              </h3>
+              <p className="text-purple-600 text-sm">
+                Context-aware search, not just keywords.
+              </p>
+            </div>
+
+            <div className="solution-card bg-white/70 backdrop-blur-xl border border-purple-200 p-10 rounded-3xl shadow-sm hover:-translate-y-1 transition-all duration-500">
+              <h3 className="text-xl font-bold mb-4">
+                Winning Insights
+              </h3>
+              <p className="text-purple-600 text-sm">
+                Analyze competition & success probability.
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

@@ -9,153 +9,133 @@ export default function Features() {
 
   useEffect(() => {
     let ctx = gsap.context(() => {
+      gsap.from(".fade-title", {
+        opacity: 0,
+        y: 30,
+        duration: 0.8,
+        ease: "power3.out",
+      });
 
-      // Problem Cards - animate individually
-      gsap.utils.toArray(".problem-card").forEach((card) => {
+      gsap.utils.toArray(".feature-card").forEach((card, i) => {
         gsap.from(card, {
           scrollTrigger: {
             trigger: card,
             start: "top 85%",
-            toggleActions: "play none none none",
           },
           opacity: 0,
-          y: 50,
-          scale: 0.95,
+          y: 60,
+          scale: 0.96,
           duration: 0.7,
+          delay: i * 0.05,
           ease: "power3.out",
         });
       });
-
-      // Solution Cards - animate individually
-      gsap.utils.toArray(".solution-card").forEach((card) => {
-        gsap.from(card, {
-          scrollTrigger: {
-            trigger: card,
-            start: "top 85%",
-            toggleActions: "play none none none",
-          },
-          opacity: 0,
-          y: 50,
-          scale: 0.95,
-          duration: 0.7,
-          ease: "power3.out",
-        });
-      });
-
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <div ref={sectionRef} className="bg-slate-950 text-slate-200 py-32 pb-40">
-      
-      {/* ================= PROBLEM ================= */}
-      <section id="problem" className="relative mb-48">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          
-          {/* Heading */}
-          <div className="text-left max-w-2xl mb-24">
-            <h2 className="text-4xl md:text-5xl font-bold mb-8 tracking-tight text-white leading-tight">
+    <div
+      ref={sectionRef}
+      className="relative overflow-hidden bg-gradient-to-b from-white via-purple-50 to-white py-16 text-purple-900"
+    >
+      {/* 🌈 Background Glow Blobs */}
+      <div className="absolute top-[-120px] left-[-120px] w-[400px] h-[400px] bg-purple-200/20 blur-[120px] rounded-full"></div>
+      <div className="absolute bottom-[-120px] right-[-120px] w-[400px] h-[400px] bg-indigo-200/20 blur-[120px] rounded-full"></div>
+
+      <div className="max-w-6xl mx-auto px-6">
+
+        {/* ================= PROBLEM ================= */}
+        <section className="mb-16">
+
+          <div className="max-w-2xl mb-10 fade-title">
+            <h2 className="text-4xl md:text-5xl font-bold leading-tight">
               Traditional procurement is{" "}
-              <span className="text-slate-500 italic">inefficient</span>
+              <span className="text-purple-500 italic">broken</span>
             </h2>
-            <p className="text-xl text-slate-400 leading-relaxed">
-              Manual searching across fragmented databases leads to missed deadlines and lost revenue.
+
+            <p className="text-lg text-purple-600 mt-5">
+              Fragmented systems, slow discovery, and missed opportunities.
             </p>
           </div>
 
-          {/* Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-slate-800 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
-            
-            {/* Card 1 */}
-            <div className="problem-card bg-slate-950 p-12 hover:bg-slate-900/50 transition-all duration-500 group hover:-translate-y-1">
-              <div className="w-12 h-12 bg-blue-600/10 rounded-xl flex items-center justify-center text-blue-500 mb-10 border border-blue-500/20 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
-                🔍
-              </div>
-              <h3 className="text-xl font-bold mb-5 text-white">Scattered Sources</h3>
-              <p className="text-slate-400 text-sm leading-relaxed">
-                Opportunities are spread across hundreds of platforms. We centralize everything into one feed.
+          <div className="grid md:grid-cols-3 gap-6">
+
+            <div className="feature-card group bg-white/60 backdrop-blur-xl border border-white/40 rounded-2xl p-7 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_-15px_rgba(124,58,237,0.35)]">
+              <div className="text-2xl mb-4 group-hover:scale-110 transition">🔍</div>
+              <h3 className="font-bold mb-2">Scattered Sources</h3>
+              <p className="text-sm text-purple-600">
+                Data spread across dozens of portals.
               </p>
             </div>
 
-            {/* Card 2 */}
-            <div className="problem-card bg-slate-950 p-12 hover:bg-slate-900/50 transition-all duration-500 group hover:-translate-y-1">
-              <div className="w-12 h-12 bg-blue-600/10 rounded-xl flex items-center justify-center text-blue-500 mb-10 border border-blue-500/20 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
-                ⚠️
-              </div>
-              <h3 className="text-xl font-bold mb-5 text-white">High Noise</h3>
-              <p className="text-slate-400 text-sm leading-relaxed">
-                Relevant contracts get buried in irrelevant data. We filter the noise.
+            <div className="feature-card group bg-white/60 backdrop-blur-xl border border-white/40 rounded-2xl p-7 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_-15px_rgba(124,58,237,0.35)]">
+              <div className="text-2xl mb-4 group-hover:scale-110 transition">⚠️</div>
+              <h3 className="font-bold mb-2">High Noise</h3>
+              <p className="text-sm text-purple-600">
+                Irrelevant tenders hide real opportunities.
               </p>
             </div>
 
-            {/* Card 3 */}
-            <div className="problem-card bg-slate-950 p-12 hover:bg-slate-900/50 transition-all duration-500 group hover:-translate-y-1">
-              <div className="w-12 h-12 bg-blue-600/10 rounded-xl flex items-center justify-center text-blue-500 mb-10 border border-blue-500/20 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
-                ⏰
-              </div>
-              <h3 className="text-xl font-bold mb-5 text-white">Deadlines</h3>
-              <p className="text-slate-400 text-sm leading-relaxed">
-                Late discovery means less prep time. We give real-time alerts.
+            <div className="feature-card group bg-white/60 backdrop-blur-xl border border-white/40 rounded-2xl p-7 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_-15px_rgba(124,58,237,0.35)]">
+              <div className="text-2xl mb-4 group-hover:scale-110 transition">⏰</div>
+              <h3 className="font-bold mb-2">Late Discovery</h3>
+              <p className="text-sm text-purple-600">
+                You lose time before even starting.
               </p>
             </div>
 
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ================= SOLUTION ================= */}
-      <section id="solution" className="relative group">
-        
-        {/* Glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-600/5 rounded-full blur-[120px] -z-10 group-hover:bg-blue-600/10 transition-all duration-1000"></div>
+        {/* ================= SOLUTION ================= */}
+        <section>
 
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          
-          {/* Heading */}
-          <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-12">
-            <div className="max-w-2xl">
-              <span className="text-blue-500 text-xs tracking-widest uppercase">
-                The Solution
-              </span>
-              <h2 className="text-4xl md:text-5xl font-bold text-white mt-6">
-                AI-Native tender <br /> discovery platform
-              </h2>
-            </div>
+          <div className="mb-14">
+            <span className="text-purple-500 text-xs tracking-widest uppercase">
+              Solution
+            </span>
 
-            <p className="text-slate-400 max-w-sm">
-              Built for modern enterprises. Faster discovery, better decisions.
+            <h2 className="text-4xl md:text-5xl font-bold mt-3 fade-title">
+              AI-native procurement intelligence
+            </h2>
+
+            <p className="text-purple-600 mt-4 max-w-xl">
+              Faster discovery. Better matches. Higher win rate.
             </p>
           </div>
 
-          {/* Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            
-            <div className="solution-card bg-slate-900/30 border border-slate-800 p-10 rounded-3xl hover:-translate-y-1 transition-all duration-500">
-              <h3 className="text-xl font-bold text-white mb-4">Smart Profiling</h3>
-              <p className="text-slate-400 text-sm">
-                AI understands your business capabilities automatically.
+          <div className="grid md:grid-cols-3 gap-6">
+
+            <div className="feature-card group bg-white/70 backdrop-blur-xl border border-purple-100 rounded-2xl p-7 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_25px_70px_-20px_rgba(99,102,241,0.4)]">
+              <div className="text-2xl mb-4 group-hover:rotate-6 transition">🧠</div>
+              <h3 className="font-bold mb-2">Smart Profiling</h3>
+              <p className="text-x text-purple-800">
+                AI understands your business automatically.
               </p>
             </div>
 
-            <div className="solution-card bg-slate-900/30 border border-slate-800 p-10 rounded-3xl hover:-translate-y-1 transition-all duration-500">
-              <h3 className="text-xl font-bold text-white mb-4">Semantic Search</h3>
-              <p className="text-slate-400 text-sm">
-                Context-aware search, not just keywords.
+            <div className="feature-card group bg-white/70 backdrop-blur-xl border border-purple-100 rounded-2xl p-7 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_25px_70px_-20px_rgba(99,102,241,0.4)]">
+              <div className="text-2xl mb-4 group-hover:rotate-6 transition">⚡</div>
+              <h3 className="font-bold mb-2">Semantic Search</h3>
+              <p className="text-x text-purple-800">
+                Understands meaning, not just keywords.
               </p>
             </div>
 
-            <div className="solution-card bg-slate-900/30 border border-slate-800 p-10 rounded-3xl hover:-translate-y-1 transition-all duration-500">
-              <h3 className="text-xl font-bold text-white mb-4">Winning Insights</h3>
-              <p className="text-slate-400 text-sm">
-                Analyze competition & success probability.
+            <div className="feature-card group bg-white/70 backdrop-blur-xl border border-purple-100 rounded-2xl p-7 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_25px_70px_-20px_rgba(99,102,241,0.4)]">
+              <div className="text-2xl mb-4 group-hover:scale-110 transition">📊</div>
+              <h3 className="font-bold mb-2">Winning Insights</h3>
+              <p className="text-x text-purple-800">
+                Predicts success probability using data.
               </p>
             </div>
 
           </div>
-        </div>
-      </section>
+        </section>
+
+      </div>
     </div>
   );
 }
