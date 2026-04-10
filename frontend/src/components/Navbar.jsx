@@ -6,6 +6,7 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Scroll effect (blur navbar)
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -13,6 +14,19 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // 🔥 Smooth scroll with offset (fix for fixed navbar)
+  const scrollToSection = (id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    const yOffset = -90;
+    const y =
+      el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+    window.scrollTo({ top: y, behavior: "smooth" });
+    setIsMobileMenuOpen(false);
+  };
 
   return (
     <nav
@@ -31,56 +45,86 @@ export default function Navbar() {
 
           {/* Desktop Links */}
           <div className="hidden md:flex items-center gap-10">
-            <a
-              href="#solution"
-              className="text-slate-500 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-300 font-medium text-sm tracking-wide"
+
+            <button
+              onClick={() => scrollToSection("hero")}
+              className="text-slate-500 hover:text-purple-600 transition font-medium text-sm"
+            >
+              Home
+            </button>
+            <button
+              onClick={() => scrollToSection("solution")}
+              className="text-slate-500 hover:text-purple-600 transition font-medium text-sm"
             >
               Features
-            </a>
+            </button>
 
-            <a
-              href="#how-it-works"
-              className="text-slate-500 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-300 font-medium text-sm tracking-wide"
+            <button
+              onClick={() => scrollToSection("how-it-works")}
+              className="text-slate-500 hover:text-purple-600 transition font-medium text-sm"
             >
               Methodology
-            </a>
+            </button>
 
-            <a
-              href="#pricing"
-              className="text-slate-500 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-300 font-medium text-sm tracking-wide"
+            <button
+              onClick={() => scrollToSection("pricing")}
+              className="text-slate-500 hover:text-purple-600 transition font-medium text-sm"
             >
               Pricing
-            </a>
+            </button>
+
+            {/* 🆕 Contact */}
+            <button
+              onClick={() => scrollToSection("contact")}
+              className="text-slate-500 hover:text-purple-600 transition font-medium text-sm"
+            >
+              Contact
+            </button>
           </div>
 
           {/* Actions */}
           <div className="hidden md:flex items-center gap-6">
             <Link
               to="/login"
-              className="text-slate-500 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 font-medium text-sm transition-colors duration-300"
+              className="text-slate-500 hover:text-purple-600 font-medium text-sm transition"
             >
               Sign In
             </Link>
 
             <Link
               to="/register"
-              className="bg-gradient-to-r from-purple-500 to-fuchsia-500 hover:from-purple-400 hover:to-fuchsia-400 text-white px-7 py-2.5 rounded-full font-bold text-sm transition-all duration-300 active:scale-95 shadow-md shadow-purple-200"
+              className="bg-gradient-to-r from-purple-500 to-fuchsia-500 hover:from-purple-400 hover:to-fuchsia-400 text-white px-7 py-2.5 rounded-full font-bold text-sm transition active:scale-95 shadow-md shadow-purple-200"
             >
               Get Started
             </Link>
           </div>
 
-          {/* Mobile Button */}
-          <div className="md:hidden flex items-center">
+          {/* Mobile Menu Button */}
+          <div className="md:hidden">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-slate-500 hover:text-purple-600 transition-colors"
+              className="text-slate-500 hover:text-purple-600"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 {isMobileMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M4 6h16M4 12h16m-7 6h7"
+                  />
                 )}
               </svg>
             </button>
@@ -91,37 +135,42 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-white/90 dark:bg-black/90 backdrop-blur-xl border-b border-purple-100 dark:border-purple-900/30">
+        <div className="md:hidden bg-white/90 dark:bg-black/90 backdrop-blur-xl border-b border-purple-100">
           <div className="px-6 pt-4 pb-10 space-y-6">
 
-            <a
-              href="#solution"
-              className="block text-lg font-medium text-slate-500 hover:text-purple-600"
-              onClick={() => setIsMobileMenuOpen(false)}
+            <button
+              onClick={() => scrollToSection("solution")}
+              className="block w-full text-left text-lg text-slate-600 hover:text-purple-600"
             >
               Features
-            </a>
+            </button>
 
-            <a
-              href="#how-it-works"
-              className="block text-lg font-medium text-slate-500 hover:text-purple-600"
-              onClick={() => setIsMobileMenuOpen(false)}
+            <button
+              onClick={() => scrollToSection("how-it-works")}
+              className="block w-full text-left text-lg text-slate-600 hover:text-purple-600"
             >
               Methodology
-            </a>
+            </button>
 
-            <a
-              href="#pricing"
-              className="block text-lg font-medium text-slate-500 hover:text-purple-600"
-              onClick={() => setIsMobileMenuOpen(false)}
+            <button
+              onClick={() => scrollToSection("pricing")}
+              className="block w-full text-left text-lg text-slate-600 hover:text-purple-600"
             >
               Pricing
-            </a>
+            </button>
+
+            {/* 🆕 Contact */}
+            <button
+              onClick={() => scrollToSection("contact")}
+              className="block w-full text-left text-lg text-slate-600 hover:text-purple-600"
+            >
+              Contact
+            </button>
 
             <div className="pt-4 space-y-4">
               <Link
                 to="/login"
-                className="block w-full text-center py-3 text-slate-600 hover:text-purple-600 font-medium border border-purple-100 rounded-xl"
+                className="block w-full text-center py-3 border border-purple-100 rounded-xl"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Sign In
@@ -129,7 +178,7 @@ export default function Navbar() {
 
               <Link
                 to="/register"
-                className="block w-full text-center py-3 bg-gradient-to-r from-purple-500 to-fuchsia-500 text-white font-bold rounded-xl"
+                className="block w-full text-center py-3 bg-gradient-to-r from-purple-500 to-fuchsia-500 text-white rounded-xl font-bold"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Get Started

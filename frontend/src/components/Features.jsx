@@ -37,19 +37,20 @@ export default function Features() {
 
   return (
     <div
+      id="solution" // ✅ IMPORTANT FIX (for navbar scroll)
       ref={sectionRef}
-      className="relative overflow-hidden bg-gradient-to-b from-white via-purple-50 to-white dark:from-black dark:via-slate-900/20 dark:to-black py-16 text-purple-900 dark:text-purple-100"
+      className="relative overflow-hidden bg-gradient-to-b from-white via-purple-50 to-white dark:from-black dark:via-slate-900/20 dark:to-black py-20 text-purple-900 dark:text-purple-100"
     >
-      {/* 🌈 Background Glow Blobs */}
+      {/* 🌈 Background Glow */}
       <div className="absolute top-[-120px] left-[-120px] w-[400px] h-[400px] bg-purple-200/20 dark:bg-purple-900/10 blur-[120px] rounded-full"></div>
       <div className="absolute bottom-[-120px] right-[-120px] w-[400px] h-[400px] bg-indigo-200/20 dark:bg-purple-900/10 blur-[120px] rounded-full"></div>
 
       <div className="max-w-6xl mx-auto px-6">
 
         {/* ================= PROBLEM ================= */}
-        <section className="mb-16">
+        <section className="mb-20">
 
-          <div className="max-w-2xl mb-10 fade-title">
+          <div className="max-w-2xl mb-12 fade-title">
             <h2 className="text-4xl md:text-5xl font-bold leading-tight text-slate-900 dark:text-slate-100">
               Traditional procurement is{" "}
               <span className="text-purple-500 italic">broken</span>
@@ -92,12 +93,12 @@ export default function Features() {
         {/* ================= SOLUTION ================= */}
         <section>
 
-          <div className="mb-14">
+          <div className="mb-16 fade-title">
             <span className="text-purple-500 text-xs tracking-widest uppercase">
               Solution
             </span>
 
-            <h2 className="text-4xl md:text-5xl font-bold mt-3 fade-title text-slate-900 dark:text-slate-100">
+            <h2 className="text-4xl md:text-5xl font-bold mt-3 text-slate-900 dark:text-slate-100">
               AI-native procurement intelligence
             </h2>
 
@@ -111,7 +112,7 @@ export default function Features() {
             <div className="feature-card group bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-purple-100 dark:border-purple-800/20 rounded-2xl p-7 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_25px_70px_-20px_rgba(99,102,241,0.4)] dark:hover:shadow-[0_25px_70px_-20px_rgba(99,102,241,0.2)]">
               <div className="text-2xl mb-4 group-hover:rotate-6 transition">🧠</div>
               <h3 className="font-bold mb-2">Smart Profiling</h3>
-              <p className="text-x text-purple-800 dark:text-purple-300">
+              <p className="text-sm text-purple-800 dark:text-purple-300">
                 AI understands your business automatically.
               </p>
             </div>
@@ -119,7 +120,7 @@ export default function Features() {
             <div className="feature-card group bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-purple-100 dark:border-purple-800/20 rounded-2xl p-7 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_25px_70px_-20px_rgba(99,102,241,0.4)] dark:hover:shadow-[0_25px_70px_-20px_rgba(99,102,241,0.2)]">
               <div className="text-2xl mb-4 group-hover:rotate-6 transition">⚡</div>
               <h3 className="font-bold mb-2">Semantic Search</h3>
-              <p className="text-x text-purple-800 dark:text-purple-300">
+              <p className="text-sm text-purple-800 dark:text-purple-300">
                 Understands meaning, not just keywords.
               </p>
             </div>
@@ -127,7 +128,7 @@ export default function Features() {
             <div className="feature-card group bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-purple-100 dark:border-purple-800/20 rounded-2xl p-7 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_25px_70px_-20px_rgba(99,102,241,0.4)] dark:hover:shadow-[0_25px_70px_-20px_rgba(99,102,241,0.2)]">
               <div className="text-2xl mb-4 group-hover:scale-110 transition">📊</div>
               <h3 className="font-bold mb-2">Winning Insights</h3>
-              <p className="text-x text-purple-800 dark:text-purple-300">
+              <p className="text-sm text-purple-800 dark:text-purple-300">
                 Predicts success probability using data.
               </p>
             </div>

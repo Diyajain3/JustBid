@@ -27,6 +27,7 @@ export default function Hero() {
 
   return (
     <div
+    id="hero"
       ref={heroRef}
       className="relative pt-20 pb-12 lg:pt-28 lg:pb-24 overflow-hidden text-center z-10 bg-white dark:bg-black"
     >
