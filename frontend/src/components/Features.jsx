@@ -41,7 +41,7 @@ export default function Features() {
       ref={sectionRef}
       className="relative overflow-hidden bg-gradient-to-b from-white via-purple-50 to-white dark:from-black dark:via-slate-900/20 dark:to-black py-20 text-purple-900 dark:text-purple-100"
     >
-      {/* 🌈 Background Glow */}
+      {/*  Background Glow */}
       <div className="absolute top-[-120px] left-[-120px] w-[400px] h-[400px] bg-purple-200/20 dark:bg-purple-900/10 blur-[120px] rounded-full"></div>
       <div className="absolute bottom-[-120px] right-[-120px] w-[400px] h-[400px] bg-indigo-200/20 dark:bg-purple-900/10 blur-[120px] rounded-full"></div>
 
@@ -64,7 +64,7 @@ export default function Features() {
           <div className="grid md:grid-cols-3 gap-6">
 
             <div className="feature-card group bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl border border-white/40 dark:border-purple-800/20 rounded-2xl p-7 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_-15px_rgba(124,58,237,0.35)] dark:hover:shadow-[0_20px_60px_-15px_rgba(124,58,237,0.2)]">
-              <div className="text-2xl mb-4 group-hover:scale-110 transition">🔍</div>
+              <div className="text-2xl mb-4 group-hover:scale-110 transition"></div>
               <h3 className="font-bold mb-2">Scattered Sources</h3>
               <p className="text-sm text-purple-600 dark:text-purple-400">
                 Data spread across dozens of portals.
@@ -72,7 +72,7 @@ export default function Features() {
             </div>
 
             <div className="feature-card group bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl border border-white/40 dark:border-purple-800/20 rounded-2xl p-7 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_-15px_rgba(124,58,237,0.35)] dark:hover:shadow-[0_20px_60px_-15px_rgba(124,58,237,0.2)]">
-              <div className="text-2xl mb-4 group-hover:scale-110 transition">⚠️</div>
+              <div className="text-2xl mb-4 group-hover:scale-110 transition"></div>
               <h3 className="font-bold mb-2">High Noise</h3>
               <p className="text-sm text-purple-600 dark:text-purple-400">
                 Irrelevant tenders hide real opportunities.
@@ -80,7 +80,7 @@ export default function Features() {
             </div>
 
             <div className="feature-card group bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl border border-white/40 dark:border-purple-800/20 rounded-2xl p-7 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_-15px_rgba(124,58,237,0.35)] dark:hover:shadow-[0_20px_60px_-15px_rgba(124,58,237,0.2)]">
-              <div className="text-2xl mb-4 group-hover:scale-110 transition">⏰</div>
+              <div className="text-2xl mb-4 group-hover:scale-110 transition"></div>
               <h3 className="font-bold mb-2">Late Discovery</h3>
               <p className="text-sm text-purple-600 dark:text-purple-400">
                 You lose time before even starting.
@@ -110,7 +110,7 @@ export default function Features() {
           <div className="grid md:grid-cols-3 gap-6">
 
             <div className="feature-card group bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-purple-100 dark:border-purple-800/20 rounded-2xl p-7 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_25px_70px_-20px_rgba(99,102,241,0.4)] dark:hover:shadow-[0_25px_70px_-20px_rgba(99,102,241,0.2)]">
-              <div className="text-2xl mb-4 group-hover:rotate-6 transition">🧠</div>
+              <div className="text-2xl mb-4 group-hover:rotate-6 transition"></div>
               <h3 className="font-bold mb-2">Smart Profiling</h3>
               <p className="text-sm text-purple-800 dark:text-purple-300">
                 AI understands your business automatically.
@@ -118,7 +118,7 @@ export default function Features() {
             </div>
 
             <div className="feature-card group bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-purple-100 dark:border-purple-800/20 rounded-2xl p-7 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_25px_70px_-20px_rgba(99,102,241,0.4)] dark:hover:shadow-[0_25px_70px_-20px_rgba(99,102,241,0.2)]">
-              <div className="text-2xl mb-4 group-hover:rotate-6 transition">⚡</div>
+              <div className="text-2xl mb-4 group-hover:rotate-6 transition"></div>
               <h3 className="font-bold mb-2">Semantic Search</h3>
               <p className="text-sm text-purple-800 dark:text-purple-300">
                 Understands meaning, not just keywords.
@@ -126,7 +126,7 @@ export default function Features() {
             </div>
 
             <div className="feature-card group bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-purple-100 dark:border-purple-800/20 rounded-2xl p-7 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_25px_70px_-20px_rgba(99,102,241,0.4)] dark:hover:shadow-[0_25px_70px_-20px_rgba(99,102,241,0.2)]">
-              <div className="text-2xl mb-4 group-hover:scale-110 transition">📊</div>
+              <div className="text-2xl mb-4 group-hover:scale-110 transition"></div>
               <h3 className="font-bold mb-2">Winning Insights</h3>
               <p className="text-sm text-purple-800 dark:text-purple-300">
                 Predicts success probability using data.
