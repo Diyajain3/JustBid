@@ -1,30 +1,31 @@
-# Recreates ThirtySix Studio Website
+# 🚀 React Horizontal Scroll Section (GSAP + ScrollTrigger)
 
-A recreation of the **ThirtySix Studio** website built using **React**, **GSAP**, **Locomotive Scroll**, and **Tailwind CSS**.  
-This project was created for learning purposes to understand advanced animations, smooth scrolling, and modern UI development.
+A premium horizontal scroll animation built with **React** and **GSAP ScrollTrigger**.
+
+This project demonstrates how to create smooth horizontal scrolling sections controlled by vertical scroll — inspired by modern award-winning websites.
 
 ---
 
 ## ✨ Features
 
-- Smooth scrolling using Locomotive Scroll
-- Advanced animations with GSAP
-- Modern UI inspired by ThirtySix Studio
-- Fully responsive design
-- Clean and reusable React components
-- Utility-first styling with Tailwind CSS
+- 🔁 Horizontal scroll controlled by vertical scrolling
+- 🎯 GSAP ScrollTrigger integration
+- 📌 Section pinning
+- ⚡ Smooth performance
+- 💻 Fully component-based React structure
+- 🧼 Clean and scalable code
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠 Tech Stack
 
-- **React**
-- **GSAP**
-- **Locomotive Scroll**
-- **Tailwind CSS**
-- **JavaScript (ES6+)**
-- **HTML5**
+- React (Vite / CRA – update based on your setup)
+- GSAP
+- GSAP ScrollTrigger
+- CSS / Tailwind (update if needed)
 
 ---
 
+> ⚠️ This project is built for learning advanced scroll animations.
+> Not recommended for simple landing pages without optimization.
 
