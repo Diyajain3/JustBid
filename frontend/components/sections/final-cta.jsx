@@ -3,7 +3,10 @@
 import { useRef, useEffect, useState } from "react"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
+import confetti from "canvas-confetti"
+import { BiddingBlitz } from "../game/BiddingBlitz"
+import { CheckCircle2, Loader2, Target } from "lucide-react"
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -12,6 +15,59 @@ export function FinalCTA() {
   const titleRef = useRef(null)
   const buttonRef = useRef(null)
   const [isGlitching, setIsGlitching] = useState(false)
+  const [isGameOpen, setIsGameOpen] = useState(false)
+  const [isProvisioning, setIsProvisioning] = useState(false)
+  const [provisioningStep, setProvisioningStep] = useState(0)
+
+  const steps = [
+    "Connecting to tender nodes...",
+    "Calibrating AI matching engine...",
+    "Securing your workspace...",
+    "Done! Preparing your dashboard..."
+  ]
+
+  const handleTrialClick = () => {
+    setIsProvisioning(true)
+    
+    // Confetti blast
+    const end = Date.now() + (3 * 1000);
+    const colors = ['#FFD700', '#FFFFFF', '#facc15'];
+
+    (function frame() {
+      confetti({
+        particleCount: 3,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0 },
+        colors: colors
+      });
+      confetti({
+        particleCount: 3,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1 },
+        colors: colors
+      });
+
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    }());
+
+    // Progress simulation
+    let currentStep = 0
+    const interval = setInterval(() => {
+      currentStep++
+      if (currentStep < steps.length) {
+        setProvisioningStep(currentStep)
+      } else {
+        clearInterval(interval)
+        setTimeout(() => {
+          window.location.href = "/auth"
+        }, 500)
+      }
+    }, 1200)
+  }
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -119,8 +175,9 @@ export function FinalCTA() {
             ref={buttonRef}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
+            onClick={handleTrialClick}
             whileTap={{ scale: 0.95 }}
-            className="relative px-12 py-6 text-xl font-bold bg-primary text-primary-foreground rounded-full overflow-hidden group"
+            className="relative px-12 py-6 text-xl font-bold bg-primary text-primary-foreground rounded-full overflow-hidden group shadow-[0_0_30px_rgba(255,215,0,0.3)] hover:shadow-[0_0_50px_rgba(255,215,0,0.5)] transition-shadow"
           >
             <span className="absolute inset-0 bg-accent scale-0 group-hover:scale-100 transition-transform duration-500 rounded-full" />
             <span className="relative z-10 flex items-center gap-3">
@@ -132,13 +189,61 @@ export function FinalCTA() {
           </motion.button>
 
           <motion.button
-            whileHover={{ scale: 1.05, borderColor: "var(--primary)" }}
+            onClick={() => setIsGameOpen(true)}
+            whileHover={{ scale: 1.05, borderColor: "var(--primary)", backgroundColor: "rgba(255,215,0,0.1)" }}
             whileTap={{ scale: 0.95 }}
-            className="px-10 py-5 text-lg font-medium border-2 border-border rounded-full hover:bg-card/50 transition-colors"
+            className="px-10 py-5 text-lg font-medium border-2 border-border rounded-full transition-all group relative overflow-hidden"
           >
-            Schedule Demo
+            <span className="relative z-10 flex items-center gap-2">
+              <Target className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+              Schedule Demo
+            </span>
           </motion.button>
         </div>
+
+        {/* Mini Game Modal */}
+        <BiddingBlitz isOpen={isGameOpen} onClose={() => setIsGameOpen(false)} />
+
+        {/* Provisioning Overlay */}
+        <AnimatePresence>
+          {isProvisioning && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[110] flex items-center justify-center bg-background/90 backdrop-blur-md"
+            >
+              <div className="max-w-md w-full p-8 text-center">
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                  className="inline-block mb-8 text-primary"
+                >
+                  <Loader2 size={64} />
+                </motion.div>
+                <h3 className="text-2xl font-bold mb-4">Setting up your edge...</h3>
+                <div className="w-full h-2 bg-muted rounded-full overflow-hidden mb-6">
+                  <motion.div 
+                    initial={{ width: "0%" }}
+                    animate={{ width: `${(provisioningStep + 1) * 25}%` }}
+                    className="h-full bg-primary"
+                  />
+                </div>
+                <AnimatePresence mode="wait">
+                  <motion.p
+                    key={provisioningStep}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="text-muted-foreground font-medium"
+                  >
+                    {steps[provisioningStep]}
+                  </motion.p>
+                </AnimatePresence>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Trust indicators */}
         <motion.div
