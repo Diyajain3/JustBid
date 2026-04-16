@@ -336,9 +336,7 @@ Project Link: [https://github.com/Diyajain3/JustBid](https://github.com/Diyajain
 <div align="center">
 
 Made with ❤️ by 
-[Diya Jain](https://github.com/Diyajain3)
-
-[Khushi_Singh](https://github.com/mekhushi)
+[Diya Jain](https://github.com/Diyajain3) & [Khushi_Singh](https://github.com/mekhushi)
 
 ⭐ **If you found this project useful, please consider giving it a star!** ⭐
 
