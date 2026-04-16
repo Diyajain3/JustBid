@@ -3,12 +3,12 @@
 <br />
 
 ```
-    ██╗  ██╗   ██╗ ███████╗ ████████╗    ██████╗  ██╗ ██████╗ 
-    ██║  ██║   ██║ ██╔════╝ ╚══██╔══╝    ██╔══██╗ ██║ ██╔══██╗
-    ██║  ██║   ██║ ███████╗    ██║       ██████╔╝ ██║ ██║  ██║
- ██ ██║  ██║   ██║ ╚════██║    ██║       ██╔══██╗ ██║ ██║  ██║
-╚█████╔╝ ╚██████╔╝ ███████║    ██║       ██████╔╝ ██║ ██████╔╝
- ╚════╝   ╚═════╝  ╚══════╝    ╚═╝       ╚═════╝  ╚═╝ ╚═════╝ 
+                                            ██╗  ██╗   ██╗ ███████╗ ████████╗    ██████╗  ██╗ ██████╗ 
+                                            ██║  ██║   ██║ ██╔════╝ ╚══██╔══╝    ██╔══██╗ ██║ ██╔══██╗
+                                            ██║  ██║   ██║ ███████╗    ██║       ██████╔╝ ██║ ██║  ██║
+                                         ██ ██║  ██║   ██║ ╚════██║    ██║       ██╔══██╗ ██║ ██║  ██║
+                                        ╚█████╔╝ ╚██████╔╝ ███████║    ██║       ██████╔╝ ██║ ██████╔╝
+                                         ╚════╝   ╚═════╝  ╚══════╝    ╚═╝       ╚═════╝  ╚═╝ ╚═════╝ 
 ```
 
 ### 🔨 The Modern Auction & Bidding Platform
@@ -326,6 +326,7 @@ Distributed under the **MIT License**. See `LICENSE` for more information.
 ## 📬 Contact
 
 **Diya Jain** — [@Diyajain3](https://github.com/Diyajain3)
+
 **Khushi Singh**-[@mekhushi](https://github.com/mekhushi)
 
 Project Link: [https://github.com/Diyajain3/JustBid](https://github.com/Diyajain3/JustBid)
@@ -334,7 +335,10 @@ Project Link: [https://github.com/Diyajain3/JustBid](https://github.com/Diyajain
 
 <div align="center">
 
-Made with ❤️ by [Diya Jain](https://github.com/Diyajain3), [@mekhushi](https://github.com/mekhushi)
+Made with ❤️ by 
+[Diya Jain](https://github.com/Diyajain3)
+
+[Khushi_Singh](https://github.com/mekhushi)
 
 ⭐ **If you found this project useful, please consider giving it a star!** ⭐
 
