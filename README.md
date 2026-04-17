@@ -147,6 +147,83 @@ Whether you're a seller looking to get the best price for your items or a buyer 
 
 ---
 
+## 🔄 Backend Workflow
+
+To understand how JustBid handles data from ingestion to user delivery, refer to the flowchart below:
+
+```mermaid
+graph TD
+    subgraph "External Sources"
+        SIMAP["SIMAP.ch (Swiss Procurement)"]
+    end
+
+    subgraph "Data Sync Pipeline (Python)"
+        Worker["simap_sync.py"]
+        Translator["Google Translator (English)"]
+        Transform["Data Transformation"]
+    end
+
+    subgraph "Backend API (Express.js)"
+        Auth["Auth Controller (JWT)"]
+        TenderAPI["Tender Controller (Ingest/Feed)"]
+        CompanyAPI["Company Controller (Profile)"]
+        MatchService["Match Service (Scoring)"]
+    end
+
+    subgraph "Storage (MongoDB)"
+        Prisma["Prisma ORM"]
+        DB[(MongoDB)]
+    end
+
+    SIMAP --> Worker
+    Worker --> Translator
+    Translator --> Transform
+    Transform --> TenderAPI
+    TenderAPI --> Prisma
+    Prisma --> DB
+
+    User((User)) -->|Browser| Frontend[React Frontend]
+    Frontend --> Auth
+    Frontend --> CompanyAPI
+    Frontend --> TenderAPI
+
+    CompanyAPI -->|Save Profile| Prisma
+    CompanyAPI -->|Trigger| MatchService
+    MatchService -->|Compute Scores| Prisma
+```
+
+---
+
+## ⚙️ Backend Deep Dive
+
+### 🏗️ Architecture Philosophy
+JustBid uses a **layered architecture** to separate concerns:
+- **Controllers**: Handle HTTP requests and responses.
+- **Middlewares**: Manage authentication (JWT), validation (Zod), and security (Helmet).
+- **Services**: Contain pure business logic (e.g., matching algorithms, email scheduling).
+- **Prisma + MongoDB**: Provides a flexible, type-safe schema with native support for nested arrays (ideal for CPV codes and keyword lists).
+
+### 🔄 Data Pipeline (SIMAP Sync)
+The `simap_sync.py` script is a standalone Python worker that:
+1.  **Fetches**: Retrieves the latest tender publications from the Swiss SIMAP API.
+2.  **Translates**: Automatically translates German/French/Italian titles and descriptions to English via `deep_translator`.
+3.  **Ingests**: Calls the `/api/tenders/ingest` endpoint to update the MongoDB database.
+4.  **Checkpointing**: Saves its state in `.sync_state.json` to avoid redundant processing.
+
+### 🎯 Matching Engine Logic
+The core value of JustBid is its ability to match companies with relevant tenders. The logic in `backend/src/services/match.service.js` uses a weighted scoring algorithm:
+
+| Criteria | Max Points | Description |
+|---|---|---|
+| **CPV Codes** | 40 pts | Matches exact European procurement category codes. |
+| **Keywords** | 40 pts | Full-text search across tender titles and descriptions. |
+| **Location** | 20 pts | Regional matching (e.g., Canton or City). |
+| **Budget** | Bonus/Penalty | Matches tender budget against company capacity. |
+
+*When a user updates their company profile, the matching engine automatically triggers an asynchronous re-calculation for all active tenders.*
+
+---
+
 ## 📁 Project Structure
 
 ```
