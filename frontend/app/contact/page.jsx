@@ -1,182 +1,200 @@
-import { useEffect, useRef } from "react"
-import { gsap } from "gsap"
-import { Mail, MapPin, Phone, MessageSquare, ChevronLeft, Send } from "lucide-react"
-import { Link } from "react-router-dom"
+"use client"
+
+import { useState } from "react"
+import { motion } from "framer-motion"
+import { Mail, MessageSquare, Send, Globe, Phone } from "lucide-react"
+import { Navbar } from "@/components/ui/navbar"
 
 export default function ContactPage() {
-  const containerRef = useRef(null)
+  const [formState, setFormState] = useState({
+    name: "",
+    email: "",
+    message: ""
+  })
+  const [isSent, setIsSent] = useState(false)
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from(".contact-header", {
-        opacity: 0,
-        y: -30,
-        duration: 0.8,
-        ease: "power3.out"
-      })
-      
-      gsap.from(".contact-info-item", {
-        opacity: 0,
-        x: -30,
-        stagger: 0.2,
-        duration: 0.6,
-        ease: "power3.out",
-        delay: 0.2
-      })
-
-      gsap.from(".contact-form", {
-        opacity: 0,
-        x: 30,
-        duration: 0.8,
-        ease: "power3.out",
-        delay: 0.4
-      })
-    }, containerRef)
-
-    return () => ctx.revert()
-  }, [])
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    setIsSent(true)
+    setTimeout(() => setIsSent(false), 3000)
+    setFormState({ name: "", email: "", message: "" })
+  }
 
   return (
-    <div 
-      ref={containerRef}
-      className="min-h-screen bg-background text-foreground overflow-hidden relative py-20 px-6"
-    >
-      {/* Background glow effects */}
-      <div className="absolute top-1/4 right-0 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[150px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-accent/5 rounded-full blur-[120px] pointer-events-none" />
+    <main className="bg-[#050508] text-[#e0e0e6] min-h-screen relative overflow-hidden font-sans selection:bg-primary/40 selection:text-white">
       
-      {/* Navigation */}
-      <div className="max-w-6xl mx-auto mb-16 relative z-10">
-        <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
-          <ChevronLeft size={20} />
-          <span>Back to Home</span>
-        </Link>
-      </div>
+      {/* Visual Overlays */}
+      <div className="grain-overlay" />
+      <div className="scanline" />
+      
+      <Navbar />
 
-      <div className="max-w-6xl mx-auto relative z-10">
+      <div className="relative z-10 container mx-auto px-6 pt-48 pb-32 max-w-7xl">
         
-        {/* Header */}
-        <div className="contact-header mb-16 max-w-2xl">
-          <h1 className="text-5xl font-bold mb-6 !leading-tight" style={{ fontFamily: "var(--font-display)" }}>
-            Let's get in <span className="text-primary italic">touch</span>.
+        {/* Header Section */}
+        <div className="mb-24">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex items-center gap-3 mb-8 text-primary"
+          >
+            <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse shadow-[0_0_10px_rgba(var(--primary),0.8)]" />
+            <span className="text-[10px] font-bold uppercase tracking-[0.4em] font-mono">Channel_Init_01</span>
+          </motion.div>
+          
+          <h1 
+            className="text-[clamp(3rem,10vw,8rem)] font-bold leading-[0.9] tracking-tighter mb-8 monolithic-text" 
+            style={{ fontFamily: "var(--font-display)" }}
+          >
+            Protocol <br/> <span className="text-primary">Engagement</span>
           </h1>
-          <p className="text-lg text-muted-foreground">
-            Have questions about a tender, pricing, or the platform? Our expert team is ready to help you navigate the bidding landscape.
+          
+          <p className="text-xl md:text-2xl text-white/60 max-w-lg leading-relaxed lowercase font-sans font-medium">
+            [SYS_REPORT]: bridging the gap between automation and advisory. deploy a transmission below for priority synchronization.
           </p>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-16 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-32">
           
-          {/* Left Side: Contact Info */}
-          <div className="w-full lg:w-1/3 space-y-12">
-            <div className="contact-info-item">
-              <div className="flex items-center gap-4 mb-3">
-                <div className="bg-primary/10 p-3 rounded-xl text-primary">
-                  <Mail size={24} />
-                </div>
-                <h3 className="text-xl font-bold">Email Us</h3>
-              </div>
-              <p className="text-muted-foreground ml-16">
-                Support: help@justbid.com<br/>
-                Sales: sales@justbid.com
-              </p>
-            </div>
-
-            <div className="contact-info-item">
-              <div className="flex items-center gap-4 mb-3">
-                <div className="bg-primary/10 p-3 rounded-xl text-primary">
-                  <Phone size={24} />
-                </div>
-                <h3 className="text-xl font-bold">Call Us</h3>
-              </div>
-              <p className="text-muted-foreground ml-16">
-                +1 (800) 123-4567<br/>
-                Mon-Fri, 9am - 6pm EST
-              </p>
-            </div>
-
-            <div className="contact-info-item">
-              <div className="flex items-center gap-4 mb-3">
-                <div className="bg-primary/10 p-3 rounded-xl text-primary">
-                  <MapPin size={24} />
-                </div>
-                <h3 className="text-xl font-bold">Headquarters</h3>
-              </div>
-              <p className="text-muted-foreground ml-16 leading-relaxed">
-                100 Innovation Drive<br/>
-                Suite 400<br/>
-                San Francisco, CA 94111
-              </p>
-            </div>
-          </div>
-
-          {/* Right Side: Contact Form */}
-          <div className="w-full lg:w-2/3 contact-form">
-            <div className="bg-card/30 border border-border/50 p-8 lg:p-12 rounded-3xl backdrop-blur-md">
-              <h2 className="text-3xl font-bold mb-8 flex items-center gap-3">
-                <MessageSquare className="text-primary" />
-                Send a Message
-              </h2>
-
-              <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground/80">First Name</label>
-                    <input 
-                      type="text" 
-                      placeholder="Jane" 
-                      className="w-full bg-background border border-border rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground/80">Last Name</label>
-                    <input 
-                      type="text" 
-                      placeholder="Doe" 
-                      className="w-full bg-background border border-border rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground/80">Work Email</label>
+          {/* Form Side */}
+          <div className="lg:col-span-7">
+            <motion.form 
+              initial="hidden"
+              animate="visible"
+              variants={{
+                hidden: { opacity: 0, y: 30 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: {
+                    duration: 0.8,
+                    staggerChildren: 0.1
+                  }
+                }
+              }}
+              onSubmit={handleSubmit}
+              className="space-y-8 bg-white/[0.02] backdrop-blur-3xl border border-white/10 p-10 md:p-14 rounded-[2rem] relative overflow-hidden"
+            >
+              <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <motion.div variants={{ hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } }} className="space-y-3">
+                  <label className="text-[11px] font-bold uppercase tracking-[0.3em] text-primary/90 font-mono pl-1">Identity_Key</label>
+                  <input 
+                    type="text" 
+                    value={formState.name}
+                    onChange={(e) => setFormState({...formState, name: e.target.value})}
+                    placeholder="ENTER FULL NAME"
+                    required
+                    className="w-full bg-black/40 border border-white/10 rounded-2xl py-5 px-6 text-sm outline-none focus:border-primary/60 focus:bg-black/60 transition-all font-sans placeholder:text-white/20 text-white font-medium"
+                  />
+                </motion.div>
+                <motion.div variants={{ hidden: { opacity: 0, x: 10 }, visible: { opacity: 1, x: 0 } }} className="space-y-3">
+                  <label className="text-[11px] font-bold uppercase tracking-[0.3em] text-primary/90 font-mono pl-1">Sync_Portal</label>
                   <input 
                     type="email" 
-                    placeholder="jane@company.com" 
-                    className="w-full bg-background border border-border rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                    value={formState.email}
+                    onChange={(e) => setFormState({...formState, email: e.target.value})}
+                    placeholder="ADDRESS@NETWORK.IO"
+                    required
+                    className="w-full bg-black/40 border border-white/10 rounded-2xl py-5 px-6 text-sm outline-none focus:border-primary/60 focus:bg-black/60 transition-all font-sans placeholder:text-white/20 text-white font-medium"
                   />
-                </div>
+                </motion.div>
+              </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground/80">Subject</label>
-                  <select className="w-full bg-background border border-border rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all appearance-none text-foreground/80">
-                    <option value="" disabled selected>Select an inquiry type</option>
-                    <option value="sales">Sales & Upgrades</option>
-                    <option value="support">Technical Support</option>
-                    <option value="billing">Billing & Invoices</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
+              <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }} className="space-y-3">
+                <label className="text-[11px] font-bold uppercase tracking-[0.3em] text-primary/90 font-mono pl-1">Transmission_Body</label>
+                <textarea 
+                  value={formState.message}
+                  onChange={(e) => setFormState({...formState, message: e.target.value})}
+                  placeholder="DRAFT YOUR REQUIREMENTS HERE..."
+                  rows={6}
+                  required
+                  className="w-full bg-black/40 border border-white/10 rounded-2xl py-5 px-6 text-sm outline-none focus:border-primary/60 focus:bg-black/60 transition-all font-sans resize-none placeholder:text-white/20 text-white font-medium"
+                />
+              </motion.div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground/80">Message</label>
-                  <textarea 
-                    rows={5}
-                    placeholder="How can we help you?" 
-                    className="w-full bg-background border border-border rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all resize-none"
-                  />
-                </div>
+              <motion.button 
+                variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
+                type="submit" 
+                className={`w-full py-6 rounded-2xl font-bold uppercase tracking-[0.4em] transition-all flex items-center justify-center gap-3 relative shadow-[0_0_30px_rgba(var(--primary),0.2)] ${
+                  isSent ? "bg-green-500 text-white" : "bg-primary text-black hover:bg-white hover:scale-[1.01] active:scale-[0.99]"
+                }`}
+              >
+                {isSent ? (
+                  <span className="font-mono">LINK_VERIFIED // SENT</span>
+                ) : (
+                  <>
+                    <Send size={14} className="opacity-80" />
+                    <span>Execute_Sync</span>
+                  </>
+                )}
+              </motion.button>
+            </motion.form>
+          </div>
 
-                <button className="w-full md:w-auto bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-4 px-10 rounded-xl transition-all mt-4 flex items-center justify-center gap-2 group hover:shadow-lg hover:shadow-primary/20">
-                  Send Message
-                  <Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                </button>
-              </form>
-            </div>
+          {/* Details Side */}
+          <div className="lg:col-span-5 flex flex-col justify-center">
+            <motion.div 
+              initial="hidden"
+              animate="visible"
+              variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: { staggerChildren: 0.15, delayChildren: 0.4 }
+                }
+              }}
+              className="space-y-14"
+            >
+              
+              <motion.div variants={{ hidden: { opacity: 0, x: 20 }, visible: { opacity: 1, x: 0 } }} className="group">
+                <div className="flex items-center gap-5 mb-5">
+                   <div className="w-12 h-12 rounded-2xl bg-white/[0.05] border border-white/10 flex items-center justify-center group-hover:border-primary/60 group-hover:bg-primary/10 transition-all duration-500">
+                    <Mail size={18} className="text-primary group-hover:scale-110 transition-transform" />
+                  </div>
+                  <h3 className="text-xl font-bold tracking-tight uppercase text-white" style={{ fontFamily: "var(--font-display)" }}>Direct_Inquiry</h3>
+                </div>
+                <p className="text-white/80 font-sans text-lg pl-[4.2rem] hover:text-primary transition-colors cursor-pointer font-medium">ops@justbid.ai</p>
+              </motion.div>
+
+              <motion.div variants={{ hidden: { opacity: 0, x: 20 }, visible: { opacity: 1, x: 0 } }} className="group">
+                <div className="flex items-center gap-5 mb-5">
+                   <div className="w-12 h-12 rounded-2xl bg-white/[0.05] border border-white/10 flex items-center justify-center group-hover:border-primary/60 group-hover:bg-primary/10 transition-all duration-500">
+                    <Globe size={18} className="text-primary group-hover:scale-110 transition-transform" />
+                  </div>
+                  <h3 className="text-xl font-bold tracking-tight uppercase text-white" style={{ fontFamily: "var(--font-display)" }}>Operations_Hub</h3>
+                </div>
+                <p className="text-white/70 font-sans text-lg pl-[4.2rem] leading-relaxed font-medium">
+                  Level_14, Neural_Tower 02<br/>
+                  Singapore_South_Harbor
+                </p>
+              </motion.div>
+
+              <motion.div variants={{ hidden: { opacity: 0, x: 20 }, visible: { opacity: 1, x: 0 } }} className="group">
+                <div className="flex items-center gap-5 mb-5">
+                   <div className="w-12 h-12 rounded-2xl bg-white/[0.05] border border-white/10 flex items-center justify-center group-hover:border-primary/60 group-hover:bg-primary/10 transition-all duration-500">
+                    <MessageSquare size={18} className="text-primary group-hover:scale-110 transition-transform" />
+                  </div>
+                  <h3 className="text-xl font-bold tracking-tight uppercase text-white" style={{ fontFamily: "var(--font-display)" }}>Data_Stream</h3>
+                </div>
+                <div className="pl-[4.2rem] flex gap-5">
+                   <div className="w-11 h-11 rounded-xl border border-white/20 bg-white/[0.02] flex items-center justify-center hover:bg-primary hover:text-black hover:border-primary transition-all cursor-pointer font-bold text-sm text-white">X</div>
+                   <div className="w-11 h-11 rounded-xl border border-white/20 bg-white/[0.02] flex items-center justify-center hover:bg-primary hover:text-black hover:border-primary transition-all cursor-pointer font-bold text-sm text-white">IN</div>
+                   <div className="w-11 h-11 rounded-xl border border-white/20 bg-white/[0.02] flex items-center justify-center hover:bg-primary hover:text-black hover:border-primary transition-all cursor-pointer font-bold text-sm text-white">GIT</div>
+                </div>
+              </motion.div>
+
+            </motion.div>
           </div>
 
         </div>
       </div>
-    </div>
+
+      {/* Decorative Grids */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-0 left-1/4 w-[2px] h-full bg-white/5 hidden lg:block" />
+      
+    </main>
   )
 }
