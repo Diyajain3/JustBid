@@ -11,9 +11,9 @@
    ╚════╝     ╚═════╝  ╚══════╝    ╚═╝       ╚═════╝  ╚═╝ ╚═════╝ 
 ```
 
-### 🔨 The Modern Auction & Bidding Platform
+### Modern Auction & Bidding Intelligence Platform
 
-*Where Every Item Finds Its True Value*
+*Real-time procurement and automated tender synchronization*
 
 <br />
 
@@ -24,385 +24,239 @@
 ![Redis](https://img.shields.io/badge/Redis-Cache-DC382D?style=for-the-badge&logo=redis&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=for-the-badge)
-![Stars](https://img.shields.io/github/stars/Diyajain3/JustBid?style=for-the-badge&color=yellow)
-![Forks](https://img.shields.io/github/forks/Diyajain3/JustBid?style=for-the-badge&color=blue)
 
 <br />
 
-[📖 Documentation](#-getting-started) · [🐛 Report Bug](https://github.com/Diyajain3/JustBid/issues) · [✨ Request Feature](https://github.com/Diyajain3/JustBid/issues)
+[Documentation](#getting-started) · [Report Issue](https://github.com/Diyajain3/JustBid/issues) · [Request Feature](https://github.com/Diyajain3/JustBid/issues)
 
 ---
 
 </div>
 
-## 📌 Table of Contents
+## Table of Contents
 
-- [About The Project](#-about-the-project)
-- [Key Features](#-key-features)
-- [Tech Stack](#-tech-stack)
-- [Architecture](#-architecture)
-- [Project Structure](#-project-structure)
-- [Getting Started](#-getting-started)
-- [API Overview](#-api-overview)
-- [Environment Variables](#-environment-variables)
-- [Analytics & Stats](#-analytics--stats)
-- [Roadmap](#-roadmap)
-- [Contributing](#-contributing)
-- [License](#-license)
-- [Contact](#-contact)
-
----
-
-## 🎯 About The Project
-
-**JustBid** is a sleek, full-featured online auction and bidding platform that enables users to list items, place competitive bids, and win auctions in real time. Designed with a modern user experience at its core, JustBid brings the thrill of live auctions directly to your browser.
-
-Whether you're a seller looking to get the best price for your items or a buyer hunting for rare finds, JustBid provides a transparent, secure, and exciting marketplace.
-
-> *"Fair prices. Fast bids. Just Bid."*
+- [About The Project](#about-the-project)
+- [System Architecture](#system-architecture)
+- [Backend Deep Dive](#backend-deep-dive)
+    - [Data Synchronization & Ingestion](#data-synchronization--ingestion)
+    - [Intelligent Matching Algorithm](#intelligent-matching-algorithm)
+    - [Security & Authentication](#security--authentication)
+- [Frontend Architecture](#frontend-architecture)
+- [Technical Stack](#technical-stack)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+- [API Specification](#api-specification)
+- [Roadmap](#roadmap)
+- [License](#license)
 
 ---
 
-## ✨ Key Features
+## About The Project
 
-| Feature | Description |
-|---|---|
-| 🏷️ **Item Listings** | Create detailed auction listings with images, descriptions, and starting prices |
-| ⏱️ **Timed Auctions** | Set custom auction durations with automatic closing timers |
-| 💰 **Real-time Bidding** | Place bids and see live updates as the competition heats up |
-| 🔔 **Email Notifications** | Get notified via email when outbid or when you win (Nodemailer) |
-| 🔒 **Secure Auth** | JWT-based authentication with bcrypt password hashing |
-| ⚡ **Redis Caching** | Fast data retrieval and session management via Redis |
-| 🛡️ **Request Validation** | Schema-based input validation using Zod |
-| 📊 **Bid History** | Full audit trail of every bid placed on an item |
-| 👤 **User Profiles** | Manage your active auctions, bids, and transaction history |
-| 📱 **Responsive UI** | Mobile-first design that works seamlessly on any device |
+JustBid is a sophisticated online auction and bidding platform designed for high-performance tender management. It automates the procurement lifecycle by synchronizing with external tender databases, translating multi-language data into English, and matching opportunities to company profiles using an intelligent scoring engine.
+
+JustBid provides a secure, transparent, and scalable environment for both buyers and sellers to engage in real-time auctions.
 
 ---
 
-## 🛠️ Tech Stack
+## System Architecture
 
-### Frontend *(active)*
+The following diagram illustrates the data flow from ingestion to user delivery:
 
-| Technology | Purpose |
-|---|---|
-| **React.js** | Component-based UI framework |
-| **JavaScript (ES6+)** | Core application logic |
-| **CSS3 / Tailwind** | Styling and responsive layout |
-| **Axios** | HTTP client for API communication |
-| **React Router** | Client-side routing and navigation |
+```mermaid
+graph TD
+    subgraph "External Integration Layer"
+        SIMAP["SIMAP API (Swiss Procurement)"]
+    end
 
-### Backend *(active)*
+    subgraph "Asynchronous Data Pipeline (Python)"
+        Worker["simap_sync.py Service"]
+        Translator["Google Translate Engine"]
+        Transform["Data Transformation Layer"]
+    end
 
-| Technology | Version | Purpose |
+    subgraph "Core API Layer (Express.js)"
+        Auth["Authentication Controller"]
+        TenderAPI["Tender Management Controller"]
+        CompanyAPI["Profile & Search Controller"]
+        MatchService["Matching Intel Service"]
+    end
+
+    subgraph "Data Persistence Layer"
+        Prisma["Prisma ORM (Type-safe)"]
+        MongoDB[(Database: MongoDB)]
+        Redis[(Cache: Redis)]
+    end
+
+    SIMAP --> Worker
+    Worker -->|Fetch| SIMAP
+    Worker -->|Process| Translator
+    Translator --> Transform
+    Transform -->|Ingest| TenderAPI
+    TenderAPI --> Prisma
+    Prisma --> MongoDB
+
+    User((End User)) -->|HTTPS| Proxy[Nginx / Load Balancer]
+    Proxy --> Frontend[React Frontend]
+    Frontend --> Auth
+    Frontend --> CompanyAPI
+    Frontend --> TenderAPI
+
+    CompanyAPI -->|Mutation| Prisma
+    CompanyAPI -->|Event Trigger| MatchService
+    MatchService -->|Heavy Compute| Prisma
+    TenderAPI -->|Performance| Redis
+```
+
+---
+
+## Backend Deep Dive
+
+The JustBid backend is built on a modular Service-Controller pattern using Node.js and Express v5. It is designed for horizontal scalability and high availability.
+
+### Data Synchronization & Ingestion
+
+The system employs a dedicated Python-based worker (`simap_sync.py`) for automated tender acquisition:
+1. **Asynchronous Acquisition**: Utilizes `httpx` for high-concurrency requests to SIMAP V1/V2 APIs.
+2. **Natural Language Translation**: Automatically detects source languages (German, French, Italian) and translates content to English using an integrated translation engine.
+3. **Data Scrubbing & Normalization**: Transforms raw JSON publications into structured objects compatible with our MongoDB schema.
+4. **Resilience & State Management**: Implements a checkpointing system via `.sync_state.json` to ensure process continuity after interruptions.
+5. **API Ingestion**: Sends sanitized data batches to the `/api/tenders/ingest` endpoint protected by internal worker keys.
+
+### Intelligent Matching Algorithm
+
+At the core of JustBid is the `MatchService`, which computes real-time opportunity scores for companies based on four primary vectors:
+
+| Matching Vector | Weight | Logic Description |
 |---|---|---|
-| **Node.js** | ES Modules (`"type": "module"`) | Server-side runtime |
-| **Express.js** | v5.2 | RESTful API framework |
-| **Prisma** | v5.22 | Type-safe ORM & database migrations |
-| **Redis** | v5.12 | Caching & session management |
-| **JWT** | v9 | Secure authentication tokens |
-| **bcrypt** | v6 | Password hashing |
-| **Zod** | v4 | Schema validation & type safety |
-| **Nodemailer** | v8 | Email notifications (outbid / win alerts) |
-| **Helmet** | v8 | HTTP security headers |
-| **Morgan** | v1.10 | HTTP request logging |
-| **Nodemon** | v3 | Dev server auto-restart |
+| **CPV Identification** | 40% | Exact match across Common Procurement Vocabulary (CPV) codes. |
+| **Keyword Relevance** | 40% | Full-text relevance analysis against tender titles and descriptions. |
+| **Regional Proximity** | 20% | Location-based matching for regional tenders (Cantons/Cities). |
+| **Capacity Management** | Bonus/Penalty | Dynamic penalty if the tender budget exceeds or falls significantly below company thresholds. |
+
+The matching process is asynchronous; updating a company profile triggers a background task that re-evaluates all current tenders without blocking the user session.
+
+### Security & Authentication
+
+- **Identity Provider**: Custom implementation using JWT (Json Web Tokens) and bcrypt for password hashing (12 rounds).
+- **Session Security**: Stateless authentication with short-lived access tokens and token-based session recovery.
+- **Request Integrity**: Validation middleware using Zod for strict schema enforcement on all incoming payloads.
+- **Defense in Depth**: Implementation of Helmet for HTTP security headers and CORS for resource sharing control.
 
 ---
 
-## 🏗️ Architecture
+## Frontend Architecture
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                        CLIENT                           │
-│   ┌──────────────────────────────────────────────────┐  │
-│   │           React Frontend  ✅ Active               │  │
-│   │  ┌──────────┐ ┌──────────┐ ┌──────────────────┐  │  │
-│   │  │  Auth    │ │ Auction  │ │   Bid Engine     │  │  │
-│   │  │  Module  │ │ Listings │ │   (Real-time)    │  │  │
-│   │  └──────────┘ └──────────┘ └──────────────────┘  │  │
-│   └──────────────────────────────────────────────────┘  │
-└───────────────────────┬─────────────────────────────────┘
-                        │  REST API (Express v5)
-┌───────────────────────▼─────────────────────────────────┐
-│                  SERVER  ✅ Active                       │
-│   ┌──────────────────────────────────────────────────┐  │
-│   │     Node.js + Express v5  (ES Modules)            │  │
-│   │  ┌──────────┐ ┌──────────┐ ┌──────────────────┐  │  │
-│   │  │  /auth   │ │/auctions │ │     /bids        │  │  │
-│   │  └──────────┘ └──────────┘ └──────────────────┘  │  │
-│   │        Helmet · Morgan · Zod · JWT / bcrypt       │  │
-│   └──────────────────────────────────────────────────┘  │
-│   ┌─────────────────────┐  ┌───────────────────────┐   │
-│   │   Prisma ORM v5     │  │      Redis v5          │   │
-│   │  DB Schema &        │  │  Caching & Sessions    │   │
-│   │  Migrations         │  │                        │   │
-│   └─────────────────────┘  └───────────────────────┘   │
-│   ┌──────────────────────────────────────────────────┐  │
-│   │                  Nodemailer v8                    │  │
-│   │       Outbid alerts · Win notifications           │  │
-│   └──────────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────┘
-```
+The frontend is a modern React application utilizing a tactical, high-contrast design language.
+- **State Management**: Context-based state handling for authentication and user sessions.
+- **Routing**: Client-side navigation via React Router with protected route guards.
+- **UI Design**: Modern industrial aesthetic using dark glassmorphism and premium CSS animations.
+- **API Client**: Axios-based service layer with interceptors for automatic authentication header injection.
 
 ---
 
-## 📁 Project Structure
+## Technical Stack
 
-```
+### Backend
+- **Runtime**: Node.js (ES Modules)
+- **API Framework**: Express.js v5
+- **Persistence**: MongoDB via Prisma ORM
+- **In-memory Store**: Redis
+- **Automation**: Python 3.x (Sync Worker)
+
+### Frontend
+- **Library**: React.js
+- **Styling**: Vanilla CSS / Tailwind CSS
+- **HTTP**: Axios
+
+---
+
+## Project Structure
+
+```text
 JustBid/
-│
-├── frontend/                      # React application ✅
-│   ├── public/
-│   │   └── index.html
+├── backend/                       # Node.js + Express API Pipeline
+│   ├── prisma/                    # Schema definitions and migrations
 │   ├── src/
-│   │   ├── components/
-│   │   │   ├── AuctionCard/
-│   │   │   ├── BidForm/
-│   │   │   ├── Navbar/
-│   │   │   └── Timer/
-│   │   ├── pages/
-│   │   │   ├── Home.jsx
-│   │   │   ├── AuctionDetail.jsx
-│   │   │   ├── CreateAuction.jsx
-│   │   │   ├── Profile.jsx
-│   │   │   └── Login.jsx
-│   │   ├── context/
-│   │   ├── hooks/
-│   │   ├── services/
-│   │   ├── utils/
-│   │   ├── App.jsx
-│   │   └── index.js
-│   └── package.json
-│
-└── backend/                       # Node.js + Express API ✅
-    ├── prisma/
-    │   └── schema.prisma          # DB schema & migrations
-    ├── src/
-    │   ├── server.js              # Entry point
-    │   ├── routes/                # API route definitions
-    │   ├── controllers/           # Business logic
-    │   ├── middlewares/           # Auth, validation, error handling
-    │   ├── services/              # Redis, Nodemailer integrations
-    │   └── utils/                 # Helper utilities
-    ├── package.json
-    └── .env.example
+│   │   ├── controllers/           # HTTP Request Handlers
+│   │   ├── services/              # Pure Business Logic & Matching engine
+│   │   ├── routes/                # Endpoint Definitions
+│   │   ├── middlewares/           # Auth & Security Layers
+│   │   └── server.js              # Application Entry Point
+├── frontend/                      # React SPA
+│   ├── src/
+│   │   ├── components/            # Reusable UI Modules
+│   │   ├── pages/                 # Route Views
+│   │   ├── context/               # Global State Providers
+│   │   └── services/              # API Integration Layers
+└── workers/                       # Python Data Synchronizers
 ```
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
-
-- **Node.js** `v18+` — [Download](https://nodejs.org/)
-- **npm** or **yarn**
-- **Redis** — [Download](https://redis.io/download) or use [Redis Cloud](https://redis.com/try-free/)
-- **A Prisma-compatible database** (PostgreSQL recommended)
-- **Git**
+- Node.js v18.0.0 or higher
+- Redis v6.0.0 or higher
+- MongoDB instance (Atlas or Local)
+- Python 3.8+
 
 ### Installation
 
-**1. Clone the repository**
+1. **Clone and Install Backend**
+   ```bash
+   cd backend
+   npm install
+   cp .env.example .env
+   npm run db:push
+   npm run dev
+   ```
 
-```bash
-git clone https://github.com/Diyajain3/JustBid.git
-cd JustBid
-```
+2. **Clone and Install Frontend**
+   ```bash
+   cd frontend
+   npm install
+   npm start
+   ```
 
-**2. Set up the Backend**
-
-```bash
-cd backend
-npm install
-cp .env.example .env   # then fill in your values
-```
-
-Push the schema to your database and generate the Prisma client:
-
-```bash
-npm run db:push
-npm run db:generate
-```
-
-Start the dev server:
-
-```bash
-npm run dev
-# API running at http://localhost:5000
-```
-
-**3. Set up the Frontend**
-
-```bash
-cd ../frontend
-npm install
-npm start
-# App running at http://localhost:3000
-```
+3. **Initialize Data Sync**
+   ```bash
+   python simap_sync.py --limit 100
+   ```
 
 ---
 
-## 🔌 API Overview
+## API Specification
 
-| Method | Endpoint | Description | Auth |
+| Endpoint | Method | Component | Authentication |
 |---|---|---|---|
-| `POST` | `/api/auth/register` | Register a new user | ❌ |
-| `POST` | `/api/auth/login` | Login & receive JWT | ❌ |
-| `GET` | `/api/auctions` | List all active auctions | ❌ |
-| `GET` | `/api/auctions/:id` | Get auction details | ❌ |
-| `POST` | `/api/auctions` | Create a new auction | ✅ |
-| `PUT` | `/api/auctions/:id` | Update an auction | ✅ |
-| `DELETE` | `/api/auctions/:id` | Delete an auction | ✅ |
-| `GET` | `/api/bids/:auctionId` | Get bids for an auction | ❌ |
-| `POST` | `/api/bids` | Place a bid | ✅ |
-
-> Protected routes require `Authorization: Bearer <token>` in the request header.
+| `/api/auth/login` | POST | Authentication | Public |
+| `/api/tenders` | GET | Tender Feed | Required |
+| `/api/company/profile` | POST | Profile Update | Required |
+| `/api/tenders/ingest` | POST | Worker Ingestion | Secret Key |
 
 ---
 
-## 🔐 Environment Variables
+## Roadmap
 
-Create a `.env` file inside the `backend/` directory:
-
-```env
-# Server
-PORT=5000
-NODE_ENV=development
-
-# Database (Prisma)
-DATABASE_URL=postgresql://user:password@localhost:5432/justbid
-
-# Authentication
-JWT_SECRET=your_jwt_secret_key
-JWT_EXPIRES_IN=7d
-
-# Redis
-REDIS_URL=redis://localhost:6379
-
-# Email (Nodemailer)
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=your_email@gmail.com
-SMTP_PASS=your_app_password
-```
+- [x] Automated SIMAP Data Pipeline
+- [x] Intelligent CPV Matching Engine
+- [x] Multi-language Translation Support
+- [ ] Real-time WebSocket Bid Notifications
+- [ ] Predictive Tender Analytics
+- [ ] Multi-tenant Enterprise Dashboards
 
 ---
 
-## 📊 Analytics & Stats
+## License
 
-<div align="center">
-
-### 📈 Repository Overview
-
-| Metric | Value |
-|---|---|
-| 🌟 Stars | 1 |
-| 🍴 Forks | 1 |
-| 👁️ Watchers | 0 |
-| 💻 Language | JavaScript (99.9%) |
-| 🏗️ Architecture | Full-Stack (React + Express v5 + Prisma + Redis) |
-| 🗂️ Branches | main |
-
----
-
-### 🧩 Codebase Composition
-
-```
-JavaScript  ████████████████████████████████████████  99.9%
-Other       ░                                           0.1%
-```
-
----
-
-### 🔥 Feature Completion Tracker
-
-| Module | Status | Progress |
-|---|---|---|
-| UI Components | ✅ Complete | `████████████` 100% |
-| Auction Listings UI | ✅ Complete | `████████████` 100% |
-| Bidding Interface UI | ✅ Complete | `████████████` 100% |
-| Backend API (Express v5) | ✅ Complete | `████████████` 100% |
-| Prisma ORM + DB Schema | ✅ Complete | `████████████` 100% |
-| JWT Auth + bcrypt | ✅ Complete | `████████████` 100% |
-| Zod Validation | ✅ Complete | `████████████` 100% |
-| Redis Caching | ✅ Complete | `████████████` 100% |
-| Email Notifications | ✅ Complete | `████████████` 100% |
-| Security (Helmet + Morgan) | ✅ Complete | `████████████` 100% |
-| Real-time Updates (WebSocket) | 🔜 Planned | `░░░░░░░░░░░░` 0% |
-| Payment Gateway | 🔜 Planned | `░░░░░░░░░░░░` 0% |
-| Admin Dashboard | 🔜 Planned | `░░░░░░░░░░░░` 0% |
-
-</div>
-
----
-
-## 🗺️ Roadmap
-
-- [x] Project scaffold and frontend setup
-- [x] Core auction listing UI
-- [x] Bidding interface and forms
-- [x] Backend API (Express v5, ES Modules)
-- [x] Prisma ORM with database schema & migrations
-- [x] JWT authentication & bcrypt password hashing
-- [x] Zod schema validation
-- [x] Redis caching & session management
-- [x] Email notifications via Nodemailer
-- [x] HTTP security with Helmet + Morgan logging
-- [ ] Real-time bid updates via WebSockets
-- [ ] Protected frontend routes (React Router guards)
-- [ ] User profile and bid history pages
-- [ ] Payment integration (Stripe / Razorpay)
-- [ ] Admin panel for moderation
-- [ ] Deployment (Railway / Render + Vercel)
-- [ ] Mobile app (React Native)
-
----
-
-## 🤝 Contributing
-
-Contributions are what make the open source community amazing. Any contributions you make are **greatly appreciated**.
-
-1. Fork the Project
-2. Create your Feature Branch
-   ```bash
-   git checkout -b feature/AmazingFeature
-   ```
-3. Commit your Changes
-   ```bash
-   git commit -m 'Add some AmazingFeature'
-   ```
-4. Push to the Branch
-   ```bash
-   git push origin feature/AmazingFeature
-   ```
-5. Open a Pull Request
-
-Please make sure to update tests as appropriate and follow the existing code style.
-
----
-
-## 📄 License
-
-Distributed under the **MIT License**. See `LICENSE` for more information.
-
----
-
-## 📬 Contact
-
-**Diya Jain** — [@Diyajain3](https://github.com/Diyajain3)
-
-**Khushi Singh** — [@mekhushi](https://github.com/mekhushi)
-
-Project Link: [https://github.com/Diyajain3/JustBid](https://github.com/Diyajain3/JustBid)
+Distributed under the MIT License. See `LICENSE` for details.
 
 ---
 
 <div align="center">
 
-Made with ❤️ by
-[Diya Jain](https://github.com/Diyajain3) & [Khushi Singh](https://github.com/mekhushi)
-
-⭐ **If you found this project useful, please consider giving it a star!** ⭐
+Distributed by the JustBid Engineering Team
 
 </div>
