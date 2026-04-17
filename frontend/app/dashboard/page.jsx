@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { Link, useNavigate } from "react-router-dom"
-import { Settings, BarChart3, LayoutDashboard, Bookmark, LogOut, TrendingUp, Search } from "lucide-react"
+import { Settings, BarChart3, LayoutDashboard, Bookmark, LogOut, TrendingUp, Search, CheckCircle2 } from "lucide-react"
+import confetti from "canvas-confetti"
+import { CircularGauge } from "@/components/ui/circular-gauge"
 
 export default function DashboardPage() {
   const navigate = useNavigate()
   const [tenders, setTenders] = useState([])
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState(null)
+  const [appliedTenders, setAppliedTenders] = useState({})
 
   useEffect(() => {
     const token = localStorage.getItem("token")
@@ -22,14 +25,12 @@ export default function DashboardPage() {
 
     const fetchTenders = async () => {
       try {
-        // Calling the custom algorithm feed which processes Min/Max budgets and CPV!
         const res = await fetch("http://localhost:5000/api/tenders/feed", {
           headers: { Authorization: `Bearer ${token}` }
         })
 
         if (!res.ok) {
            if (res.status === 400) {
-              // They haven't created a profile yet
               navigate("/profile")
            }
            throw new Error("Failed to fetch feed")
@@ -47,11 +48,26 @@ export default function DashboardPage() {
     fetchTenders()
   }, [navigate])
 
+  const handleApply = (e, tenderId) => {
+    const rect = e.target.getBoundingClientRect()
+    const x = (rect.left + rect.width / 2) / window.innerWidth
+    const y = (rect.top + rect.height / 2) / window.innerHeight
+
+    confetti({
+      particleCount: 80,
+      spread: 70,
+      origin: { x, y },
+      colors: ['#4ade80', '#ffffff', '#22c55e']
+    })
+
+    setAppliedTenders(prev => ({ ...prev, [tenderId]: true }))
+  }
+
   return (
-    <div className="flex h-screen bg-background overflow-hidden">
+    <div className="flex h-screen bg-background overflow-hidden relative">
       
       {/* Sidebar */}
-      <aside className="w-64 bg-card/50 border-r border-border hidden md:flex flex-col">
+      <aside className="w-64 bg-card/50 border-r border-border hidden md:flex flex-col z-10">
         <div className="p-6">
           <Link to="/" className="text-2xl font-bold text-primary" style={{ fontFamily: "var(--font-display)" }}>
             JustBid
@@ -122,29 +138,33 @@ export default function DashboardPage() {
         <div className="p-6 md:p-8 max-w-5xl mx-auto">
           
           {/* Top Stat row */}
-           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-              <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
-                <p className="text-sm text-muted-foreground mb-2">Algorithm Matches</p>
-                <p className="text-3xl font-bold" style={{ fontFamily: "var(--font-display)" }}>{tenders.length}</p>
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <div className="bg-card border border-border rounded-2xl p-6 shadow-sm flex flex-col justify-center">
+                <p className="text-sm text-muted-foreground mb-2 uppercase tracking-widest">Algorithm Matches</p>
+                <div className="flex items-baseline gap-4">
+                  <p className="text-5xl font-bold text-foreground" style={{ fontFamily: "var(--font-display)" }}>{tenders.length}</p>
+                  <p className="text-sm text-primary flex items-center gap-1"><TrendingUp size={14}/> +12 this week</p>
+                </div>
               </div>
-              <div className="bg-gradient-to-br from-primary/20 to-transparent border border-primary/30 rounded-2xl p-6 shadow-sm">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <p className="text-sm text-primary/80 font-medium mb-1">Highest Score</p>
-                    <p className="text-3xl font-bold text-primary" style={{ fontFamily: "var(--font-display)" }}>
-                      {tenders.length > 0 ? tenders[0].matchScore : 0}%
-                    </p>
-                  </div>
-                  <TrendingUp className="text-primary" />
+              <div className="bg-gradient-to-br from-card to-card/50 border border-border rounded-2xl p-6 shadow-sm flex items-center justify-between overflow-hidden relative">
+                <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-primary/10 rounded-full blur-2xl pointer-events-none" />
+                <div>
+                  <p className="text-sm text-primary/80 font-medium mb-1 uppercase tracking-widest">Highest Scoring Tender</p>
+                  <p className="text-muted-foreground text-sm max-w-[200px]">The platform found an extremely high probability match.</p>
+                </div>
+                <div className="relative z-10 flex shrink-0 justify-center min-w-[120px]">
+                  <CircularGauge value={tenders.length > 0 ? tenders[0].matchScore : 0} size={100} strokeWidth={8} delay={0.5} />
                 </div>
               </div>
             </div>
 
           {/* Feed */}
-          <h2 className="text-lg font-semibold mb-4">Your Custom Feed</h2>
+          <h2 className="text-lg font-semibold mb-6 flex items-center gap-2">
+            Your Custom Feed <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse ml-2" />
+          </h2>
           
           {loading ? (
-             <div className="text-center py-20 text-muted-foreground">
+             <div className="text-center py-20 text-muted-foreground border border-dashed border-border rounded-2xl bg-card/20">
                <div className="animate-spin w-10 h-10 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
                Crunching multi-dimensional arrays...
              </div>
@@ -157,75 +177,117 @@ export default function DashboardPage() {
                </Link>
              </div>
           ) : (
-            <div className="space-y-4">
-              {tenders.map((tender, i) => (
-                <motion.div 
-                  key={tender.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.05 }}
-                  className="bg-card border border-border rounded-2xl p-6 hover:shadow-lg hover:border-primary/50 transition-all group"
-                >
-                  <div className="flex flex-col md:flex-row gap-6 justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                          tender.matchScore >= 80 ? 'bg-green-500/20 text-green-400' :
-                          tender.matchScore >= 50 ? 'bg-primary/20 text-primary' :
-                          'bg-yellow-500/20 text-yellow-500'
-                        }`}>
-                          {tender.matchScore}% Match
-                        </span>
-                        <span className="text-xs text-muted-foreground">ID: {tender.externalId}</span>
-                      </div>
-                      <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">{tender.title}</h3>
-                      <p className="text-muted-foreground text-sm line-clamp-2 mb-4">
-                        {tender.description}
-                      </p>
-                      
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {tender.cpvCodes?.map(code => (
-                          <span key={code} className="text-xs bg-secondary px-2 py-1 rounded text-foreground/70">
-                            CPV: {code}
+            <div className="space-y-6">
+              <AnimatePresence>
+                {tenders.map((tender, i) => (
+                  <motion.div 
+                    key={tender.id}
+                    layout
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
+                    transition={{ delay: i * 0.1, duration: 0.5, ease: "easeOut" }}
+                    className={`bg-card border rounded-2xl p-6 transition-all group relative overflow-hidden ${appliedTenders[tender.id] ? 'border-primary shadow-[0_0_15px_rgba(var(--primary),0.2)]' : 'border-border hover:shadow-xl hover:border-primary/40'}`}
+                  >
+                    {appliedTenders[tender.id] && (
+                      <div className="absolute inset-0 bg-green-500/5 pointer-events-none z-0" />
+                    )}
+
+                    <div className="flex flex-col md:flex-row gap-8 justify-between relative z-10">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-3">
+                          <span className={`px-3 py-1 rounded-full text-xs font-bold shadow-sm ${
+                            tender.matchScore >= 80 ? 'bg-green-500/20 text-green-400 border border-green-500/30' :
+                            tender.matchScore >= 50 ? 'bg-primary/20 text-primary border border-primary/30' :
+                            'bg-yellow-500/20 text-yellow-500 border border-yellow-500/30'
+                          }`}>
+                            {tender.matchScore}% Neural Match
                           </span>
-                        ))}
-                      </div>
+                          <span className="text-xs text-muted-foreground font-mono bg-secondary px-2 py-1 rounded">ID: {tender.externalId}</span>
+                        </div>
+                        <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">{tender.title}</h3>
+                        <p className="text-muted-foreground text-sm line-clamp-2 mb-5 leading-relaxed">
+                          {tender.description}
+                        </p>
+                        
+                        <div className="flex flex-wrap gap-2 mb-5">
+                          {tender.cpvCodes?.map(code => (
+                            <span key={code} className="text-xs bg-secondary px-2.5 py-1 rounded-md text-foreground/80 font-medium">
+                              CPV: {code}
+                            </span>
+                          ))}
+                        </div>
 
-                      {/* AI Reasoning Tags */}
-                      <div className="space-y-1">
-                        {tender.matchReasons?.map((reason, idx) => (
-                          <p key={idx} className="text-xs text-primary/80 flex items-center gap-1">
-                            <span className="w-1 h-1 rounded-full bg-primary inline-block"></span>
-                            {reason}
+                        {/* AI Reasoning Tags */}
+                        <div className="space-y-1.5 p-3 rounded-lg bg-secondary/50 border border-border/50">
+                          <p className="text-xs text-primary/80 font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                            <SparklesIcon /> Analysis
                           </p>
-                        ))}
+                          {tender.matchReasons?.map((reason, idx) => (
+                            <p key={idx} className="text-xs text-foreground/80 flex items-start gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-primary inline-block mt-1 shrink-0 shadow-[0_0_5px_rgba(var(--primary),1)]"></span>
+                              <span>{reason}</span>
+                            </p>
+                          ))}
+                        </div>
+
                       </div>
 
-                    </div>
+                      <div className="flex flex-col justify-between items-end min-w-[220px] border-t md:border-t-0 md:border-l border-border pt-5 md:pt-0 md:pl-8">
+                        <div className="text-right w-full mb-6">
+                           <p className="text-xs text-muted-foreground uppercase tracking-widest mb-1.5">Budget Allocation</p>
+                           <p className="text-3xl font-bold text-green-400 drop-shadow-[0_0_5px_rgba(74,222,128,0.2)]">
+                             {tender.budget ? `$${tender.budget.toLocaleString()}` : "Confidential"}
+                           </p>
+                           
+                           <p className="text-xs text-muted-foreground uppercase tracking-widest mt-5 mb-1.5">Deployment Location</p>
+                           <p className="font-medium text-sm text-foreground bg-secondary/80 inline-block px-2 py-1 rounded">{tender.location}</p>
 
-                    <div className="flex flex-col justify-between items-end min-w-[200px] border-t md:border-t-0 md:border-l border-border pt-4 md:pt-0 md:pl-6">
-                      <div className="text-right w-full mb-4">
-                         <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Budget</p>
-                         <p className="text-2xl font-bold text-green-400">${tender.budget?.toLocaleString()}</p>
-                         
-                         <p className="text-xs text-muted-foreground uppercase tracking-wider mt-4 mb-1">Location</p>
-                         <p className="font-medium text-sm">{tender.location}</p>
-
-                         <p className="text-xs text-muted-foreground uppercase tracking-wider mt-4 mb-1">Deadline</p>
-                         <p className="font-medium text-sm text-red-400">{new Date(tender.deadline).toLocaleDateString()}</p>
+                           <p className="text-xs text-muted-foreground uppercase tracking-widest mt-5 mb-1.5">Deadline</p>
+                           <p className="font-medium text-sm text-red-400 flex items-center justify-end gap-1.5">
+                             <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
+                             {new Date(tender.deadline).toLocaleDateString()}
+                           </p>
+                        </div>
+                        
+                        <AnimatePresence mode="wait">
+                          {appliedTenders[tender.id] ? (
+                            <motion.div
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              className="w-full bg-green-500/20 text-green-500 border border-green-500/50 font-bold py-3 rounded-xl flex justify-center items-center gap-2"
+                            >
+                              <CheckCircle2 size={20} /> Bid Fast-Tracked
+                            </motion.div>
+                          ) : (
+                            <motion.button 
+                              whileHover={{ scale: 1.02 }}
+                              whileTap={{ scale: 0.98 }}
+                              onClick={(e) => handleApply(e, tender.id)}
+                              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 rounded-xl transition-all shadow-[0_0_15px_rgba(var(--primary),0.3)] hover:shadow-[0_0_25px_rgba(var(--primary),0.5)] flex justify-center items-center gap-2 group"
+                            >
+                              Fast-Track Bid
+                              <motion.span className="group-hover:translate-x-1 transition-transform inline-block">→</motion.span>
+                            </motion.button>
+                          )}
+                        </AnimatePresence>
                       </div>
-                      
-                      <button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-2 rounded-xl transition-colors shadow-lg hover:shadow-primary/20">
-                        View Full Tender
-                      </button>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             </div>
           )}
         </div>
       </main>
     </div>
+  )
+}
+
+function SparklesIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+    </svg>
   )
 }

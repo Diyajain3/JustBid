@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { gsap } from "gsap"
 import { Mail, Lock, User, ArrowRight, ShieldCheck, Zap, TrendingUp, ChevronLeft } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom"
+import { ParticleNetwork } from "@/components/ui/particle-network"
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true)
@@ -127,17 +128,12 @@ export default function AuthPage() {
       {/* LEFT SIDE - Advantages */}
       <div 
         ref={leftSideRef}
-        className="hidden lg:flex flex-col w-1/2 relative overflow-hidden bg-card/30"
+        className="hidden lg:flex flex-col w-1/2 relative overflow-hidden bg-[rgb(10,10,13)]"
       >
-        <motion.div 
-          className="absolute -top-40 -left-40 w-96 h-96 bg-primary/20 rounded-full blur-[100px]"
-          animate={{
-            scale: [1, 1.2, 1],
-            x: [0, 50, 0],
-            y: [0, 30, 0]
-          }}
-          transition={{ duration: 10, repeat: Infinity, repeatType: "reverse" }}
-        />
+        <ParticleNetwork />
+        
+        {/* subtle gradient overlay over the particles so text is more readable */}
+        <div className="absolute inset-0 bg-gradient-to-br from-background/40 to-transparent pointer-events-none" />
         
         <div className="relative z-10 flex flex-col justify-between h-full w-full max-w-xl mx-auto p-12 lg:px-20 lg:py-16">
           <Link to="/" className="auth-brand inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors w-fit">
