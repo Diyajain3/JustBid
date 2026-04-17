@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import prisma from '../config/db.js';
+import sendEmail from '../utils/sendEmail.js';
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -106,13 +107,35 @@ export const forgotPassword = async (req, res) => {
     });
 
     const resetUrl = `http://localhost:5173/auth/reset/${resetToken}`;
-    
-    console.log(`\n\n[SIMULATED EMAIL DISPATCH] Password Reset Link for ${email}:\n--> ${resetUrl}\n\n`);
 
-    res.status(200).json({ 
-      message: 'If that email is in our system, a reset link has been generated.',
-      resetUrl // Exposing for dev local testing without full backend log inspection
-    });
+    const message = `You are receiving this email because a password reset was requested for your account.\n\nPlease make a PUT request to:\n\n${resetUrl}\n\nIf you did not request this, please ignore this email.`;
+
+    try {
+      await sendEmail({
+        to: user.email,
+        subject: 'JustBid - Password Reset Token',
+        text: message
+      });
+      
+      console.log(`\n\n[EMAIL DISPATCHED] Password Reset Link for ${email}:\n--> ${resetUrl}\n\n`);
+
+      res.status(200).json({ 
+        message: 'If that email is in our system, a reset link has been generated.',
+        resetUrl // Exposing for dev local testing
+      });
+    } catch (err) {
+      console.error('Error sending email:', err);
+      
+      await prisma.user.update({
+        where: { email },
+        data: { 
+          resetPasswordToken: null, 
+          resetPasswordExpires: null 
+        }
+      });
+      
+      return res.status(500).json({ message: 'Error sending email. Please try again later.' });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error generating reset token' });
