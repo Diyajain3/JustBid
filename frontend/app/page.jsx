@@ -1,9 +1,9 @@
 
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 import { Hero } from "@/components/sections/hero"
 import { Story } from "@/components/sections/story"
@@ -21,7 +21,16 @@ if (typeof window !== "undefined") {
 }
 
 export default function Home() {
+  const [user, setUser] = useState(null)
+  const navigate = useNavigate()
+
   useEffect(() => {
+    // Check if user is logged in
+    const storedUser = localStorage.getItem('user')
+    if (storedUser) {
+      setUser(JSON.parse(storedUser))
+    }
+
     // Refresh ScrollTrigger on page load
     ScrollTrigger.refresh()
 
@@ -63,9 +72,29 @@ export default function Home() {
             <Link to="/contact" className="text-muted-foreground hover:text-foreground transition-colors">
               Contact
             </Link>
-            <Link to="/auth" className="inline-flex items-center justify-center px-6 py-2 bg-primary text-primary-foreground rounded-full font-medium hover:bg-primary/90 transition-colors">
-              Get Started
-            </Link>
+            
+            {user ? (
+              <div className="flex items-center gap-4">
+                <span className="text-sm font-medium text-primary">Hello, {user.name || user.email.split('@')[0]}</span>
+                <Link to="/dashboard" className="inline-flex items-center justify-center px-4 py-2 bg-primary/10 text-primary rounded-full font-medium hover:bg-primary/20 transition-colors">
+                  Dashboard
+                </Link>
+                <button 
+                  onClick={() => {
+                    localStorage.removeItem('token')
+                    localStorage.removeItem('user')
+                    setUser(null)
+                  }}
+                  className="inline-flex items-center justify-center px-4 py-2 bg-secondary text-foreground rounded-full font-medium hover:bg-secondary/80 transition-colors"
+                >
+                  Log out
+                </button>
+              </div>
+            ) : (
+              <Link to="/auth" className="inline-flex items-center justify-center px-6 py-2 bg-primary text-primary-foreground rounded-full font-medium hover:bg-primary/90 transition-colors">
+                Get Started
+              </Link>
+            )}
           </div>
           <button className="md:hidden text-foreground">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

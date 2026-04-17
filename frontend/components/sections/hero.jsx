@@ -4,6 +4,7 @@ import { useRef, useEffect } from "react"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { motion } from "framer-motion"
+import { useNavigate } from "react-router-dom"
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -12,6 +13,7 @@ export function Hero() {
   const titleRef = useRef(null)
   const subtitleRef = useRef(null)
   const shapesRef = useRef(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -174,15 +176,21 @@ export function Hero() {
           transition={{ delay: 1.5, duration: 0.8 }}
           className="flex flex-col sm:flex-row gap-4 justify-center items-center"
         >
-          <MagneticButton>
-            <span className="relative z-10">Start Winning</span>
-          </MagneticButton>
+          <div onClick={() => {
+            if (localStorage.getItem('token')) navigate('/dashboard')
+            else navigate('/auth')
+          }}>
+            <MagneticButton>
+              <span className="relative z-10">Start Winning</span>
+            </MagneticButton>
+          </div>
           <motion.button
+            onClick={() => navigate('/explore')}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="px-8 py-4 text-lg font-medium text-foreground border border-border rounded-full hover:border-primary/50 transition-colors"
           >
-            Watch Demo
+            Browse Tenders
           </motion.button>
         </motion.div>
 
