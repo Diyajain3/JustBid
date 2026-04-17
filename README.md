@@ -19,6 +19,9 @@
 
 ![JavaScript](https://img.shields.io/badge/JavaScript-99.9%25-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 ![React](https://img.shields.io/badge/React-Frontend-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![Express](https://img.shields.io/badge/Express_v5-Backend-000000?style=for-the-badge&logo=express&logoColor=white)
+![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?style=for-the-badge&logo=prisma&logoColor=white)
+![Redis](https://img.shields.io/badge/Redis-Cache-DC382D?style=for-the-badge&logo=redis&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=for-the-badge)
 ![Stars](https://img.shields.io/github/stars/Diyajain3/JustBid?style=for-the-badge&color=yellow)
@@ -26,7 +29,7 @@
 
 <br />
 
-[🚀 Live Demo](#-live-demo) · [📖 Documentation](#-getting-started) · [🐛 Report Bug](https://github.com/Diyajain3/JustBid/issues) · [✨ Request Feature](https://github.com/Diyajain3/JustBid/issues)
+[📖 Documentation](#-getting-started) · [🐛 Report Bug](https://github.com/Diyajain3/JustBid/issues) · [✨ Request Feature](https://github.com/Diyajain3/JustBid/issues)
 
 ---
 
@@ -40,7 +43,8 @@
 - [Architecture](#-architecture)
 - [Project Structure](#-project-structure)
 - [Getting Started](#-getting-started)
-- [Usage](#-usage)
+- [API Overview](#-api-overview)
+- [Environment Variables](#-environment-variables)
 - [Analytics & Stats](#-analytics--stats)
 - [Roadmap](#-roadmap)
 - [Contributing](#-contributing)
@@ -66,8 +70,10 @@ Whether you're a seller looking to get the best price for your items or a buyer 
 | 🏷️ **Item Listings** | Create detailed auction listings with images, descriptions, and starting prices |
 | ⏱️ **Timed Auctions** | Set custom auction durations with automatic closing timers |
 | 💰 **Real-time Bidding** | Place bids and see live updates as the competition heats up |
-| 🔔 **Bid Notifications** | Get instantly notified when you're outbid or win an auction |
-| 🔒 **Secure Auth** | JWT-based authentication to protect user accounts and bid history |
+| 🔔 **Email Notifications** | Get notified via email when outbid or when you win (Nodemailer) |
+| 🔒 **Secure Auth** | JWT-based authentication with bcrypt password hashing |
+| ⚡ **Redis Caching** | Fast data retrieval and session management via Redis |
+| 🛡️ **Request Validation** | Schema-based input validation using Zod |
 | 📊 **Bid History** | Full audit trail of every bid placed on an item |
 | 👤 **User Profiles** | Manage your active auctions, bids, and transaction history |
 | 📱 **Responsive UI** | Mobile-first design that works seamlessly on any device |
@@ -76,7 +82,7 @@ Whether you're a seller looking to get the best price for your items or a buyer 
 
 ## 🛠️ Tech Stack
 
-### Frontend
+### Frontend *(active)*
 
 | Technology | Purpose |
 |---|---|
@@ -86,15 +92,21 @@ Whether you're a seller looking to get the best price for your items or a buyer 
 | **Axios** | HTTP client for API communication |
 | **React Router** | Client-side routing and navigation |
 
-### Backend *(planned / in progress)*
+### Backend *(active)*
 
-| Technology | Purpose |
-|---|---|
-| **Node.js** | Server-side runtime |
-| **Express.js** | RESTful API framework |
-| **MongoDB** | NoSQL database for flexible data storage |
-| **Socket.IO** | Real-time bidding communication |
-| **JWT** | Secure authentication tokens |
+| Technology | Version | Purpose |
+|---|---|---|
+| **Node.js** | ES Modules (`"type": "module"`) | Server-side runtime |
+| **Express.js** | v5.2 | RESTful API framework |
+| **Prisma** | v5.22 | Type-safe ORM & database migrations |
+| **Redis** | v5.12 | Caching & session management |
+| **JWT** | v9 | Secure authentication tokens |
+| **bcrypt** | v6 | Password hashing |
+| **Zod** | v4 | Schema validation & type safety |
+| **Nodemailer** | v8 | Email notifications (outbid / win alerts) |
+| **Helmet** | v8 | HTTP security headers |
+| **Morgan** | v1.10 | HTTP request logging |
+| **Nodemon** | v3 | Dev server auto-restart |
 
 ---
 
@@ -104,25 +116,31 @@ Whether you're a seller looking to get the best price for your items or a buyer 
 ┌─────────────────────────────────────────────────────────┐
 │                        CLIENT                           │
 │   ┌──────────────────────────────────────────────────┐  │
-│   │              React Frontend                       │  │
+│   │           React Frontend  ✅ Active               │  │
 │   │  ┌──────────┐ ┌──────────┐ ┌──────────────────┐  │  │
 │   │  │  Auth    │ │ Auction  │ │   Bid Engine     │  │  │
 │   │  │  Module  │ │ Listings │ │   (Real-time)    │  │  │
 │   │  └──────────┘ └──────────┘ └──────────────────┘  │  │
 │   └──────────────────────────────────────────────────┘  │
 └───────────────────────┬─────────────────────────────────┘
-                        │  REST API + WebSocket
+                        │  REST API (Express v5)
 ┌───────────────────────▼─────────────────────────────────┐
-│                       SERVER                            │
+│                  SERVER  ✅ Active                       │
 │   ┌──────────────────────────────────────────────────┐  │
-│   │            Node.js + Express API                  │  │
+│   │     Node.js + Express v5  (ES Modules)            │  │
 │   │  ┌──────────┐ ┌──────────┐ ┌──────────────────┐  │  │
 │   │  │  /auth   │ │/auctions │ │     /bids        │  │  │
 │   │  └──────────┘ └──────────┘ └──────────────────┘  │  │
+│   │        Helmet · Morgan · Zod · JWT / bcrypt       │  │
 │   └──────────────────────────────────────────────────┘  │
+│   ┌─────────────────────┐  ┌───────────────────────┐   │
+│   │   Prisma ORM v5     │  │      Redis v5          │   │
+│   │  DB Schema &        │  │  Caching & Sessions    │   │
+│   │  Migrations         │  │                        │   │
+│   └─────────────────────┘  └───────────────────────┘   │
 │   ┌──────────────────────────────────────────────────┐  │
-│   │                  MongoDB                          │  │
-│   │  [Users] [Auctions] [Bids] [Notifications]       │  │
+│   │                  Nodemailer v8                    │  │
+│   │       Outbid alerts · Win notifications           │  │
 │   └──────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────┘
 ```
@@ -134,31 +152,41 @@ Whether you're a seller looking to get the best price for your items or a buyer 
 ```
 JustBid/
 │
-├── frontend/                   # React application
-│   ├── public/                 # Static assets
+├── frontend/                      # React application ✅
+│   ├── public/
 │   │   └── index.html
 │   ├── src/
-│   │   ├── components/         # Reusable UI components
+│   │   ├── components/
 │   │   │   ├── AuctionCard/
 │   │   │   ├── BidForm/
 │   │   │   ├── Navbar/
 │   │   │   └── Timer/
-│   │   ├── pages/              # Route-level pages
+│   │   ├── pages/
 │   │   │   ├── Home.jsx
 │   │   │   ├── AuctionDetail.jsx
 │   │   │   ├── CreateAuction.jsx
 │   │   │   ├── Profile.jsx
 │   │   │   └── Login.jsx
-│   │   ├── context/            # Global state management
-│   │   ├── hooks/              # Custom React hooks
-│   │   ├── services/           # API call abstractions
-│   │   ├── utils/              # Helper utilities
+│   │   ├── context/
+│   │   ├── hooks/
+│   │   ├── services/
+│   │   ├── utils/
 │   │   ├── App.jsx
 │   │   └── index.js
-│   ├── package.json
-│   └── .env.example
+│   └── package.json
 │
-└── README.md
+└── backend/                       # Node.js + Express API ✅
+    ├── prisma/
+    │   └── schema.prisma          # DB schema & migrations
+    ├── src/
+    │   ├── server.js              # Entry point
+    │   ├── routes/                # API route definitions
+    │   ├── controllers/           # Business logic
+    │   ├── middlewares/           # Auth, validation, error handling
+    │   ├── services/              # Redis, Nodemailer integrations
+    │   └── utils/                 # Helper utilities
+    ├── package.json
+    └── .env.example
 ```
 
 ---
@@ -167,10 +195,10 @@ JustBid/
 
 ### Prerequisites
 
-Make sure you have the following installed:
-
-- **Node.js** `v16+` — [Download](https://nodejs.org/)
+- **Node.js** `v18+` — [Download](https://nodejs.org/)
 - **npm** or **yarn**
+- **Redis** — [Download](https://redis.io/download) or use [Redis Cloud](https://redis.com/try-free/)
+- **A Prisma-compatible database** (PostgreSQL recommended)
 - **Git**
 
 ### Installation
@@ -182,56 +210,82 @@ git clone https://github.com/Diyajain3/JustBid.git
 cd JustBid
 ```
 
-**2. Install frontend dependencies**
+**2. Set up the Backend**
 
 ```bash
-cd frontend
+cd backend
 npm install
+cp .env.example .env   # then fill in your values
 ```
 
-**3. Configure environment variables**
+Push the schema to your database and generate the Prisma client:
 
 ```bash
-cp .env.example .env
+npm run db:push
+npm run db:generate
 ```
 
-Then edit `.env` with your configuration:
-
-```env
-REACT_APP_API_URL=http://localhost:5000
-REACT_APP_SOCKET_URL=http://localhost:5000
-```
-
-**4. Start the development server**
+Start the dev server:
 
 ```bash
+npm run dev
+# API running at http://localhost:5000
+```
+
+**3. Set up the Frontend**
+
+```bash
+cd ../frontend
+npm install
 npm start
+# App running at http://localhost:3000
 ```
-
-The app will be running at `http://localhost:3000` 🎉
 
 ---
 
-## 💡 Usage
+## 🔌 API Overview
 
-### As a Buyer
+| Method | Endpoint | Description | Auth |
+|---|---|---|---|
+| `POST` | `/api/auth/register` | Register a new user | ❌ |
+| `POST` | `/api/auth/login` | Login & receive JWT | ❌ |
+| `GET` | `/api/auctions` | List all active auctions | ❌ |
+| `GET` | `/api/auctions/:id` | Get auction details | ❌ |
+| `POST` | `/api/auctions` | Create a new auction | ✅ |
+| `PUT` | `/api/auctions/:id` | Update an auction | ✅ |
+| `DELETE` | `/api/auctions/:id` | Delete an auction | ✅ |
+| `GET` | `/api/bids/:auctionId` | Get bids for an auction | ❌ |
+| `POST` | `/api/bids` | Place a bid | ✅ |
 
-1. **Register/Login** to your account
-2. Browse **active auction listings** on the homepage
-3. Click on any item to view its **details and bid history**
-4. Enter your bid amount (must exceed the current highest bid) and click **"Place Bid"**
-5. Monitor your bids — you'll be notified if you're outbid
-6. If your bid stands when the timer hits zero — **you win!** 🏆
+> Protected routes require `Authorization: Bearer <token>` in the request header.
 
-### As a Seller
+---
 
-1. **Login** and navigate to **"Create Auction"**
-2. Upload item images, add a description, and set:
-   - **Starting price**
-   - **Reserve price** *(optional)*
-   - **Auction end date/time**
-3. Publish your listing and watch the bids roll in
-4. Once the auction closes, connect with the winning bidder
+## 🔐 Environment Variables
+
+Create a `.env` file inside the `backend/` directory:
+
+```env
+# Server
+PORT=5000
+NODE_ENV=development
+
+# Database (Prisma)
+DATABASE_URL=postgresql://user:password@localhost:5432/justbid
+
+# Authentication
+JWT_SECRET=your_jwt_secret_key
+JWT_EXPIRES_IN=7d
+
+# Redis
+REDIS_URL=redis://localhost:6379
+
+# Email (Nodemailer)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your_email@gmail.com
+SMTP_PASS=your_app_password
+```
 
 ---
 
@@ -245,10 +299,10 @@ The app will be running at `http://localhost:3000` 🎉
 |---|---|
 | 🌟 Stars | 1 |
 | 🍴 Forks | 1 |
+| 👁️ Watchers | 0 |
 | 💻 Language | JavaScript (99.9%) |
-| 📦 Commits | 3 |
-| 🏗️ Architecture | Frontend SPA |
-| 📅 Last Active | 2024 |
+| 🏗️ Architecture | Full-Stack (React + Express v5 + Prisma + Redis) |
+| 🗂️ Branches | main |
 
 ---
 
@@ -266,10 +320,16 @@ Other       ░                                           0.1%
 | Module | Status | Progress |
 |---|---|---|
 | UI Components | ✅ Complete | `████████████` 100% |
-| Auction Listings | ✅ Complete | `████████████` 100% |
-| Bidding Engine | 🔄 In Progress | `████████░░░░` 70% |
-| Auth System | 🔄 In Progress | `████████░░░░` 70% |
-| Real-time Updates | 🔜 Planned | `░░░░░░░░░░░░` 0% |
+| Auction Listings UI | ✅ Complete | `████████████` 100% |
+| Bidding Interface UI | ✅ Complete | `████████████` 100% |
+| Backend API (Express v5) | ✅ Complete | `████████████` 100% |
+| Prisma ORM + DB Schema | ✅ Complete | `████████████` 100% |
+| JWT Auth + bcrypt | ✅ Complete | `████████████` 100% |
+| Zod Validation | ✅ Complete | `████████████` 100% |
+| Redis Caching | ✅ Complete | `████████████` 100% |
+| Email Notifications | ✅ Complete | `████████████` 100% |
+| Security (Helmet + Morgan) | ✅ Complete | `████████████` 100% |
+| Real-time Updates (WebSocket) | 🔜 Planned | `░░░░░░░░░░░░` 0% |
 | Payment Gateway | 🔜 Planned | `░░░░░░░░░░░░` 0% |
 | Admin Dashboard | 🔜 Planned | `░░░░░░░░░░░░` 0% |
 
@@ -279,17 +339,22 @@ Other       ░                                           0.1%
 
 ## 🗺️ Roadmap
 
-- [✓] Project scaffold and frontend setup
-- [✓] Core auction listing UI
-- [✓] Bidding interface and forms
-- [ ] Complete backend API (Node + Express)
-- [ ] Database integration (MongoDB)
-- [ ] Real-time bid updates via Socket.IO
-- [ ] JWT authentication & protected routes
+- [x] Project scaffold and frontend setup
+- [x] Core auction listing UI
+- [x] Bidding interface and forms
+- [x] Backend API (Express v5, ES Modules)
+- [x] Prisma ORM with database schema & migrations
+- [x] JWT authentication & bcrypt password hashing
+- [x] Zod schema validation
+- [x] Redis caching & session management
+- [x] Email notifications via Nodemailer
+- [x] HTTP security with Helmet + Morgan logging
+- [ ] Real-time bid updates via WebSockets
+- [ ] Protected frontend routes (React Router guards)
 - [ ] User profile and bid history pages
-- [ ] Email notifications for outbids / wins
-- [ ] Payment integration (Stripe/Razorpay)
+- [ ] Payment integration (Stripe / Razorpay)
 - [ ] Admin panel for moderation
+- [ ] Deployment (Railway / Render + Vercel)
 - [ ] Mobile app (React Native)
 
 ---
@@ -327,7 +392,7 @@ Distributed under the **MIT License**. See `LICENSE` for more information.
 
 **Diya Jain** — [@Diyajain3](https://github.com/Diyajain3)
 
-**Khushi Singh**-[@mekhushi](https://github.com/mekhushi)
+**Khushi Singh** — [@mekhushi](https://github.com/mekhushi)
 
 Project Link: [https://github.com/Diyajain3/JustBid](https://github.com/Diyajain3/JustBid)
 
@@ -335,8 +400,8 @@ Project Link: [https://github.com/Diyajain3/JustBid](https://github.com/Diyajain
 
 <div align="center">
 
-Made with ❤️ by 
-[Diya Jain](https://github.com/Diyajain3) & [Khushi_Singh](https://github.com/mekhushi)
+Made with ❤️ by
+[Diya Jain](https://github.com/Diyajain3) & [Khushi Singh](https://github.com/mekhushi)
 
 ⭐ **If you found this project useful, please consider giving it a star!** ⭐
 
