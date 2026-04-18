@@ -37,8 +37,8 @@ export function Navbar() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ type: "spring", stiffness: 260, damping: 20 }}
-        className={`flex items-center gap-4 px-4 py-2 rounded-full border border-white/10 bg-black/60 backdrop-blur-xl transition-all duration-500 shadow-2xl ${
-          isScrolled ? "scale-95" : "scale-100"
+        className={`flex items-center gap-4 px-6 py-3 rounded-full border border-white/10 bg-black/40 backdrop-blur-2xl transition-all duration-500 ease-in-out shadow-2xl ${
+          isScrolled ? "scale-95 bg-black/80 py-2 border-white/20" : "scale-100"
         }`}
       >
         {/* Logo Section */}

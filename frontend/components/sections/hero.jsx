@@ -182,10 +182,13 @@ export function Hero() {
         </div>
       </div>
 
-      {/* Holographic Parallax Cards (Z-index layers) */}
+      {/* Holographic Parallax Cards (Z-index layers) - Smooth Entrance */}
       <div className="absolute inset-0 pointer-events-none z-10 flex justify-center items-center">
         {/* Card 1 - Left */}
         <motion.div
+          initial={{ opacity: 0, x: -100, rotateZ: -10 }}
+          animate={{ opacity: 0.5, x: 0, rotateZ: 0 }}
+          transition={{ duration: 1.5, delay: 0.8, ease: [0.33, 1, 0.68, 1] }}
           style={{ x: card1X, y: card1Y, rotateX: card1RotateX, rotateY: card1RotateY }}
           className="absolute -left-20 md:left-[10%] top-[25%] w-64 bg-card/20 backdrop-blur-md border border-primary/10 rounded-2xl p-4 shadow-xl opacity-30 md:opacity-50"
         >
@@ -203,6 +206,9 @@ export function Hero() {
 
         {/* Card 2 - Right */}
         <motion.div
+          initial={{ opacity: 0, x: 100, rotateZ: 10 }}
+          animate={{ opacity: 0.5, x: 0, rotateZ: 0 }}
+          transition={{ duration: 1.5, delay: 1, ease: [0.33, 1, 0.68, 1] }}
           style={{ x: card2X, y: card2Y, rotateX: card2RotateX, rotateY: card2RotateY }}
           className="absolute -right-10 md:right-[15%] top-[10%] md:top-[20%] w-72 bg-card/20 backdrop-blur-md border border-accent/10 rounded-2xl p-4 shadow-xl opacity-30 md:opacity-50"
         >
@@ -220,6 +226,9 @@ export function Hero() {
 
         {/* Card 3 - Bottom */}
         <motion.div
+          initial={{ opacity: 0, y: 100 }}
+          animate={{ opacity: 0.4, y: 0 }}
+          transition={{ duration: 1.5, delay: 1.2, ease: [0.33, 1, 0.68, 1] }}
           style={{ x: card3X, y: card3Y, rotateX: card3RotateX, rotateY: card3RotateY }}
           className="absolute left-[30%] bottom-[15%] w-56 bg-primary/5 backdrop-blur-md border border-primary/20 rounded-2xl p-4 shadow-xl hidden md:block opacity-40"
         >

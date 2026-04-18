@@ -1,6 +1,8 @@
 import { Space_Grotesk, Syne } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
+import { SmoothScroll } from '@/components/providers/smooth-scroll'
+import { CustomCursor } from '@/components/ui/custom-cursor'
 
 const spaceGrotesk = Space_Grotesk({ 
   subsets: ["latin"],
@@ -38,8 +40,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${spaceGrotesk.variable} ${syne.variable} bg-background`}>
-      <body className="font-sans antialiased overflow-x-hidden">
-        {children}
+      <body className="font-sans antialiased overflow-x-hidden cursor-none">
+        <SmoothScroll>
+          <CustomCursor />
+          {children}
+        </SmoothScroll>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
