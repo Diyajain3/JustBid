@@ -9,6 +9,7 @@ import ExplorePage from '@/app/explore/page'
 import ResetPasswordPage from '@/app/auth/reset/page'
 import VisionPage from '@/app/vision/page'
 import { AiBroker } from '@/components/ui/ai-broker'
+import { AiChatbot } from '@/components/ui/ai-chatbot'
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
         <Route path="/vision" element={<VisionPage />} />
       </Routes>
       <AiBroker />
+      <AiChatbot />
     </>
   )
 }
