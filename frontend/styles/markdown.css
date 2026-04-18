@@ -1,0 +1,53 @@
+.chatbot-markdown {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: hsl(var(--foreground));
+}
+
+.chatbot-markdown p {
+  margin-bottom: 0.75rem;
+}
+
+.chatbot-markdown p:last-child {
+  margin-bottom: 0;
+}
+
+.chatbot-markdown ul, .chatbot-markdown ol {
+  margin-bottom: 1rem;
+  padding-left: 1.25rem;
+}
+
+.chatbot-markdown li {
+  margin-bottom: 0.25rem;
+}
+
+.chatbot-markdown h1, .chatbot-markdown h2, .chatbot-markdown h3 {
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  color: hsl(var(--primary));
+}
+
+.chatbot-markdown h3 {
+  font-size: 1rem;
+}
+
+.chatbot-markdown code {
+  background-color: hsl(var(--muted));
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.25rem;
+  font-family: monospace;
+}
+
+.chatbot-markdown strong {
+  font-weight: 800;
+  color: hsl(var(--primary));
+}
+
+.chatbot-markdown blockquote {
+  border-left: 3px solid hsl(var(--primary));
+  padding-left: 1rem;
+  margin: 1rem 0;
+  font-style: italic;
+  color: hsl(var(--muted-foreground));
+}
