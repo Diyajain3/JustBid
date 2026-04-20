@@ -25,13 +25,29 @@ export function BentoFeatures() {
         </div>
 
         {/* Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <motion.div 
+          variants={{
+            hidden: { opacity: 0 },
+            show: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.15,
+                delayChildren: 0.2
+              }
+            }
+          }}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-100px" }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto"
+        >
           
           {/* Main Globe Cell - spans 2 columns on desktop */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
+            variants={{
+              hidden: { opacity: 0, y: 30 },
+              show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.33, 1, 0.68, 1] } }
+            }}
             className="md:col-span-2 bg-card/40 backdrop-blur-md border border-border/50 rounded-3xl p-8 md:p-10 relative overflow-hidden group hover:border-primary/40 transition-colors"
           >
             <div className="absolute top-0 right-0 w-64 h-64 bg-accent/10 rounded-full blur-[80px] group-hover:bg-accent/20 transition-colors" />
@@ -56,9 +72,10 @@ export function BentoFeatures() {
 
           {/* Typing Terminal Cell */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            variants={{
+              hidden: { opacity: 0, y: 30 },
+              show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.33, 1, 0.68, 1] } }
+            }}
             className="bg-card/40 backdrop-blur-md border border-border/50 rounded-3xl p-8 relative overflow-hidden group hover:border-accent/40 transition-colors"
           >
             <div className="flex items-center gap-3 mb-4">
@@ -71,60 +88,38 @@ export function BentoFeatures() {
               Every document is parsed using state-of-the-art Natural Language Processing to find hidden requirements.
             </p>
             
-            {/* Refined Neural Pattern Visualization - Replaces the old terminal */}
-            <div className="relative w-full h-[220px] bg-white/[0.02] border border-white/5 rounded-2xl overflow-hidden group/viz">
-              <div className="absolute inset-0 opacity-20">
-                <div className="absolute inset-0 grid grid-cols-10 gap-px">
-                  {[...Array(100)].map((_, i) => (
-                    <div key={i} className="border-[0.5px] border-white/5 w-full h-full" />
+            {/* Simplified Strategic Identity Visual - Static and non-distracting */}
+            <div className="relative w-full h-[220px] bg-white/[0.02] border border-white/5 rounded-2xl overflow-hidden flex items-center justify-center">
+              <div className="absolute inset-0 opacity-10">
+                <div className="absolute inset-0 grid grid-cols-6 gap-px">
+                  {[...Array(30)].map((_, i) => (
+                    <div key={i} className="border-[0.5px] border-white/10 w-full h-full" />
                   ))}
                 </div>
               </div>
 
-              {/* Laser Scanning Line */}
-              <motion.div 
-                animate={{ 
-                  top: ["-10%", "110%"],
-                  opacity: [0, 1, 1, 0]
-                }}
-                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                className="absolute left-0 w-full h-px bg-primary/40 shadow-[0_0_15px_rgba(var(--primary),0.8)] z-20"
-              />
-
-              {/* Data Points */}
-              <div className="absolute inset-0 flex items-center justify-center p-8">
-                 <div className="grid grid-cols-5 gap-4 opacity-40">
-                    {[...Array(15)].map((_, i) => (
-                      <motion.div 
-                        key={i}
-                        animate={{ 
-                          scale: [1, 1.2, 1],
-                          opacity: [0.3, 0.8, 0.3],
-                          backgroundColor: i % 3 === 0 ? "rgba(var(--primary), 0.6)" : "rgba(255, 255, 255, 0.2)"
-                        }}
-                        transition={{ duration: 2 + Math.random() * 2, repeat: Infinity }}
-                        className="w-1.5 h-1.5 rounded-full"
-                      />
-                    ))}
-                 </div>
+              <div className="relative z-10 text-center space-y-4">
+                <div className="text-4xl font-bold text-primary/80" style={{ fontFamily: "var(--font-display)" }}>
+                  94.2%
+                </div>
+                <div className="px-3 py-1 bg-primary/10 border border-primary/20 rounded-full text-[10px] text-primary font-bold uppercase tracking-widest">
+                  Neural Match Verified
+                </div>
               </div>
 
-              <div className="absolute bottom-4 left-6 right-6 flex justify-between items-end">
-                 <div className="space-y-1">
-                    <div className="text-[8px] font-mono text-white/20 uppercase tracking-[0.3em]">Vector_Space_01</div>
-                    <div className="text-[10px] font-mono text-primary font-bold">MATCHING_94.2%</div>
-                 </div>
-                 <div className="h-4 w-px bg-white/10" />
-                 <div className="text-[8px] font-mono text-white/40 uppercase tracking-[0.2em]">Proc_Node: A9-02</div>
+              <div className="absolute bottom-4 left-6 right-6 flex justify-between items-center opacity-30">
+                 <div className="text-[8px] font-mono text-white/40 uppercase tracking-[0.2em]">PROC_NODE: A9-02</div>
+                 <div className="text-[8px] font-mono text-white/40 uppercase tracking-[0.2em]">VECTOR_SPACE_01</div>
               </div>
             </div>
           </motion.div>
 
           {/* Analytics Cell */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
+            variants={{
+              hidden: { opacity: 0, y: 30 },
+              show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.33, 1, 0.68, 1] } }
+            }}
             className="bg-card/40 backdrop-blur-md border border-border/50 rounded-3xl p-8 relative overflow-hidden group hover:border-green-500/40 transition-colors flex flex-col justify-between"
           >
             <div>
@@ -145,8 +140,9 @@ export function BentoFeatures() {
                  <motion.div 
                    key={i}
                    initial={{ height: 0 }}
-                   animate={isInView ? { height: `${height}%` } : { height: 0 }}
+                   whileInView={{ height: `${height}%` }}
                    transition={{ duration: 1, delay: 0.5 + i * 0.1, ease: "easeOut" }}
+                   viewport={{ once: true }}
                    className={`w-full rounded-t-md ${i === 5 ? 'bg-primary' : 'bg-primary/20'}`}
                  />
                ))}
@@ -155,9 +151,10 @@ export function BentoFeatures() {
 
           {/* Security Card - spans 2 columns on mostly wide screens */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            variants={{
+              hidden: { opacity: 0, y: 30 },
+              show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.33, 1, 0.68, 1] } }
+            }}
             className="md:col-span-2 bg-gradient-to-br from-card/40 to-primary/5 backdrop-blur-md border border-border/50 rounded-3xl p-8 relative overflow-hidden group hover:border-primary/40 transition-colors flex flex-col md:flex-row items-center gap-8 justify-between"
           >
              <div className="flex-1">
@@ -183,7 +180,7 @@ export function BentoFeatures() {
              </div>
           </motion.div>
 
-        </div>
+        </motion.div>
       </div>
     </section>
   )
