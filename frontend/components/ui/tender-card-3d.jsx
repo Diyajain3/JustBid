@@ -156,7 +156,7 @@ export function TenderCard3D({ tender, onMatchClick, index }) {
               <span key={idx} className="text-[9px] font-bold bg-white/5 text-muted-foreground px-2 py-0.5 rounded-md border border-white/5 uppercase tracking-wider">
                 {code}
               </span>
-            ))}
+            )}
           </div>
         </div>
 
