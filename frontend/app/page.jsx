@@ -1,5 +1,4 @@
 
-
 import { useEffect, useState } from "react"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
@@ -19,7 +18,6 @@ import { Navbar } from "@/components/ui/navbar"
 // Register GSAP plugins
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger)
-  // ScrollSmoother requires GSAP membership, so we'll use native smooth scrolling
 }
 
 export default function Home() {

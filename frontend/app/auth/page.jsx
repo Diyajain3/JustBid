@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { gsap } from "gsap"
 import { Mail, Lock, User, ArrowRight, ShieldCheck, Zap, TrendingUp, ChevronLeft } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom"
-import { ParticleNetwork } from "@/components/ui/particle-network"
+import { Atmosphere } from "@/components/ui/atmosphere"
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true)
@@ -91,9 +91,12 @@ export default function AuthPage() {
         throw new Error(data.message || 'Something went wrong');
       }
 
-      // Store JWT token locally
+      // Store JWT token and session data locally
       localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify({id: data.id, email: data.email, role: data.role}));
+      localStorage.setItem('user', JSON.stringify({id: data.id, email: data.email, role: data.role, name: data.name}));
+      if (data.company) {
+        localStorage.setItem('company', JSON.stringify(data.company));
+      }
       
       // Redirect to home/dashboard
       navigate('/');
@@ -132,7 +135,7 @@ export default function AuthPage() {
         ref={leftSideRef}
         className="hidden lg:flex flex-col w-1/2 relative overflow-hidden bg-[rgb(10,10,13)]"
       >
-        <ParticleNetwork />
+        <Atmosphere />
         
         {/* subtle gradient overlay over the particles so text is more readable */}
         <div className="absolute inset-0 bg-gradient-to-br from-background/40 to-transparent pointer-events-none" />
@@ -197,15 +200,14 @@ export default function AuthPage() {
       </div>
 
       {/* RIGHT SIDE - Auth Forms */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-12 border-l border-border/50 relative">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-12 border-l border-white/5 relative bg-[#0a0a0b]">
          <motion.div 
           className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-accent/10 rounded-full blur-[120px] pointer-events-none"
           animate={{
-            scale: [1, 1.1, 1],
-            x: [0, -30, 0],
-            y: [0, -40, 0]
+            scale: [1, 1.2, 1],
+            opacity: [0.1, 0.2, 0.1],
           }}
-          transition={{ duration: 8, repeat: Infinity, repeatType: "reverse", delay: 1 }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
         />
 
         <div className="w-full max-w-md relative z-10">
@@ -238,7 +240,7 @@ export default function AuthPage() {
                           onChange={(e) => setEmail(e.target.value)}
                           placeholder="name@example.com" 
                           required
-                          className="w-full bg-background border border-border rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                          className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:ring-1 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder:text-muted-foreground/30"
                         />
                       </div>
                     </div>
@@ -255,7 +257,7 @@ export default function AuthPage() {
                           onChange={(e) => setPassword(e.target.value)}
                           placeholder="••••••••" 
                           required
-                          className="w-full bg-background border border-border rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                          className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:ring-1 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder:text-muted-foreground/30"
                         />
                       </div>
                     </div>
@@ -264,8 +266,8 @@ export default function AuthPage() {
                       <button type="button" onClick={() => { setIsForgot(true); setError(null); }} className="text-sm font-medium text-primary hover:underline ml-auto block">Forgot password?</button>
                     </div>
 
-                    <button disabled={loading} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-3 rounded-xl transition-colors mt-2 flex justify-center items-center gap-2 group">
-                      {loading ? 'Processing...' : 'Sign In'}
+                    <button disabled={loading} className="w-full bg-primary text-primary-foreground font-bold py-3 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] mt-2 flex justify-center items-center gap-2 shadow-[0_0_20px_rgba(var(--primary),0.3)]">
+                      {loading ? 'INITIATING...' : 'ESTABLISH CONNECTION'}
                     </button>
                   </form>
                 </div>

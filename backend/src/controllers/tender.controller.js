@@ -33,6 +33,35 @@ export const getTenders = async (req, res) => {
   }
 };
 
+const stripTags = (text) => {
+  if (!text) return "";
+  // Remove HTML tags, replace with space
+  let clean = text.replace(/<[^>]*>?/gm, ' ');
+  // Handle common entities
+  clean = clean.replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+  // Normalize double spaces
+  return clean.replace(/\s\s+/g, ' ').trim();
+};
+
+const findBudgetInText = (text) => {
+  if (!text) return null;
+  const regex = /(?:Budget|Value|Price|Total|CHF|USD|\$)\D*([\d\s'\.,]{4,})/i;
+  const match = text.match(regex);
+  if (match) {
+    const raw = match[1].replace(/[\s'\.]/g, '').split(',')[0];
+    if (/^\d+$/.test(raw) && raw.length > 3) return parseInt(raw);
+  }
+  return null;
+};
+
+const findLocationInText = (text) => {
+  if (!text) return null;
+  const cantons = ["ZH", "BE", "LU", "UR", "SZ", "OW", "NW", "GL", "ZG", "FR", "SO", "BS", "BL", "SH", "AR", "AI", "SG", "GR", "AG", "TG", "TI", "VD", "VS", "NE", "GE", "JU"];
+  const regex = new RegExp(`\\b(${cantons.join('|')})\\b`);
+  const match = text.match(regex);
+  return match ? match[0] : null;
+};
+
 export const getTenderById = async (req, res) => {
   try {
     const tenderId = req.params.id; // Removed parseInt for Mongo ObjectId
@@ -105,11 +134,18 @@ export const ingestTenderFromWorker = async (req, res) => {
         title = tenderData.title[tenderData.language] || tenderData.title['en'] || tenderData.title['de'] || "Untitled Tender";
       }
 
-      // Extract raw description
+      // Extract and clean description
       let description = tenderData.description || null;
       if (typeof description === 'object' && description !== null) {
         description = description[tenderData.language] || description['en'] || description['de'];
       }
+      description = stripTags(description);
+
+      const budgetFromText = findBudgetInText(description);
+      const budget = tenderData.budget || budgetFromText || null;
+
+      const locationFromText = findLocationInText(description);
+      const location = tenderData.region || tenderData.location || locationFromText || null;
 
       // Prepare date payload
       const deadline = tenderData.deadline ? new Date(tenderData.deadline) : null;
@@ -127,8 +163,8 @@ export const ingestTenderFromWorker = async (req, res) => {
           deadline,
           publicationDate: tenderData.publication_date ? new Date(tenderData.publication_date) : (tenderData.publicationDate ? new Date(tenderData.publicationDate) : null),
           offerOpening,
-          location: tenderData.region || tenderData.location || null,
-          budget: tenderData.budget || null,
+          location,
+          budget: budget ? parseFloat(budget) : null,
           type: tenderData.project_type || tenderData.type || null,
           category: tenderData.project_sub_type || tenderData.category || null,
           status: tenderData.status || "open",
@@ -144,8 +180,8 @@ export const ingestTenderFromWorker = async (req, res) => {
           deadline,
           publicationDate: tenderData.publication_date ? new Date(tenderData.publication_date) : (tenderData.publicationDate ? new Date(tenderData.publicationDate) : null),
           offerOpening,
-          location: tenderData.region || tenderData.location || null,
-          budget: tenderData.budget || null,
+          location,
+          budget: budget ? parseFloat(budget) : null,
           type: tenderData.project_type || tenderData.type || null,
           category: tenderData.project_sub_type || tenderData.category || null,
           status: tenderData.status || "open",
@@ -310,15 +346,26 @@ export const reparseTenders = async (req, res) => {
       const decision = raw.decision || {};
       const base = raw.base || {};
 
+      // Improved Sanitization
+      const description = stripTags(tender.description || base.orderDescription || "");
+      
       // Improved Budget Extraction
       let budget = (procurement.budget || 
                   procurement.totalPriceSelectionValue || 
                   procurement.totalPriceRange?.range?.min ||
+                  findBudgetInText(description) ||
                   tender.budget);
       
       if (!budget && decision.vendors?.length > 0) {
           budget = decision.vendors[0].price?.price;
       }
+
+      // Improved Location Extraction
+      const location = (
+        procurement.orderAddress?.cantonId ||
+        findLocationInText(description) ||
+        tender.location
+      );
 
       // Improved Deadline Extraction
       const deadlineStr = (
@@ -336,7 +383,9 @@ export const reparseTenders = async (req, res) => {
       await prisma.tender.update({
         where: { id: tender.id },
         data: {
+          description,
           budget: budget ? parseFloat(budget) : null,
+          location,
           deadline,
           publicationDate,
           detailsFetchedAt: tender.detailsFetchedAt || new Date()

@@ -30,7 +30,7 @@ export const protect = async (req, res, next) => {
 
 export const workerProtect = async (req, res, next) => {
   const apiKey = req.headers['x-api-key'];
-  if (apiKey && apiKey === process.env.WORKER_API_KEY) {
+  if (apiKey && apiKey === process.env.BACKEND_API_KEY) {
     next();
   } else {
     res.status(401).json({ message: 'Not authorized, invalid worker key' });
