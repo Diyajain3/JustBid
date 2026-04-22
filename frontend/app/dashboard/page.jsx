@@ -8,9 +8,13 @@ import { CircularGauge } from "@/components/ui/circular-gauge"
 export default function DashboardPage() {
   const navigate = useNavigate()
   const [tenders, setTenders] = useState([])
+  const [filteredTenders, setFilteredTenders] = useState([])
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState(null)
   const [appliedTenders, setAppliedTenders] = useState({})
+  const [searchQuery, setSearchQuery] = useState("")
+
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000"
 
   useEffect(() => {
     const token = localStorage.getItem("token")
@@ -25,7 +29,7 @@ export default function DashboardPage() {
 
     const fetchTenders = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/tenders/feed", {
+        const res = await fetch(`${API_URL}/api/tenders/feed`, {
           headers: { Authorization: `Bearer ${token}` }
         })
 
@@ -38,6 +42,7 @@ export default function DashboardPage() {
 
         const data = await res.json()
         setTenders(data)
+        setFilteredTenders(data)
       } catch (err) {
         console.error(err)
       } finally {
@@ -46,9 +51,26 @@ export default function DashboardPage() {
     }
 
     fetchTenders()
-  }, [navigate])
+  }, [navigate, API_URL])
 
-  const handleApply = (e, tenderId) => {
+  // Live Search Logic for Dashboard Feed
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setFilteredTenders(tenders)
+      return
+    }
+
+    const q = searchQuery.toLowerCase()
+    const filtered = tenders.filter(t => 
+      t.title?.toLowerCase().includes(q) || 
+      t.description?.toLowerCase().includes(q) ||
+      t.location?.toLowerCase().includes(q) ||
+      t.matchReasons?.some(r => r.toLowerCase().includes(q))
+    )
+    setFilteredTenders(filtered)
+  }, [searchQuery, tenders])
+
+  const handleApply = async (e, tenderId) => {
     const rect = e.target.getBoundingClientRect()
     const x = (rect.left + rect.width / 2) / window.innerWidth
     const y = (rect.top + rect.height / 2) / window.innerHeight
@@ -61,6 +83,16 @@ export default function DashboardPage() {
     })
 
     setAppliedTenders(prev => ({ ...prev, [tenderId]: true }))
+
+    const token = localStorage.getItem('token')
+    try {
+      await fetch(`${API_URL}/api/tenders/save/${tenderId}`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+    } catch (err) {
+      console.error("Failed to save bid:", err)
+    }
   }
 
   return (
@@ -83,14 +115,14 @@ export default function DashboardPage() {
             <Settings size={20} />
             AI Matrix Profile
           </Link>
-          <a href="#" className="flex items-center gap-3 px-4 py-3 text-muted-foreground hover:bg-secondary/50 hover:text-foreground rounded-xl transition-colors">
+          <Link to="/saved-bids" className="flex items-center gap-3 px-4 py-3 text-muted-foreground hover:bg-secondary/50 hover:text-foreground rounded-xl transition-colors">
             <Bookmark size={20} />
-            Saved Bids
-          </a>
-          <a href="#" className="flex items-center gap-3 px-4 py-3 text-muted-foreground hover:bg-secondary/50 hover:text-foreground rounded-xl transition-colors">
+            Inbox & Saved Bids
+          </Link>
+          <Link to="/analytics" className="flex items-center gap-3 px-4 py-3 text-muted-foreground hover:bg-secondary/50 hover:text-foreground rounded-xl transition-colors">
             <BarChart3 size={20} />
-            Analytics
-          </a>
+            Insights & Analytics
+          </Link>
         </nav>
 
         <div className="p-4 border-t border-border mt-auto">
@@ -130,6 +162,8 @@ export default function DashboardPage() {
             <input 
               type="text" 
               placeholder="Search specific tenders..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               className="bg-secondary/50 border border-border rounded-full py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all w-64"
             />
           </div>
@@ -142,7 +176,7 @@ export default function DashboardPage() {
               <div className="bg-card border border-border rounded-2xl p-6 shadow-sm flex flex-col justify-center">
                 <p className="text-sm text-muted-foreground mb-2 uppercase tracking-widest">Algorithm Matches</p>
                 <div className="flex items-baseline gap-4">
-                  <p className="text-5xl font-bold text-foreground" style={{ fontFamily: "var(--font-display)" }}>{tenders.length}</p>
+                  <p className="text-5xl font-bold text-foreground" style={{ fontFamily: "var(--font-display)" }}>{filteredTenders.length}</p>
                   <p className="text-sm text-primary flex items-center gap-1"><TrendingUp size={14}/> +12 this week</p>
                 </div>
               </div>
@@ -153,7 +187,7 @@ export default function DashboardPage() {
                   <p className="text-muted-foreground text-sm max-w-[200px]">The platform found an extremely high probability match.</p>
                 </div>
                 <div className="relative z-10 flex shrink-0 justify-center min-w-[120px]">
-                  <CircularGauge value={tenders.length > 0 ? tenders[0].matchScore : 0} size={100} strokeWidth={8} delay={0.5} />
+                  <CircularGauge value={filteredTenders.length > 0 ? filteredTenders[0].matchScore : 0} size={100} strokeWidth={8} delay={0.5} />
                 </div>
               </div>
             </div>
@@ -168,18 +202,20 @@ export default function DashboardPage() {
                <div className="animate-spin w-10 h-10 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
                Crunching multi-dimensional arrays...
              </div>
-          ) : tenders.length === 0 ? (
+          ) : filteredTenders.length === 0 ? (
              <div className="text-center py-20 bg-secondary/30 rounded-2xl border border-dashed border-border">
-               <p className="text-lg font-medium mb-2">No active matches found.</p>
-               <p className="text-muted-foreground mb-6">Your criteria might be too strict, or the Python worker hasn't ingested new data.</p>
-               <Link to="/profile" className="px-6 py-2 bg-primary text-primary-foreground rounded-full font-medium hover:bg-primary/90 transition-colors">
-                  Loosen Criteria
-               </Link>
+               <p className="text-lg font-medium mb-2">{searchQuery ? "No search results." : "No active matches found."}</p>
+               <p className="text-muted-foreground mb-6">{searchQuery ? `We couldn't find any matches for "${searchQuery}"` : "Your criteria might be too strict, or the Python worker hasn't ingested new data."}</p>
+               {!searchQuery && (
+                 <Link to="/profile" className="px-6 py-2 bg-primary text-primary-foreground rounded-full font-medium hover:bg-primary/90 transition-colors">
+                    Loosen Criteria
+                 </Link>
+               )}
              </div>
           ) : (
             <div className="space-y-6">
               <AnimatePresence>
-                {tenders.map((tender, i) => (
+                {filteredTenders.map((tender, i) => (
                   <motion.div 
                     key={tender.id}
                     layout
@@ -246,7 +282,8 @@ export default function DashboardPage() {
                            <p className="text-xs text-muted-foreground uppercase tracking-widest mt-5 mb-1.5">Deadline</p>
                            <p className="font-medium text-sm text-red-400 flex items-center justify-end gap-1.5">
                              <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
-                             {new Date(tender.deadline).toLocaleDateString()}
+                                                           {tender.deadline ? new Date(tender.deadline).toLocaleDateString() : "No Deadline Set"}
+
                            </p>
                         </div>
                         
