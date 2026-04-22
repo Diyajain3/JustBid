@@ -28,12 +28,20 @@ export const registerUser = async (req, res) => {
         password: hashedPassword,
         name,
         role: role || 'user',
+        // Automatically create a companion company profile
+        company: {
+          create: {
+            name: `${name}'s Construction Hub`,
+            industry: 'General Construction'
+          }
+        }
       },
       select: {
         id: true,
         email: true,
         name: true,
         role: true,
+        company: true
       }
     });
 
@@ -51,7 +59,10 @@ export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findUnique({ 
+      where: { email },
+      include: { company: true }
+    });
 
     if (user && (await bcrypt.compare(password, user.password))) {
       res.json({
@@ -59,6 +70,7 @@ export const loginUser = async (req, res) => {
         email: user.email,
         name: user.name,
         role: user.role,
+        company: user.company,
         token: generateToken(user.id),
       });
     } else {

@@ -16,10 +16,50 @@ model User {
   company              Company?
   bookmarks            Bookmark[]
   bids                 Bid[]
+  teams           TeamMember[]
+  ownedTeams      Team[]           @relation("TeamOwner")
+  analysisReports AnalysisReport[]
   resetPasswordToken   String?
   resetPasswordExpires DateTime?
   createdAt            DateTime   @default(now())
   updatedAt            DateTime   @updatedAt
+}
+
+model Team {
+  id        String       @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  ownerId   String       @db.ObjectId
+  owner     User         @relation("TeamOwner", fields: [ownerId], references: [id])
+  members   TeamMember[]
+  bids      Bid[]
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+}
+
+model TeamMember {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  teamId    String   @db.ObjectId
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      String   @default("member") // owner, admin, member
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([teamId, userId])
+}
+
+model AnalysisReport {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String   @db.ObjectId
+  filename     String
+  requirements String[]
+  deadlines    String[]
+  budget       String?
+  summary      String?
+  createdAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Company {
@@ -92,6 +132,8 @@ model Bid {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   tenderId  String   @db.ObjectId
   tender    Tender   @relation(fields: [tenderId], references: [id], onDelete: Cascade)
+  teamId    String?  @db.ObjectId
+  team      Team?    @relation(fields: [teamId], references: [id])
   status    String   @default("draft") // draft, submitted, won, lost
   notes     String?
   createdAt DateTime @default(now())

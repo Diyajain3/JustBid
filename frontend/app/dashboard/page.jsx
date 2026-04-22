@@ -1,9 +1,15 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Link, useNavigate } from "react-router-dom"
-import { Settings, BarChart3, LayoutDashboard, Bookmark, LogOut, TrendingUp, Search, CheckCircle2 } from "lucide-react"
+import { Settings, BarChart3, LayoutDashboard, Bookmark, LogOut, TrendingUp, Search, CheckCircle2, Shield, Activity, Wifi, Cpu, Users } from "lucide-react"
 import confetti from "canvas-confetti"
 import { CircularGauge } from "@/components/ui/circular-gauge"
+import { TenderCard3D } from "@/components/ui/tender-card-3d"
+import { TeamCollaborationCard } from "@/components/ui/team-collaboration-card"
+import { DocumentAnalysisCard } from "@/components/ui/document-analysis-card"
+import { Atmosphere } from "@/components/ui/atmosphere"
+import { DecryptionText } from "@/components/ui/decryption-text"
+import Magnetic from "@/components/ui/magnetic"
 
 export default function DashboardPage() {
   const navigate = useNavigate()
@@ -13,8 +19,39 @@ export default function DashboardPage() {
   const [user, setUser] = useState(null)
   const [appliedTenders, setAppliedTenders] = useState({})
   const [searchQuery, setSearchQuery] = useState("")
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+  const [systemLogs, setSystemLogs] = useState([
+    "INITIALIZING NEURAL INTERFACE...",
+    "HANDSHAKE WITH SIMAP COMPLETE",
+    "MATCH ENGINE ACTIVE",
+    "UPDATING OPPORTUNITY MATRIX",
+    "SECURITY ENCRYPTION: SHIELD ON"
+  ])
 
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000"
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePos({ x: e.clientX, y: e.clientY })
+    }
+    window.addEventListener('mousemove', handleMouseMove)
+    return () => window.removeEventListener('mousemove', handleMouseMove)
+  }, [])
+
+  // Auto-scroll logs
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const logs = [
+        "PARSING NODE " + Math.floor(Math.random() * 1000),
+        "SENTIMENT SCANNED: POSITIVE",
+        "NEW TENDER ID " + Math.floor(Math.random() * 99999) + " INGESTED",
+        "NEURAL FILTER: APPLIED",
+        "SIGNAL STRENGTH: OPTIMAL"
+      ]
+      setSystemLogs(prev => [...prev.slice(-15), logs[Math.floor(Math.random() * logs.length)]])
+    }, 3000)
+    return () => clearInterval(interval)
+  }, [])
 
   useEffect(() => {
     const token = localStorage.getItem("token")
@@ -53,7 +90,6 @@ export default function DashboardPage() {
     fetchTenders()
   }, [navigate, API_URL])
 
-  // Live Search Logic for Dashboard Feed
   useEffect(() => {
     if (!searchQuery.trim()) {
       setFilteredTenders(tenders)
@@ -71,7 +107,7 @@ export default function DashboardPage() {
   }, [searchQuery, tenders])
 
   const handleApply = async (e, tenderId) => {
-    const rect = e.target.getBoundingClientRect()
+    const rect = e.target.getBoundingClientRect?.() || { left: 0.5, top: 0.5, width: 0, height: 0 }
     const x = (rect.left + rect.width / 2) / window.innerWidth
     const y = (rect.top + rect.height / 2) / window.innerHeight
 
@@ -79,7 +115,7 @@ export default function DashboardPage() {
       particleCount: 80,
       spread: 70,
       origin: { x, y },
-      colors: ['#4ade80', '#ffffff', '#22c55e']
+      colors: ['#D4AF37', '#ffffff', '#4ade80']
     })
 
     setAppliedTenders(prev => ({ ...prev, [tenderId]: true }))
@@ -96,235 +132,262 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="flex h-screen bg-background overflow-hidden relative">
-      
-      {/* Sidebar */}
-      <aside className="w-64 bg-card/50 border-r border-border hidden md:flex flex-col z-10">
+    <div className="flex h-screen bg-background overflow-hidden relative selection:bg-primary/30">
+      {/* Infrastructure Layers */}
+      <div className="fixed inset-0 z-0">
+        <Atmosphere />
+        <div className="neural-grid" />
+        <div className="scanline-overlay" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background opacity-80 pointer-events-none" />
+      </div>
+
+      {/* Global Background Spotlight */}
+      <div 
+        className="fixed inset-0 pointer-events-none z-10 transition-opacity duration-300"
+        style={{
+          background: `radial-gradient(1000px circle at ${mousePos.x}px ${mousePos.y}px, rgba(212, 175, 55, 0.03), transparent 80%)`
+        }}
+      />
+
+      {/* Sidebar (Left) */}
+      <aside className="w-64 bg-black/40 backdrop-blur-2xl border-r border-border/20 hidden md:flex flex-col z-20 transition-all duration-500">
         <div className="p-6">
-          <Link to="/" className="text-2xl font-bold text-primary" style={{ fontFamily: "var(--font-display)" }}>
-            JustBid
+          <Link to="/" className="text-2xl font-bold text-primary flex items-center gap-2 group" style={{ fontFamily: "var(--font-display)" }}>
+            <span className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center border border-primary/30 shadow-[0_0_15px_rgba(var(--primary),0.2)] group-hover:scale-110 transition-transform">J</span>
+            <DecryptionText text="JustBid" delay={0.1} />
           </Link>
         </div>
 
-        <nav className="flex-1 px-4 space-y-2 mt-4">
-          <Link to="/dashboard" className="flex items-center gap-3 px-4 py-3 bg-primary/10 text-primary rounded-xl font-medium">
-            <LayoutDashboard size={20} />
-            Matches Feed
-          </Link>
-          <Link to="/profile" className="flex items-center gap-3 px-4 py-3 text-muted-foreground hover:bg-secondary/50 hover:text-foreground rounded-xl transition-colors">
-            <Settings size={20} />
-            AI Matrix Profile
-          </Link>
-          <Link to="/saved-bids" className="flex items-center gap-3 px-4 py-3 text-muted-foreground hover:bg-secondary/50 hover:text-foreground rounded-xl transition-colors">
-            <Bookmark size={20} />
-            Inbox & Saved Bids
-          </Link>
-          <Link to="/analytics" className="flex items-center gap-3 px-4 py-3 text-muted-foreground hover:bg-secondary/50 hover:text-foreground rounded-xl transition-colors">
-            <BarChart3 size={20} />
-            Insights & Analytics
-          </Link>
+        <nav className="flex-1 px-4 space-y-4 mt-6">
+          <Magnetic strength={0.3}>
+            <Link to="/dashboard" className="flex items-center gap-3 px-4 py-3 bg-primary/15 text-primary border border-primary/20 rounded-xl font-bold shadow-[0_0_20px_rgba(var(--primary),0.05)] transition-all">
+              <LayoutDashboard size={20} />
+              Matches Feed
+            </Link>
+          </Magnetic>
+          
+          <Magnetic strength={0.2}>
+            <Link to="/profile" className="flex items-center gap-3 px-4 py-3 text-muted-foreground hover:bg-white/5 hover:text-foreground rounded-xl transition-all duration-300 group">
+              <Settings size={20} className="group-hover:rotate-45 transition-transform" />
+              AI Matrix Profile
+            </Link>
+          </Magnetic>
+
+          <Magnetic strength={0.2}>
+            <Link to="/saved-bids" className="flex items-center gap-3 px-4 py-3 text-muted-foreground hover:bg-white/5 hover:text-foreground rounded-xl transition-all duration-300">
+              <Bookmark size={20} />
+              Inbox & Saved Bids
+            </Link>
+          </Magnetic>
+
+          <Magnetic strength={0.2}>
+            <Link to="/analytics" className="flex items-center gap-3 px-4 py-3 text-muted-foreground hover:bg-white/5 hover:text-foreground rounded-xl transition-all duration-300">
+              <BarChart3 size={20} />
+              Insights & Analytics
+            </Link>
+          </Magnetic>
+
+          <Magnetic strength={0.2}>
+            <Link to="/team" className="flex items-center gap-3 px-4 py-3 text-muted-foreground hover:bg-white/5 hover:text-foreground rounded-xl transition-all duration-300 group">
+              <Users size={20} className="group-hover:scale-110 transition-transform" />
+              Team Hub
+            </Link>
+          </Magnetic>
         </nav>
 
-        <div className="p-4 border-t border-border mt-auto">
-          <div className="flex items-center gap-3 mb-4 px-2">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-accent flex items-center justify-center font-bold">
-              {user?.email?.charAt(0).toUpperCase()}
-            </div>
-            <div className="overflow-hidden">
-              <p className="text-sm font-medium truncate">{user?.name || "Member"}</p>
-              <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
-            </div>
-          </div>
+        {/* Sidebar Mini-Widgets */}
+        <div className="px-5 mb-8 space-y-4">
+           <div className="p-3 rounded-xl bg-white/5 border border-white/5">
+              <div className="flex items-center justify-between mb-2">
+                 <p className="text-[10px] font-bold text-muted-foreground uppercase opacity-50">Sync Protocol</p>
+                 <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_#22c55e]" />
+              </div>
+              <div className="flex items-center gap-2">
+                 <Activity size={12} className="text-green-500" />
+                 <p className="text-xs font-mono">SIMAP CONNECTED</p>
+              </div>
+           </div>
+
+           <div className="p-3 rounded-xl bg-white/5 border border-white/5">
+              <p className="text-[10px] font-bold text-muted-foreground uppercase opacity-50 mb-2">Neural Efficiency</p>
+              <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                 <motion.div initial={{ width: 0 }} animate={{ width: "94%" }} transition={{ duration: 2 }} className="h-full bg-primary" />
+              </div>
+              <p className="text-[10px] text-right mt-1 font-mono text-primary">94.2%</p>
+           </div>
+        </div>
+
+        <div className="p-4 border-t border-border/20 mt-auto bg-black/20">
           <button 
             onClick={() => {
               localStorage.removeItem('token')
               localStorage.removeItem('user')
               navigate('/')
             }}
-            className="w-full flex items-center gap-3 px-4 py-2 text-red-400 hover:bg-red-400/10 rounded-xl transition-colors"
+            className="w-full flex items-center gap-3 px-4 py-2 text-red-400/70 hover:text-red-400 hover:bg-red-400/10 rounded-xl transition-all font-bold text-xs uppercase tracking-widest"
           >
-            <LogOut size={18} />
-            Sign Out
+            <LogOut size={16} />
+            Terminate
           </button>
         </div>
       </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 overflow-y-auto">
-        <header className="sticky top-0 z-10 bg-background/80 backdrop-blur-md border-b border-border p-6 flex justify-between items-center">
+      {/* Main Container: Feed + Intelligence Panel */}
+      <div className="flex-1 flex flex-col relative z-10 overflow-hidden">
+        
+        {/* Header */}
+        <header className="sticky top-0 z-30 bg-background/40 backdrop-blur-3xl border-b border-border/20 p-6 flex justify-between items-center transition-all">
           <div>
-            <h1 className="text-2xl font-bold">Active Opportunities</h1>
-            <p className="text-sm text-muted-foreground">Tailored exactly to your scale and industry.</p>
+            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
+              <DecryptionText text="Active Opportunities" delay={0.2} />
+            </h1>
+            <p className="text-xs text-muted-foreground font-mono uppercase tracking-[0.2em] opacity-60">Status: Filtering Real Time Assets</p>
           </div>
 
-          <div className="relative hidden md:block">
+          <div className="relative hidden lg:block">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
             <input 
               type="text" 
-              placeholder="Search specific tenders..." 
+              placeholder="Query matrix..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-secondary/50 border border-border rounded-full py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all w-64"
+              className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl py-2 pl-10 pr-4 text-xs focus:outline-none focus:ring-1 focus:ring-primary/40 transition-all w-80 hover:bg-white/10"
             />
           </div>
         </header>
 
-        <div className="p-6 md:p-8 max-w-5xl mx-auto">
+        {/* Scrollable Area */}
+        <div className="flex-1 overflow-y-auto flex">
           
-          {/* Top Stat row */}
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              <div className="bg-card border border-border rounded-2xl p-6 shadow-sm flex flex-col justify-center">
-                <p className="text-sm text-muted-foreground mb-2 uppercase tracking-widest">Algorithm Matches</p>
-                <div className="flex items-baseline gap-4">
-                  <p className="text-5xl font-bold text-foreground" style={{ fontFamily: "var(--font-display)" }}>{filteredTenders.length}</p>
-                  <p className="text-sm text-primary flex items-center gap-1"><TrendingUp size={14}/> +12 this week</p>
+          {/* Main Feed */}
+          <main className="flex-1 min-w-0 p-6 md:p-8 max-w-4xl mx-auto scroll-smooth">
+            
+            {/* Top Stat row */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+                <TeamCollaborationCard />
+                <DocumentAnalysisCard />
+                <div className="glass-panel rounded-2xl p-6 relative overflow-hidden group">
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent" />
+                  <p className="text-xs text-muted-foreground mb-3 uppercase tracking-[0.3em] font-bold opacity-70">Neural Matches</p>
+                  <div className="flex items-baseline gap-4">
+                    <p className="text-6xl font-bold text-foreground" style={{ fontFamily: "var(--font-display)" }}>{filteredTenders.length}</p>
+                    <div className="p-2 bg-primary/10 rounded-lg text-primary text-xs font-black">LIVE</div>
+                  </div>
                 </div>
-              </div>
-              <div className="bg-gradient-to-br from-card to-card/50 border border-border rounded-2xl p-6 shadow-sm flex items-center justify-between overflow-hidden relative">
-                <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-primary/10 rounded-full blur-2xl pointer-events-none" />
-                <div>
-                  <p className="text-sm text-primary/80 font-medium mb-1 uppercase tracking-widest">Highest Scoring Tender</p>
-                  <p className="text-muted-foreground text-sm max-w-[200px]">The platform found an extremely high probability match.</p>
-                </div>
-                <div className="relative z-10 flex shrink-0 justify-center min-w-[120px]">
-                  <CircularGauge value={filteredTenders.length > 0 ? filteredTenders[0].matchScore : 0} size={100} strokeWidth={8} delay={0.5} />
-                </div>
-              </div>
-            </div>
 
-          {/* Feed */}
-          <h2 className="text-lg font-semibold mb-6 flex items-center gap-2">
-            Your Custom Feed <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse ml-2" />
-          </h2>
-          
-          {loading ? (
-             <div className="text-center py-20 text-muted-foreground border border-dashed border-border rounded-2xl bg-card/20">
-               <div className="animate-spin w-10 h-10 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
-               Crunching multi-dimensional arrays...
-             </div>
-          ) : filteredTenders.length === 0 ? (
-             <div className="text-center py-20 bg-secondary/30 rounded-2xl border border-dashed border-border">
-               <p className="text-lg font-medium mb-2">{searchQuery ? "No search results." : "No active matches found."}</p>
-               <p className="text-muted-foreground mb-6">{searchQuery ? `We couldn't find any matches for "${searchQuery}"` : "Your criteria might be too strict, or the Python worker hasn't ingested new data."}</p>
-               {!searchQuery && (
-                 <Link to="/profile" className="px-6 py-2 bg-primary text-primary-foreground rounded-full font-medium hover:bg-primary/90 transition-colors">
-                    Loosen Criteria
-                 </Link>
-               )}
-             </div>
-          ) : (
-            <div className="space-y-6">
-              <AnimatePresence>
-                {filteredTenders.map((tender, i) => (
-                  <motion.div 
-                    key={tender.id}
-                    layout
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
-                    transition={{ delay: i * 0.1, duration: 0.5, ease: "easeOut" }}
-                    className={`bg-card border rounded-2xl p-6 transition-all group relative overflow-hidden ${appliedTenders[tender.id] ? 'border-primary shadow-[0_0_15px_rgba(var(--primary),0.2)]' : 'border-border hover:shadow-xl hover:border-primary/40'}`}
-                  >
-                    {appliedTenders[tender.id] && (
-                      <div className="absolute inset-0 bg-green-500/5 pointer-events-none z-0" />
-                    )}
-
-                    <div className="flex flex-col md:flex-row gap-8 justify-between relative z-10">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-3">
-                          <span className={`px-3 py-1 rounded-full text-xs font-bold shadow-sm ${
-                            tender.matchScore >= 80 ? 'bg-green-500/20 text-green-400 border border-green-500/30' :
-                            tender.matchScore >= 50 ? 'bg-primary/20 text-primary border border-primary/30' :
-                            'bg-yellow-500/20 text-yellow-500 border border-yellow-500/30'
-                          }`}>
-                            {tender.matchScore}% Neural Match
-                          </span>
-                          <span className="text-xs text-muted-foreground font-mono bg-secondary px-2 py-1 rounded">ID: {tender.externalId}</span>
-                        </div>
-                        <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">{tender.title}</h3>
-                        <p className="text-muted-foreground text-sm line-clamp-2 mb-5 leading-relaxed">
-                          {tender.description}
-                        </p>
-                        
-                        <div className="flex flex-wrap gap-2 mb-5">
-                          {tender.cpvCodes?.map(code => (
-                            <span key={code} className="text-xs bg-secondary px-2.5 py-1 rounded-md text-foreground/80 font-medium">
-                              CPV: {code}
-                            </span>
-                          ))}
-                        </div>
-
-                        {/* AI Reasoning Tags */}
-                        <div className="space-y-1.5 p-3 rounded-lg bg-secondary/50 border border-border/50">
-                          <p className="text-xs text-primary/80 font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                            <SparklesIcon /> Analysis
-                          </p>
-                          {tender.matchReasons?.map((reason, idx) => (
-                            <p key={idx} className="text-xs text-foreground/80 flex items-start gap-2">
-                              <span className="w-1.5 h-1.5 rounded-full bg-primary inline-block mt-1 shrink-0 shadow-[0_0_5px_rgba(var(--primary),1)]"></span>
-                              <span>{reason}</span>
-                            </p>
-                          ))}
-                        </div>
-
-                      </div>
-
-                      <div className="flex flex-col justify-between items-end min-w-[220px] border-t md:border-t-0 md:border-l border-border pt-5 md:pt-0 md:pl-8">
-                        <div className="text-right w-full mb-6">
-                           <p className="text-xs text-muted-foreground uppercase tracking-widest mb-1.5">Budget Allocation</p>
-                           <p className="text-3xl font-bold text-green-400 drop-shadow-[0_0_5px_rgba(74,222,128,0.2)]">
-                             {tender.budget ? `$${tender.budget.toLocaleString()}` : "Confidential"}
-                           </p>
-                           
-                           <p className="text-xs text-muted-foreground uppercase tracking-widest mt-5 mb-1.5">Deployment Location</p>
-                           <p className="font-medium text-sm text-foreground bg-secondary/80 inline-block px-2 py-1 rounded">{tender.location}</p>
-
-                           <p className="text-xs text-muted-foreground uppercase tracking-widest mt-5 mb-1.5">Deadline</p>
-                           <p className="font-medium text-sm text-red-400 flex items-center justify-end gap-1.5">
-                             <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
-                                                           {tender.deadline ? new Date(tender.deadline).toLocaleDateString() : "No Deadline Set"}
-
-                           </p>
-                        </div>
-                        
-                        <AnimatePresence mode="wait">
-                          {appliedTenders[tender.id] ? (
-                            <motion.div
-                              initial={{ opacity: 0, scale: 0.8 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              className="w-full bg-green-500/20 text-green-500 border border-green-500/50 font-bold py-3 rounded-xl flex justify-center items-center gap-2"
-                            >
-                              <CheckCircle2 size={20} /> Bid Fast-Tracked
-                            </motion.div>
-                          ) : (
-                            <motion.button 
-                              whileHover={{ scale: 1.02 }}
-                              whileTap={{ scale: 0.98 }}
-                              onClick={(e) => handleApply(e, tender.id)}
-                              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 rounded-xl transition-all shadow-[0_0_15px_rgba(var(--primary),0.3)] hover:shadow-[0_0_25px_rgba(var(--primary),0.5)] flex justify-center items-center gap-2 group"
-                            >
-                              Fast-Track Bid
-                              <motion.span className="group-hover:translate-x-1 transition-transform inline-block">→</motion.span>
-                            </motion.button>
-                          )}
-                        </AnimatePresence>
-                      </div>
+                <div className="glass-panel rounded-2xl p-6 relative overflow-hidden group border-primary/20">
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent" />
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs text-primary font-bold mb-1 uppercase tracking-[0.3em]">Alpha Priority</p>
+                      <p className="text-muted-foreground text-xs leading-relaxed max-w-[200px]">Optimal alignment detected with target industry node.</p>
                     </div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
+                    <div className="relative drop-shadow-[0_0_15px_rgba(var(--primary),0.3)]">
+                      <CircularGauge value={filteredTenders.length > 0 ? filteredTenders[0].matchScore : 0} size={100} strokeWidth={8} delay={0.5} />
+                    </div>
+                  </div>
+                </div>
             </div>
-          )}
-        </div>
-      </main>
-    </div>
-  )
-}
 
-function SparklesIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
-    </svg>
+            {/* Neural Feed Content */}
+            <div className="mb-10">
+              <div className="flex items-center justify-between mb-8">
+                <h2 className="text-sm font-bold flex items-center gap-3 uppercase tracking-[0.4em] text-muted-foreground">
+                  Neural Intelligence Feed 
+                  <span className="w-2 h-2 rounded-full bg-primary animate-ping" />
+                </h2>
+                <div className="h-px w-32 bg-gradient-to-r from-primary/40 to-transparent" />
+              </div>
+              
+              {loading ? (
+                <div className="flex flex-col items-center justify-center py-32 glass-panel rounded-3xl border-dashed border-border/40">
+                  <div className="relative w-12 h-12 mb-6">
+                    <div className="absolute inset-0 border-2 border-primary/10 rounded-full"></div>
+                    <div className="absolute inset-0 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+                  </div>
+                  <DecryptionText text="Deciphering SIMAP Stream" className="text-sm font-mono" />
+                </div>
+              ) : (
+                <div className="space-y-10">
+                  <AnimatePresence mode="popLayout">
+                    {filteredTenders.map((tender, i) => (
+                      <TenderCard3D 
+                        key={tender.id}
+                        tender={tender}
+                        index={i}
+                        onMatchClick={(e) => handleApply(e || { target: {} }, tender.id)}
+                      />
+                    ))}
+                  </AnimatePresence>
+                </div>
+              )}
+            </div>
+          </main>
+
+          {/* Intelligence Panel (Right Sidebar - Space Filler) */}
+          <aside className="w-80 hidden xl:flex flex-col bg-black/20 border-l border-border/10 p-6 z-20">
+             <div className="space-y-8">
+                {/* AI Insights Card */}
+                <div className="glass-panel p-5 rounded-2xl border-white/5 relative overflow-hidden group">
+                   <div className="absolute top-0 right-0 p-2 opacity-20 group-hover:opacity-100 transition-opacity">
+                      <Shield size={16} className="text-primary" />
+                   </div>
+                   <h3 className="text-xs font-black uppercase tracking-[0.2em] mb-4 text-primary">Neural Insights</h3>
+                   <div className="space-y-4">
+                      <div className="p-3 bg-white/5 rounded-lg border border-white/5 border-l-primary/40 border-l-2">
+                         <p className="text-[10px] text-muted-foreground font-mono mb-1">PROBABILITY SCAN</p>
+                         <p className="text-xs font-bold font-mono">HIGH SUCCESS DETECTED</p>
+                      </div>
+                      <div className="p-3 bg-white/5 rounded-lg border border-white/5 border-l-accent/40 border-l-2">
+                         <p className="text-[10px] text-muted-foreground font-mono mb-1">MARKET SENTIMENT</p>
+                         <p className="text-xs font-bold font-mono">UPWARD TREND 0.42%</p>
+                      </div>
+                   </div>
+                </div>
+
+                {/* System Activity Log */}
+                <div>
+                   <h3 className="text-xs font-black uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+                      <Cpu size={14} className="text-muted-foreground" />
+                      Live Network Logs
+                   </h3>
+                   <div className="space-y-2 max-h-[400px] overflow-hidden">
+                      {systemLogs.map((log, i) => (
+                        <motion.div 
+                          key={i+log}
+                          initial={{ opacity: 0, x: 10 }}
+                          animate={{ opacity: 0.6, x: 0 }}
+                          className="text-[10px] font-mono text-muted-foreground leading-tight hover:text-primary hover:bg-white/5 p-1 rounded transition-colors"
+                        >
+                           <span className="text-primary/40">[{new Date().toLocaleTimeString([], { hour12: false })}]</span> {log}
+                        </motion.div>
+                      ))}
+                      <div className="h-20 bg-gradient-to-t from-background to-transparent absolute bottom-6 w-[calc(100%-48px)] pointer-events-none" />
+                   </div>
+                </div>
+             </div>
+          </aside>
+        </div>
+
+        {/* Command Center Footer (Fixed) */}
+        <footer className="h-10 border-t border-border/10 bg-black/40 backdrop-blur-md px-6 flex items-center justify-between z-30">
+           <div className="flex items-center gap-6">
+              <div className="flex items-center gap-2">
+                 <div className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_8px_#22c55e]" />
+                 <p className="text-[9px] font-mono uppercase tracking-widest text-muted-foreground">Neural Secure: OK</p>
+              </div>
+              <div className="flex items-center gap-2">
+                 <Wifi size={10} className="text-muted-foreground" />
+                 <p className="text-[9px] font-mono uppercase tracking-widest text-muted-foreground">Gateway: 24ms</p>
+              </div>
+           </div>
+           <div className="flex items-center gap-4">
+              <p className="text-[9px] font-mono uppercase tracking-widest text-primary/60">Session Auth: PRM USER</p>
+              <div className="h-4 w-px bg-white/10" />
+              <p className="text-[9px] font-mono uppercase tracking-widest text-muted-foreground">JustBid OS v2.4.1</p>
+           </div>
+        </footer>
+      </div>
+    </div>
   )
 }

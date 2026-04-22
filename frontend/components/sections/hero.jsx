@@ -40,12 +40,11 @@ export function Hero() {
     // Parallax logic (Toned down)
     const x = e.clientX - bounds.width / 2
     const y = e.clientY - bounds.height / 2
-    // Reduced sensitivity by mapping x/y to much smaller values before applying to motion values
     mouseX.set(x * 0.3)
     mouseY.set(y * 0.3)
   }
 
-  // Parallax transform equations (Decent and subtle)
+  // Parallax transform equations
   const card1X = useTransform(smoothMouseX, [-1000, 1000], [40, -40])
   const card1Y = useTransform(smoothMouseY, [-1000, 1000], [40, -40])
   const card1RotateX = useTransform(smoothMouseY, [-1000, 1000], [-10, 10])
@@ -149,7 +148,7 @@ export function Hero() {
       onMouseMove={handleMouseMove}
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background [perspective:1000px]"
     >
-      {/* Interactive Cursor Spotlight - Toned down */}
+      {/* Interactive Cursor Spotlight */}
       <motion.div
         className="pointer-events-none absolute inset-0 z-0 opacity-30"
         style={{
@@ -168,21 +167,9 @@ export function Hero() {
         <div className="absolute top-[10%] left-[5%] w-64 h-64 rounded-full bg-primary/20 blur-[100px] animate-pulse" />
         <div className="absolute top-[30%] right-[10%] w-96 h-96 rounded-full bg-accent/20 blur-[120px] animate-pulse" style={{ animationDelay: "2s" }} />
         <div className="absolute bottom-[20%] left-[20%] w-80 h-80 rounded-full bg-primary/10 blur-[100px] animate-pulse" style={{ animationDelay: "4s" }} />
-        
-        {/* Grid lines with mask for spotlight effect */}
-        <div className="absolute inset-0 mask-radial-fade">
-          <svg className="absolute inset-0 w-full h-full opacity-[0.05]" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
-                <path d="M 60 0 L 0 0 0 60" fill="none" stroke="currentColor" strokeWidth="1" className="text-foreground" />
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#grid)" />
-          </svg>
-        </div>
       </div>
 
-      {/* Holographic Parallax Cards (Z-index layers) - Smooth Entrance */}
+      {/* Holographic Parallax Cards */}
       <div className="absolute inset-0 pointer-events-none z-10 flex justify-center items-center">
         {/* Card 1 - Left */}
         <motion.div
@@ -190,7 +177,7 @@ export function Hero() {
           animate={{ opacity: 0.5, x: 0, rotateZ: 0 }}
           transition={{ duration: 1.5, delay: 0.8, ease: [0.33, 1, 0.68, 1] }}
           style={{ x: card1X, y: card1Y, rotateX: card1RotateX, rotateY: card1RotateY }}
-          className="absolute -left-20 md:left-[10%] top-[25%] w-64 bg-card/20 backdrop-blur-md border border-primary/10 rounded-2xl p-4 shadow-xl opacity-30 md:opacity-50"
+          className="absolute -left-20 md:left-[10%] top-[25%] w-64 bg-card/20 backdrop-blur-md border border-primary/10 rounded-2xl p-4 shadow-xl"
         >
           <div className="flex items-center gap-2 mb-3">
              <ShieldCheck size={16} className="text-primary"/> 
@@ -210,7 +197,7 @@ export function Hero() {
           animate={{ opacity: 0.5, x: 0, rotateZ: 0 }}
           transition={{ duration: 1.5, delay: 1, ease: [0.33, 1, 0.68, 1] }}
           style={{ x: card2X, y: card2Y, rotateX: card2RotateX, rotateY: card2RotateY }}
-          className="absolute -right-10 md:right-[15%] top-[10%] md:top-[20%] w-72 bg-card/20 backdrop-blur-md border border-accent/10 rounded-2xl p-4 shadow-xl opacity-30 md:opacity-50"
+          className="absolute -right-10 md:right-[15%] top-[10%] md:top-[20%] w-72 bg-card/20 backdrop-blur-md border border-accent/10 rounded-2xl p-4 shadow-xl"
         >
           <div className="flex items-center gap-2 mb-3">
              <TrendingUp size={16} className="text-accent"/> 
@@ -230,7 +217,7 @@ export function Hero() {
           animate={{ opacity: 0.4, y: 0 }}
           transition={{ duration: 1.5, delay: 1.2, ease: [0.33, 1, 0.68, 1] }}
           style={{ x: card3X, y: card3Y, rotateX: card3RotateX, rotateY: card3RotateY }}
-          className="absolute left-[30%] bottom-[15%] w-56 bg-primary/5 backdrop-blur-md border border-primary/20 rounded-2xl p-4 shadow-xl hidden md:block opacity-40"
+          className="absolute left-[30%] bottom-[15%] w-56 bg-primary/5 backdrop-blur-md border border-primary/20 rounded-2xl p-4 shadow-xl hidden md:block"
         >
           <div className="flex items-center gap-2 mb-3">
              <Cpu size={16} className="text-primary"/> 
@@ -238,7 +225,7 @@ export function Hero() {
           </div>
           <div className="flex items-center gap-2">
              <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-             <span className="text-xs text-muted-foreground">Monitoring active SIMAP feeds...</span>
+             <span className="text-xs text-muted-foreground">Monitoring active feeds...</span>
           </div>
         </motion.div>
       </div>
@@ -247,8 +234,9 @@ export function Hero() {
       <div className="relative z-20 container mx-auto px-6 text-center">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
+          whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
           className="mb-8"
         >
           <span className="inline-block px-4 py-2 text-sm font-medium bg-primary/10 text-primary rounded-full border border-primary/20 shadow-[0_0_15px_rgba(var(--primary),0.2)]">
@@ -277,8 +265,9 @@ export function Hero() {
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.5, duration: 0.8 }}
+          viewport={{ once: true }}
           className="flex flex-col sm:flex-row gap-6 justify-center items-center"
         >
           <div onClick={() => {

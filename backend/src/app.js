@@ -7,6 +7,8 @@ import authRoutes from './routes/auth.routes.js';
 import companyRoutes from './routes/company.routes.js';
 import tenderRoutes from './routes/tender.routes.js';
 import bookmarkRoutes from './routes/bookmark.routes.js';
+import teamRoutes from './routes/team.routes.js';
+import documentRoutes from './routes/document.routes.js';
 
 const app = express();
 
@@ -24,6 +26,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/company', companyRoutes);
 app.use('/api/tenders', tenderRoutes);
 app.use('/api/bookmarks', bookmarkRoutes);
+app.use('/api/team', teamRoutes);
+app.use('/api/document', documentRoutes);
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {

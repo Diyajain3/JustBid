@@ -71,9 +71,20 @@ export function DashboardPreview() {
         trigger: dashboardRef.current,
         start: "top 60%",
         onEnter: () => {
-          gsap.to({}, { duration: 2, onUpdate: function() { setCounters(prev => ({...prev, tenders: Math.round(gsap.utils.interpolate(0, tenders.length || 154, this.progress())) })) } })
-          gsap.to({}, { duration: 2.2, onUpdate: function() { setCounters(prev => ({...prev, matches: Math.round(gsap.utils.interpolate(0, tenders.length ? tenders.length : 12, this.progress())) })) } })
-          gsap.to({}, { duration: 2.5, onUpdate: function() { setCounters(prev => ({...prev, winRate: Math.round(gsap.utils.interpolate(0, 84, this.progress())) })) } })
+          const obj = { val: 0 };
+          gsap.to(obj, { 
+            val: 1, 
+            duration: 2, 
+            ease: "power2.out",
+            onUpdate: function() { 
+              const progress = this.progress();
+              setCounters({
+                tenders: Math.round(gsap.utils.interpolate(0, tenders.length || 154, progress)),
+                matches: Math.round(gsap.utils.interpolate(0, tenders.length ? tenders.length : 12, progress)),
+                winRate: Math.round(gsap.utils.interpolate(0, 84, progress))
+              });
+            } 
+          });
         },
         once: true,
       }
@@ -137,10 +148,10 @@ export function DashboardPreview() {
                         <motion.div key={i} initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.1, duration: 0.5 }} viewport={{ once: true }} className="flex items-center justify-between p-3 bg-background/50 rounded-xl mb-2">
                           <div className="flex flex-col gap-1 w-full text-left">
                             <p className="font-bold text-sm text-primary">{tender.title}</p>
-                            <p className="text-xs text-muted-foreground line-clamp-1">{tender.description}</p>
-                            <div className="flex gap-2">
-                                <span className="text-[10px] bg-secondary p-1 rounded">Budget: ${tender.budget}</span>
-                                <span className="text-[10px] bg-secondary p-1 rounded">Location: {tender.location}</span>
+                            <p className="text-xs text-muted-foreground line-clamp-1" dangerouslySetInnerHTML={{ __html: tender.description || "Analytical node data pending..." }} />
+                            <div className="flex gap-2 mt-1">
+                                {tender.budget && <span className="text-[9px] bg-white/5 border border-white/10 px-2 py-0.5 rounded text-primary uppercase font-bold tracking-tighter">Budget: ${Number(tender.budget).toLocaleString()}</span>}
+                                {tender.location && <span className="text-[9px] bg-white/5 border border-white/10 px-2 py-0.5 rounded text-muted-foreground uppercase font-bold tracking-tighter">Location: {tender.location}</span>}
                             </div>
                           </div>
                         </motion.div>

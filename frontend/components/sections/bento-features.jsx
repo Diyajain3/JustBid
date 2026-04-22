@@ -88,7 +88,6 @@ export function BentoFeatures() {
               Every document is parsed using state-of-the-art Natural Language Processing to find hidden requirements.
             </p>
             
-            {/* Simplified Strategic Identity Visual - Static and non-distracting */}
             <div className="relative w-full h-[220px] bg-white/[0.02] border border-white/5 rounded-2xl overflow-hidden flex items-center justify-center">
               <div className="absolute inset-0 opacity-10">
                 <div className="absolute inset-0 grid grid-cols-6 gap-px">
@@ -105,11 +104,6 @@ export function BentoFeatures() {
                 <div className="px-3 py-1 bg-primary/10 border border-primary/20 rounded-full text-[10px] text-primary font-bold uppercase tracking-widest">
                   Neural Match Verified
                 </div>
-              </div>
-
-              <div className="absolute bottom-4 left-6 right-6 flex justify-between items-center opacity-30">
-                 <div className="text-[8px] font-mono text-white/40 uppercase tracking-[0.2em]">PROC_NODE: A9-02</div>
-                 <div className="text-[8px] font-mono text-white/40 uppercase tracking-[0.2em]">VECTOR_SPACE_01</div>
               </div>
             </div>
           </motion.div>
@@ -134,7 +128,6 @@ export function BentoFeatures() {
               </p>
             </div>
             
-            {/* Mock Chart Animation */}
             <div className="mt-8 flex items-end justify-between h-32 gap-3 px-4">
                {[40, 70, 55, 90, 65, 100].map((height, i) => (
                  <motion.div 
@@ -149,7 +142,7 @@ export function BentoFeatures() {
             </div>
           </motion.div>
 
-          {/* Security Card - spans 2 columns on mostly wide screens */}
+          {/* Security Card - spans 2 columns */}
           <motion.div
             variants={{
               hidden: { opacity: 0, y: 30 },

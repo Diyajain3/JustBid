@@ -9,6 +9,7 @@ import json
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 
+import re
 import httpx
 from deep_translator import GoogleTranslator
 
@@ -307,6 +308,16 @@ class SimapSyncWorker:
             elif isinstance(result, Exception):
                 self.stats["details_errors"] += 1
         return successful
+    def strip_tags(self, text: str) -> str:
+        if not text: return ""
+        # Remove HTML tags but try to preserve structural spacing
+        clean = re.compile('<.*?>')
+        text = re.sub(clean, ' ', text)
+        # Unescape common HTML entities
+        text = text.replace('&nbsp;', ' ').replace('&amp;', '&').replace('&lt;', '<').replace('&gt;', '>')
+        # Normalize whitespace
+        return re.sub(r'\s+', ' ', text).strip()
+
     def transform_publication_details(self, details: dict) -> dict:
         project_info = details.get("project-info") or {}
         procurement = details.get("procurement") or {}
@@ -316,11 +327,12 @@ class SimapSyncWorker:
         decision = details.get("decision") or {}
         base = details.get("base") or {}
 
-        # Translate description
+        # Translate and clean description
         desc_dict = procurement.get("orderDescription") or {}
         if isinstance(desc_dict, str):
             desc_dict = {"auto": desc_dict}
         translated_desc, _ = self._translate_dict(desc_dict)
+        clean_desc = self.strip_tags(translated_desc)
 
         # Translate Criteria
         qual_dict = criteria.get("qualification") or {}
@@ -333,12 +345,24 @@ class SimapSyncWorker:
                   procurement.get("totalPriceSelectionValue") or 
                   procurement.get("totalPriceRange", {}).get("range", {}).get("min"))
         
-        if not budget:
-            # Try to get award price
-            vendors = decision.get("vendors", [])
-            if vendors and isinstance(vendors, list):
-                price_info = vendors[0].get("price", {})
-                budget = price_info.get("price")
+        if not budget and clean_desc:
+            # Enhanced Regex Budget Hunting
+            budget_matches = re.findall(r'(?:Budget|Value|Price|Total|CHF|USD|\$)\D*([\d\s\'\.,]+)', clean_desc, re.IGNORECASE)
+            if budget_matches:
+                # Take the first plausible number, clean it
+                raw_val = re.sub(r'[\s\'\.]', '', budget_matches[0].split(',')[0])
+                if raw_val.isdigit() and len(raw_val) > 3:
+                   budget = int(raw_val)
+
+        # Enhanced Location Extraction
+        location = (procurement.get("orderAddress") or {}).get("cantonId")
+        if not location and clean_desc:
+            # Hunt for Swiss Cantons (ZH, BE, GL, etc.)
+            cantons = ["ZH", "BE", "LU", "UR", "SZ", "OW", "NW", "GL", "ZG", "FR", "SO", "BS", "BL", "SH", "AR", "AI", "SG", "GR", "AG", "TG", "TI", "VD", "VS", "NE", "GE", "JU"]
+            pattern = r'\b(' + '|'.join(cantons) + r')\b'
+            loc_match = re.search(pattern, clean_desc)
+            if loc_match:
+                location = loc_match.group(1)
 
         # Enhanced Deadline Extraction
         deadline = (
@@ -355,7 +379,8 @@ class SimapSyncWorker:
             "offer_opening": (dates.get("offerOpening") or {}).get("dateTime") or dates.get("offerOpening"),
             "qna_deadlines": dates.get("qnas", []),
             "offer_validity_days": dates.get("offerValidityDeadlineDays"),
-            "description": translated_desc,
+            "description": clean_desc,
+            "location": location,
             "cpv_codes": [procurement.get("cpvCode", {}).get("code")] if isinstance(procurement.get("cpvCode"), dict) else [],
             "bkp_codes": procurement.get("bkpCodes", []),
             "npk_codes": procurement.get("npkCodes", []),

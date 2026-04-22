@@ -5,15 +5,15 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(0.08 0.01 260);
+  --background: oklch(0.1 0.01 260); /* Deep Luxury Black */
   --foreground: oklch(0.98 0 0);
-  --card: oklch(0.12 0.015 260);
+  --card: oklch(0.14 0.01 260); /* Discrete glass cards */
   --card-foreground: oklch(0.98 0 0);
-  --popover: oklch(0.12 0.015 260);
+  --popover: oklch(0.14 0.01 260);
   --popover-foreground: oklch(0.98 0 0);
-  --primary: oklch(0.82 0.18 85);
+  --primary: oklch(0.85 0.18 85); /* High-end gold */
   --primary-foreground: oklch(0.1 0.01 260);
-  --secondary: oklch(0.18 0.02 260);
+  --secondary: oklch(0.16 0.01 260);
   --secondary-foreground: oklch(0.98 0 0);
   --muted: oklch(0.2 0.015 260);
   --muted-foreground: oklch(0.65 0 0);
@@ -125,10 +125,12 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border/40 outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground font-sans antialiased overflow-x-hidden;
+    @apply text-foreground font-sans antialiased overflow-x-hidden;
+    background: var(--background);
+    background-attachment: fixed;
   }
   
   html {
@@ -279,6 +281,10 @@
   100% { transform: translateY(100%); opacity: 0; }
 }
 
+.animate-scan-line {
+  animation: scan-line 4s linear infinite;
+}
+
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-5px); }
@@ -299,3 +305,116 @@
   pointer-events: none;
   z-index: 10;
 }
+/* Glassmorphism Utilities */
+.glass-card {
+  @apply bg-card/60 backdrop-blur-md border border-white/5;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.glass-card-gold {
+  @apply bg-card/60 backdrop-blur-md border border-primary/20;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+.glass-panel {
+  @apply bg-card/20 backdrop-blur-xl border border-white/5;
+}
+
+.glass-panel-dark {
+  @apply bg-black/40 backdrop-blur-2xl border-r border-border/20;
+}
+
+.bg-dot-pattern {
+  background-image: radial-gradient(oklch(0.98 0 0 / 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.neural-grid {
+  position: fixed;
+  inset: 0;
+  background-image: 
+    linear-gradient(to right, oklch(0.98 0 0 / 0.01) 1px, transparent 1px),
+    linear-gradient(to bottom, oklch(0.98 0 0 / 0.01) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(circle at center, black 30%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.15;
+  will-change: transform;
+}
+
+.scanline-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    rgba(0, 0, 0, 0.02) 51%,
+    transparent 51%
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.1;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* Luxury FX Utilities */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 0%,
+    transparent 40%,
+    rgba(255, 255, 255, 0.03) 50%,
+    transparent 60%,
+    transparent 100%
+  );
+  transform: rotate(25deg);
+  animation: shimmer 6s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%) rotate(25deg); }
+  20% { transform: translateX(100%) rotate(25deg); }
+  100% { transform: translateX(100%) rotate(25deg); }
+}
+
+.neon-border-gold:hover {
+  border-color: var(--gold);
+  box-shadow: 0 0 15px rgba(var(--primary), 0.2);
+  transition: all 0.3s ease;
+}
+
+/* Drifting background blobs */
+@keyframes blob-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(50px, -30px) scale(1.1); }
+  66% { transform: translate(-20px, 40px) scale(0.9); }
+}
+
+.bg-blob {
+  position: fixed;
+  width: 50vw;
+  height: 50vw;
+  filter: blur(100px);
+  opacity: 0.1;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 50%;
+  animation: blob-drift 20s infinite ease-in-out;
+}
+
+.blob-gold { background: var(--gold); top: -25%; right: -10%; animation-delay: 0s; }
+.blob-deep { background: oklch(0.4 0.1 260); bottom: -10%; left: -10%; animation-delay: -10s; }

@@ -32,8 +32,8 @@ export function TenderCard3D({ tender, onMatchClick, index }) {
     const mouseX = e.clientX - rect.left
     const mouseY = e.clientY - rect.top
     
-    const rX = ((mouseY / height) - 0.5) * -12
-    const rY = ((mouseX / width) - 0.5) * 12
+    const rX = ((mouseY / height) - 0.5) * -8
+    const rY = ((mouseX / width) - 0.5) * 8
     
     x.set(rY)
     y.set(rX)
@@ -61,6 +61,7 @@ export function TenderCard3D({ tender, onMatchClick, index }) {
         rotateX,
         rotateY,
         transformStyle: "preserve-3d",
+        willChange: "transform"
       }}
       className={`relative w-full rounded-2xl bg-gradient-to-br from-card/80 to-card/40 border border-white/5 transition-all duration-500 hover:border-primary/40 group shadow-2xl cursor-pointer ${isExpanded ? 'ring-1 ring-primary/30 shadow-primary/10' : ''}`}
     >
@@ -81,8 +82,12 @@ export function TenderCard3D({ tender, onMatchClick, index }) {
             </div>
             
             {tender.matchScore && (
-              <div className="md:hidden">
-                 <CircularGauge size={40} percentage={tender.matchScore} strokeWidth={4} />
+              <div className="flex items-center gap-2">
+                 <div className="flex flex-col items-end">
+                    <span className="text-[8px] font-black uppercase text-primary/60 tracking-tighter">Resonance</span>
+                    <span className="text-[10px] font-bold text-primary">{tender.matchScore}%</span>
+                 </div>
+                 <CircularGauge size={36} percentage={tender.matchScore} strokeWidth={4} />
               </div>
             )}
           </div>
@@ -91,50 +96,60 @@ export function TenderCard3D({ tender, onMatchClick, index }) {
             {tender.title}
           </h3>
           
-          <div className="relative mb-4">
-            <motion.div
-              animate={{ height: isExpanded ? "auto" : "56px" }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="overflow-hidden"
-            >
-              <div 
-                className={`text-muted-foreground/80 text-[13px] leading-relaxed ${!isExpanded ? 'line-clamp-3' : ''}`}
-                dangerouslySetInnerHTML={{ __html: tender.description || "In-depth intelligence analysis pending final ingestion..." }}
-              />
-              
-              <AnimatePresence>
-                {isExpanded && tender.matchReasons && (
-                  <motion.div 
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-6 p-4 rounded-xl bg-primary/5 border border-primary/10"
-                  >
-                    <h4 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary mb-3">
-                      <BrainCircuit size={14} /> AI Resonance Logs
-                    </h4>
-                    <ul className="space-y-2">
-                       {tender.matchReasons.map((reason, i) => (
-                         <li key={i} className="text-xs text-foreground/70 flex items-start gap-2">
-                            <span className="text-primary mt-1">●</span> {reason}
-                         </li>
-                       ))}
-                    </ul>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
+          <div className="relative mb-6">
+            <div 
+              className="text-muted-foreground/80 text-[13px] leading-relaxed line-clamp-3 mb-4 whitespace-pre-wrap"
+              dangerouslySetInnerHTML={{ __html: tender.description || "In-depth intelligence analysis pending final ingestion..." }}
+            />
             
-            {!isExpanded && (
-              <div className="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-card to-transparent pointer-events-none" />
+            {/* AI Intelligence Restoration - NOW FRONT & CENTER */}
+            {tender.matchReasons && (
+              <div className="p-4 rounded-xl bg-primary/10 border border-primary/20 backdrop-blur-md relative overflow-hidden group/intel">
+                <div className="absolute top-0 left-0 w-1 h-full bg-primary shadow-[0_0_10px_rgba(var(--primary),0.5)]" />
+                <h4 className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-2.5">
+                  <BrainCircuit size={14} className="animate-pulse" /> AI Analysis Log
+                </h4>
+                <ul className="space-y-1.5">
+                    {tender.matchReasons.slice(0, 2).map((reason, i) => (
+                      <li key={i} className="text-[11px] text-foreground/90 flex items-start gap-2 leading-tight">
+                        <span className="text-primary mt-1 shrink-0">◢</span> {reason}
+                      </li>
+                    ))}
+                </ul>
+              </div>
             )}
           </div>
 
           <div className="flex items-center gap-2 text-primary/50 text-[10px] font-black uppercase tracking-[0.2em] group-hover:text-primary transition-colors">
-            {isExpanded ? "Collapse Protocol" : "Deep Scan Intelligence"} 
+            {isExpanded ? "Minimize Logs" : "Expand Full Intelligence"} 
             <motion.div animate={{ y: isExpanded ? -2 : 2 }} transition={{ repeat: Infinity, repeatType: "reverse", duration: 1 }}>
               <ChevronDown size={14} className={isExpanded ? "rotate-180" : ""} />
             </motion.div>
           </div>
+
+          <AnimatePresence>
+            {isExpanded && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="overflow-hidden"
+              >
+                <div className="pt-6 text-sm text-muted-foreground border-t border-white/5 mt-4">
+                   <p className="mb-4 whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: tender.description }} />
+                   {tender.matchReasons && tender.matchReasons.length > 2 && (
+                     <div className="space-y-1.5">
+                        {tender.matchReasons.slice(2).map((reason, i) => (
+                          <p key={i} className="text-xs flex items-start gap-2">
+                            <span className="text-primary/40 mt-1">◢</span> {reason}
+                          </p>
+                        ))}
+                     </div>
+                   )}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <div className="flex flex-wrap gap-2 mt-auto pt-6">
             {tender.cpvCodes?.slice(0, 3).map((code, idx) => (
@@ -147,17 +162,6 @@ export function TenderCard3D({ tender, onMatchClick, index }) {
 
         <div className="border-t md:border-t-0 md:border-l border-white/5 pt-6 md:pt-0 md:pl-8 min-w-[240px] flex flex-col justify-between items-end">
           <div className="w-full relative">
-            {tender.matchScore && (
-              <div className="hidden md:flex absolute -top-2 -right-2">
-                 <div className="relative group/gauge">
-                    <CircularGauge size={64} percentage={tender.matchScore} strokeWidth={6} />
-                    <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover/gauge:opacity-100 transition-opacity bg-background/80 rounded-full">
-                       <span className="text-[8px] font-black uppercase">Alpha</span>
-                       <span className="text-xs font-bold">{tender.matchScore}%</span>
-                    </div>
-                 </div>
-              </div>
-            )}
 
             <div className="space-y-6">
               <div>
