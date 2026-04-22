@@ -10,14 +10,27 @@ const groq = new Groq({
   dangerouslyAllowBrowser: true
 })
 
-// ✅ Relevance filter
+// ✅ STRICT relevance filter
 const isRelevant = (text) => {
   const keywords = [
-    "tender", "bid", "bidding", "contract",
-    "procurement", "rfp", "quotation",
-    "government", "vendor", "pricing"
+    "tender",
+    "bid",
+    "bidding",
+    "procurement",
+    "contract",
+    "rfp",
+    "quotation",
+    "government",
+    "vendor",
+    "pricing",
+    "e-tender",
+    "justbid",
+    "auction"
   ]
-  return keywords.some(k => text.toLowerCase().includes(k))
+
+  return keywords.some(k =>
+    text.toLowerCase().includes(k)
+  )
 }
 
 export function AiChatbot() {
@@ -25,14 +38,15 @@ export function AiChatbot() {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      content: "Hello! I'm your JustBid Senior Broker. How can we improve your **bid strategy** today?"
+      content:
+        "Hello! I'm your JustBid Senior Broker. Ask me anything about **tenders, bidding, or procurement strategies**."
     }
   ])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const scrollRef = useRef(null)
 
-  // ✅ Smooth auto-scroll
+  // ✅ Auto scroll
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTo({
@@ -45,18 +59,20 @@ export function AiChatbot() {
   const handleSend = async () => {
     if (!input.trim() || isLoading) return
 
-    const userMessage = { role: "user", content: input }
+    const userText = input
+    const userMessage = { role: "user", content: userText }
+
     setMessages(prev => [...prev, userMessage])
     setInput("")
 
-    // ❌ Block unrelated
-    if (!isRelevant(input)) {
+    // ❌ BLOCK NON-RELEVANT QUERIES
+    if (!isRelevant(userText)) {
       setMessages(prev => [
         ...prev,
         {
           role: "assistant",
           content:
-            "I specialize in **tender strategy and bidding intelligence**. Ask something related to winning contracts."
+            "I can only assist with bidding, tenders, and procurement-related queries on this platform."
         }
       ])
       return
@@ -66,33 +82,40 @@ export function AiChatbot() {
 
     try {
       const chatCompletion = await groq.chat.completions.create({
+        model: "llama-3.3-70b-versatile",
+        temperature: 0.5,
         messages: [
           {
             role: "system",
             content: `
-You are the JustBid Senior Strategic Broker.
+You are the JustBid Senior Strategic Broker chatbot.
 
-Only answer about:
-- tenders
-- bidding
-- procurement
-- contracts
+STRICT RULES:
+- Only answer questions about:
+  • tenders
+  • bidding
+  • procurement
+  • contracts
+  • government/private tenders
+  • pricing & quotation in bids
+  • JustBid platform usage
 
-If unrelated say:
-"I specialize in tender strategy and bidding intelligence."
+- If user asks anything outside this domain, respond EXACTLY:
+"I can only assist with bidding, tenders, and procurement-related queries on this platform."
 
-Tone: Professional, human-like.
+- Do NOT answer general knowledge, coding, or unrelated topics.
+
+Tone: Professional, precise, business-focused.
 `
           },
           ...messages,
-          { role: "user", content: input }
-        ],
-        model: "llama-3.3-70b-versatile",
-        temperature: 0.6
+          { role: "user", content: userText }
+        ]
       })
 
       const response =
-        chatCompletion.choices[0]?.message?.content || "No response"
+        chatCompletion.choices[0]?.message?.content ||
+        "No response available."
 
       setMessages(prev => [
         ...prev,
@@ -101,7 +124,10 @@ Tone: Professional, human-like.
     } catch (err) {
       setMessages(prev => [
         ...prev,
-        { role: "assistant", content: "Error. Try again." }
+        {
+          role: "assistant",
+          content: "Something went wrong. Please try again."
+        }
       ])
     }
 
@@ -127,15 +153,12 @@ Tone: Professional, human-like.
             initial={{ opacity: 0, scale: 0.8, y: 100 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 100 }}
-            
-            // ✅ FIXED CONTAINER (NO OVERFLOW)
             className="fixed left-6 bottom-24 top-4 z-[1000]
             w-[400px]
             bg-background/80 backdrop-blur-2xl border border-white/10
             rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)]
             flex flex-col overflow-hidden"
           >
-
             {/* Header */}
             <div className="p-4 border-b border-white/10 flex justify-between items-center shrink-0">
               <div className="flex items-center gap-2">
@@ -202,7 +225,6 @@ Tone: Professional, human-like.
                 </button>
               </div>
             </div>
-
           </motion.div>
         )}
       </AnimatePresence>
