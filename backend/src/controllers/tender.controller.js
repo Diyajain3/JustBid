@@ -1,4 +1,5 @@
 import prisma from '../config/db.js';
+import { matchAllCompaniesToNewTenders } from '../services/match.service.js';
 
 export const getTenders = async (req, res) => {
   try {
@@ -10,7 +11,10 @@ export const getTenders = async (req, res) => {
       prisma.tender.findMany({
         skip,
         take: limit,
-        orderBy: { createdAt: 'desc' }
+        orderBy: [
+          { publicationDate: 'desc' },
+          { createdAt: 'desc' }
+        ]
       }),
       prisma.tender.count()
     ]);
@@ -121,9 +125,12 @@ export const ingestTenderFromWorker = async (req, res) => {
           description,
           cpvCodes: tenderData.cpv_codes || tenderData.cpvCodes || [],
           deadline,
+          publicationDate: tenderData.publication_date ? new Date(tenderData.publication_date) : (tenderData.publicationDate ? new Date(tenderData.publicationDate) : null),
           offerOpening,
           location: tenderData.region || tenderData.location || null,
           budget: tenderData.budget || null,
+          type: tenderData.project_type || tenderData.type || null,
+          category: tenderData.project_sub_type || tenderData.category || null,
           status: tenderData.status || "open",
           publicationId: tenderData.publication_id || tenderData.publicationId || null,
           detailsFetchedAt: tenderData.details_fetched_at ? new Date(tenderData.details_fetched_at) : null,
@@ -135,9 +142,12 @@ export const ingestTenderFromWorker = async (req, res) => {
           description,
           cpvCodes: tenderData.cpv_codes || tenderData.cpvCodes || [],
           deadline,
+          publicationDate: tenderData.publication_date ? new Date(tenderData.publication_date) : (tenderData.publicationDate ? new Date(tenderData.publicationDate) : null),
           offerOpening,
           location: tenderData.region || tenderData.location || null,
           budget: tenderData.budget || null,
+          type: tenderData.project_type || tenderData.type || null,
+          category: tenderData.project_sub_type || tenderData.category || null,
           status: tenderData.status || "open",
           publicationId: tenderData.publication_id || tenderData.publicationId || null,
           detailsFetchedAt: tenderData.details_fetched_at ? new Date(tenderData.details_fetched_at) : null,
@@ -146,9 +156,13 @@ export const ingestTenderFromWorker = async (req, res) => {
       });
     });
 
-    await Promise.all(upsertPromises.filter(Boolean));
+    const upsertedResults = await Promise.all(upsertPromises.filter(Boolean));
+    const newTenderIds = upsertedResults.map(t => t.id);
 
-    res.status(200).json({ message: `Successfully ingested ${upsertPromises.length} tenders` });
+    // Fire off global matching in background
+    matchAllCompaniesToNewTenders(newTenderIds).catch(err => console.error("Post-ingest matching error:", err));
+
+    res.status(200).json({ message: `Successfully ingested ${upsertedResults.length} tenders` });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error ingesting tender batch' });
@@ -179,9 +193,36 @@ export const batchUpdateDetails = async (req, res) => {
     
     const promises = updates.map(update => {
       const { id, ...data } = update;
+      
+      const procurement = data.procurement || {};
+      const dates = data.dates || {};
+      const decision = data.decision || {};
+      const base = data.base || {};
+
+      // Enhanced Budget Extraction
+      let budget = (procurement.budget || 
+                  procurement.totalPriceSelectionValue || 
+                  data.decision?.vendors?.[0]?.price?.price);
+      
+      // Enhanced Deadline Extraction
+      const deadlineStr = (
+        dates.offerDeadline || 
+        dates.offersDeadline ||
+        procurement.executionDeadline || 
+        decision.awardDecisionDate || 
+        base.publicationDate
+      );
+      const deadline = deadlineStr ? new Date(deadlineStr) : null;
+
+      const pubDateStr = base.publicationDate || null;
+      const publicationDate = pubDateStr ? new Date(pubDateStr) : null;
+
       return prisma.tender.update({
         where: { id },
         data: {
+          budget: budget ? parseFloat(budget) : null,
+          deadline,
+          publicationDate,
           rawData: data,
           detailsFetchedAt: new Date(data.details_fetched_at || new Date())
         }
@@ -192,5 +233,183 @@ export const batchUpdateDetails = async (req, res) => {
     res.json({ message: `Updated ${promises.length} records!` });
   } catch(e) {
     res.status(500).json({ message: 'Error bulk updating details' });
+  }
+};
+export const getSavedBids = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const bids = await prisma.bid.findMany({
+      where: { userId },
+      include: { tender: true },
+      orderBy: { createdAt: 'desc' }
+    });
+    res.json(bids);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error fetching saved bids' });
+  }
+};
+
+export const saveTenderAsBid = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const tenderId = req.params.id;
+
+    const bid = await prisma.bid.upsert({
+      where: {
+        userId_tenderId: { userId, tenderId }
+      },
+      update: { status: 'saved' },
+      create: { userId, tenderId, status: 'saved' }
+    });
+
+    // Also bookmark it for convenience
+    await prisma.bookmark.upsert({
+      where: {
+        userId_tenderId: { userId, tenderId }
+      },
+      update: {},
+      create: { userId, tenderId }
+    });
+
+    res.json({ message: 'Tender saved successfully', bid });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error saving tender' });
+  }
+};
+
+export const deleteSavedBid = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const tenderId = req.params.id;
+
+    await prisma.bid.deleteMany({
+      where: { userId, tenderId }
+    });
+
+    res.json({ message: 'Tender removed from saved bids' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error deleting bid' });
+  }
+};
+export const reparseTenders = async (req, res) => {
+  try {
+    const tenders = await prisma.tender.findMany({
+      where: { NOT: { rawData: null } }
+    });
+
+    let count = 0;
+    for (const tender of tenders) {
+      if (!tender.rawData || typeof tender.rawData !== 'object') continue;
+      
+      const raw = tender.rawData;
+      const procurement = raw.procurement || {};
+      const dates = raw.dates || {};
+      const decision = raw.decision || {};
+      const base = raw.base || {};
+
+      // Improved Budget Extraction
+      let budget = (procurement.budget || 
+                  procurement.totalPriceSelectionValue || 
+                  procurement.totalPriceRange?.range?.min ||
+                  tender.budget);
+      
+      if (!budget && decision.vendors?.length > 0) {
+          budget = decision.vendors[0].price?.price;
+      }
+
+      // Improved Deadline Extraction
+      const deadlineStr = (
+        dates.offerDeadline || 
+        dates.offersDeadline ||
+        procurement.executionDeadline || 
+        decision.awardDecisionDate || 
+        base.publicationDate
+      );
+      const deadline = deadlineStr ? new Date(deadlineStr) : tender.deadline;
+
+      const pubDateStr = base.publicationDate || tender.publicationDate;
+      const publicationDate = pubDateStr ? new Date(pubDateStr) : null;
+
+      await prisma.tender.update({
+        where: { id: tender.id },
+        data: {
+          budget: budget ? parseFloat(budget) : null,
+          deadline,
+          publicationDate,
+          detailsFetchedAt: tender.detailsFetchedAt || new Date()
+        }
+      });
+      count++;
+    }
+
+    res.json({ message: `Successfully re-parsed ${count} tenders` });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error reparsing tenders' });
+  }
+};
+
+export const getTenderStats = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const company = await prisma.company.findUnique({ where: { userId } });
+
+    if (!company) {
+      return res.status(400).json({ message: 'Complete company profile first' });
+    }
+
+    const matches = await prisma.match.findMany({
+      where: { companyId: company.id },
+      include: { tender: true }
+    });
+
+    if (matches.length === 0) {
+      return res.json({
+        totalMatches: 0,
+        avgScore: 0,
+        topSector: "N/A",
+        scoreDistribution: { high: 0, med: 0, low: 0 },
+        categoryDistribution: []
+      });
+    }
+
+    const totalMatches = matches.length;
+    const totalScore = matches.reduce((acc, curr) => acc + curr.score, 0);
+    const avgScore = (totalScore / totalMatches).toFixed(1);
+
+    // Distribution
+    const distribution = { high: 0, med: 0, low: 0 };
+    const categories = {};
+
+    matches.forEach(m => {
+      if (m.score >= 80) distribution.high++;
+      else if (m.score >= 50) distribution.med++;
+      else distribution.low++;
+
+      const cat = m.tender.category || "Uncategorized";
+      categories[cat] = (categories[cat] || 0) + 1;
+    });
+
+    const categoryDistribution = Object.entries(categories)
+      .map(([label, count]) => ({ 
+        label, 
+        count, 
+        percentage: Math.round((count / totalMatches) * 100) 
+      }))
+      .sort((a, b) => b.count - a.count);
+
+    res.json({
+      totalMatches,
+      avgScore,
+      topSector: categoryDistribution[0]?.label || "N/A",
+      scoreDistribution: distribution,
+      categoryDistribution
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error calculating market intelligence' });
   }
 };

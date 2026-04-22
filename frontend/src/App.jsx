@@ -8,6 +8,8 @@ import DashboardPage from '@/app/dashboard/page'
 import ExplorePage from '@/app/explore/page'
 import ResetPasswordPage from '@/app/auth/reset/page'
 import VisionPage from '@/app/vision/page'
+import AnalyticsPage from '@/app/analytics/page'
+import SavedBidsPage from '@/app/saved-bids/page'
 import { AiBroker } from '@/components/ui/ai-broker'
 import { AiChatbot } from '@/components/ui/ai-chatbot'
 
@@ -22,6 +24,8 @@ export default function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/explore" element={<ExplorePage />} />
+        <Route path="/analytics" element={<AnalyticsPage />} />
+        <Route path="/saved-bids" element={<SavedBidsPage />} />
         <Route path="/auth/reset/:token" element={<ResetPasswordPage />} />
         <Route path="/vision" element={<VisionPage />} />
       </Routes>

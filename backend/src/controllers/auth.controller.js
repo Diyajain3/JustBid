@@ -106,7 +106,7 @@ export const forgotPassword = async (req, res) => {
       data: { resetPasswordToken, resetPasswordExpires }
     });
 
-    const resetUrl = `http://localhost:5173/auth/reset/${resetToken}`;
+    const resetUrl = `${req.headers.origin || 'http://localhost:5173'}/auth/reset/${resetToken}`;
 
     const message = `You are receiving this email because a password reset was requested for your account.\n\nPlease make a PUT request to:\n\n${resetUrl}\n\nIf you did not request this, please ignore this email.`;
 

@@ -47,12 +47,14 @@ export default function AuthPage() {
     setError(null)
   }
 
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
   const handleForgotSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`http://localhost:5000/api/auth/forgot-password`, {
+      const res = await fetch(`${API_URL}/api/auth/forgot-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
@@ -77,7 +79,7 @@ export default function AuthPage() {
     const payload = isLogin ? { email, password } : { name, email, password };
 
     try {
-      const res = await fetch(`http://localhost:5000${endpoint}`, {
+      const res = await fetch(`${API_URL}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -169,7 +171,7 @@ export default function AuthPage() {
                 <div>
                   <h3 className="text-xl font-semibold mb-2">Bank-grade Security</h3>
                   <p className="text-foreground/60 text-base leading-relaxed">
-                    Protected by industry-leading JSON Web Tokens and robust SQLite storage layers.
+                    Protected by industry-leading JSON Web Tokens and robust encrypted cluster storage layers.
                   </p>
                 </div>
               </div>
@@ -219,7 +221,7 @@ export default function AuthPage() {
               >
                 <div className="mb-8">
                   <h2 className="text-3xl font-bold mb-2">Welcome Back</h2>
-                  <p className="text-muted-foreground">Enter your credentials to connect to our SQLite server.</p>
+                  <p className="text-muted-foreground">Enter your credentials to connect to our secure strategic server.</p>
                 </div>
 
                 {error && <div className="mb-4 text-sm text-red-500 bg-red-500/10 p-3 rounded">{error}</div>}

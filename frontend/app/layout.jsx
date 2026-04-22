@@ -3,6 +3,7 @@ import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import { SmoothScroll } from '@/components/providers/smooth-scroll'
 import { CustomCursor } from '@/components/ui/custom-cursor'
+import { Toaster } from '@/components/ui/sonner'
 
 const spaceGrotesk = Space_Grotesk({ 
   subsets: ["latin"],
@@ -45,6 +46,7 @@ export default function RootLayout({ children }) {
           <CustomCursor />
           {children}
         </SmoothScroll>
+        <Toaster closeButton position="top-right" expand={false} />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

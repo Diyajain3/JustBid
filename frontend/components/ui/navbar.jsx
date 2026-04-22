@@ -9,16 +9,10 @@ import { Circle, User, LayoutDashboard, Telescope, Send, Activity } from "lucide
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
-  const [tenderCount, setTenderCount] = useState(12430)
   const navRef = useRef(null)
   const location = useLocation()
 
   useEffect(() => {
-    // Ticker logic
-    const interval = setInterval(() => {
-      setTenderCount(prev => prev + Math.floor(Math.random() * 3))
-    }, 5000)
-
     // Scroll logic
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50)
@@ -26,7 +20,6 @@ export function Navbar() {
 
     window.addEventListener("scroll", handleScroll)
     return () => {
-      clearInterval(interval)
       window.removeEventListener("scroll", handleScroll)
     }
   }, [])
@@ -53,15 +46,23 @@ export function Navbar() {
         <div className="hidden md:flex items-center gap-1">
           <NavLink to="/" label="Home" active={location.pathname === "/"} />
           <NavLink to="/explore" label="Explore" active={location.pathname === "/explore"} />
-          <NavLink to="/vision" label="Vision" active={location.pathname === "/vision"} />
-          <NavLink to="/contact" label="Contact" active={location.pathname === "/contact"} />
           <NavLink to="/dashboard" label="Console" active={location.pathname === "/dashboard"} />
+          <NavLink to="/saved-bids" label="Inbox" active={location.pathname === "/saved-bids"} />
+          <NavLink to="/analytics" label="Insights" active={location.pathname === "/analytics"} />
+          <NavLink to="/vision" label="Vision" active={location.pathname === "/vision"} />
         </div>
 
         {/* User / Auth */}
         <div className="ml-4 pr-1">
-          <Link to="/auth" className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/40 transition-all">
-            <User size={14} />
+          <Link 
+            to={localStorage.getItem('token') ? "/profile" : "/auth"} 
+            className={`flex items-center justify-center p-2 rounded-xl transition-all ${
+              location.pathname === "/profile" 
+                ? "bg-primary/20 text-primary border border-primary/20" 
+                : "text-muted-foreground hover:text-primary hover:bg-white/5"
+            }`}
+          >
+            <User size={18} strokeWidth={2.5} />
           </Link>
         </div>
       </motion.nav>

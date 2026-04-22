@@ -22,6 +22,8 @@ export function DashboardPreview() {
 
   // Fetch LIVE Tenders from Backend!
   useEffect(() => {
+    const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
     const fetchTenders = async () => {
       try {
         const token = localStorage.getItem('token');
@@ -29,14 +31,14 @@ export function DashboardPreview() {
         
         // If user logged in, get personalized feed. Otherwise all tenders.
         if (token) {
-           res = await fetch('http://localhost:5000/api/tenders/feed', {
+           res = await fetch(`${API_URL}/api/tenders/feed`, {
             headers: { 'Authorization': `Bearer ${token}` }
           });
         }
         
         // Fallback to public feed if fetch failed or no token
         if (!token || !res.ok) {
-           res = await fetch('http://localhost:5000/api/tenders');
+           res = await fetch(`${API_URL}/api/tenders`);
         }
 
         const data = await res.json();
@@ -91,7 +93,7 @@ export function DashboardPreview() {
             Live API Tenders
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            These tenders are actively syncing from our local SQLite Database instead of static arrays!
+            These tenders are actively syncing from our MongoDB Database instead of static arrays!
           </p>
         </div>
 

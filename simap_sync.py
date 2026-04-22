@@ -242,6 +242,7 @@ class SimapSyncWorker:
     def transform_project(self, project: dict) -> dict:
         title_dict = project.get("title", {})
         translated_title, language = self._translate_dict(title_dict)
+        order_address = project.get("orderAddress", {})
 
         return {
             "external_id": project.get("id"),
@@ -312,41 +313,50 @@ class SimapSyncWorker:
         terms = details.get("terms") or {}
         dates = details.get("dates") or {}
         criteria = details.get("criteria") or {}
+        decision = details.get("decision") or {}
+        base = details.get("base") or {}
 
         # Translate description
         desc_dict = procurement.get("orderDescription") or {}
         if isinstance(desc_dict, str):
-            # If it's already a string, we wrap it to translate
             desc_dict = {"auto": desc_dict}
         translated_desc, _ = self._translate_dict(desc_dict)
 
-        # Translate criteria
-        qual_criteria = criteria.get("qualificationCriteria", [])
-        award_criteria = criteria.get("awardCriteria", [])
-        
-        translated_qual = []
-        for item in qual_criteria:
-            if isinstance(item, dict):
-                t_item, _ = self._translate_dict(item)
-                translated_qual.append(t_item)
-            else:
-                translated_qual.append(item)
+        # Translate Criteria
+        qual_dict = criteria.get("qualification") or {}
+        award_dict = criteria.get("award") or {}
+        translated_qual, _ = self._translate_dict(qual_dict)
+        translated_award, _ = self._translate_dict(award_dict)
 
-        translated_award = []
-        for item in award_criteria:
-            if isinstance(item, dict):
-                t_item, _ = self._translate_dict(item)
-                translated_award.append(t_item)
-            else:
-                translated_award.append(item)
+        # Enhanced Budget Extraction
+        budget = (procurement.get("budget") or 
+                  procurement.get("totalPriceSelectionValue") or 
+                  procurement.get("totalPriceRange", {}).get("range", {}).get("min"))
+        
+        if not budget:
+            # Try to get award price
+            vendors = decision.get("vendors", [])
+            if vendors and isinstance(vendors, list):
+                price_info = vendors[0].get("price", {})
+                budget = price_info.get("price")
+
+        # Enhanced Deadline Extraction
+        deadline = (
+            dates.get("offerDeadline") or 
+            procurement.get("executionDeadline") or 
+            decision.get("awardDecisionDate") or 
+            base.get("publicationDate")
+        )
 
         return {
-            "deadline": dates.get("offerDeadline"),
-            "offer_opening": (dates.get("offerOpening") or {}).get("dateTime"),
+            "deadline": deadline,
+            "publicationDate": base.get("publicationDate"),
+            "budget": budget,
+            "offer_opening": (dates.get("offerOpening") or {}).get("dateTime") or dates.get("offerOpening"),
             "qna_deadlines": dates.get("qnas", []),
             "offer_validity_days": dates.get("offerValidityDeadlineDays"),
             "description": translated_desc,
-            "cpv_codes": [procurement.get("cpvCode")] if procurement.get("cpvCode") else [],
+            "cpv_codes": [procurement.get("cpvCode", {}).get("code")] if isinstance(procurement.get("cpvCode"), dict) else [],
             "bkp_codes": procurement.get("bkpCodes", []),
             "npk_codes": procurement.get("npkCodes", []),
             "oag_codes": procurement.get("oagCodes", []),
@@ -487,8 +497,8 @@ class SimapSyncWorker:
 
 def main():
     parser = argparse.ArgumentParser(description="Sync SIMAP tenders to MongoDB API")
-    parser.add_argument("--supabase-url", type=str, default=None, help="Backend API URL")
-    parser.add_argument("--supabase-key", type=str, default=None, help="Backend API Key")
+    parser.add_argument("--api-url", type=str, default=None, help="Backend API URL")
+    parser.add_argument("--api-key", type=str, default=None, help="Backend API Key")
     parser.add_argument("--days", type=int, default=None)
     parser.add_argument("--type", type=str, choices=PROJECT_SUB_TYPES, action="append", dest="types")
     parser.add_argument("--limit", type=int, default=None)
@@ -509,8 +519,8 @@ def main():
     setup_logging(verbose=args.verbose, log_file=log_file)
 
     # Note: Retained legacy CLI arguments but correctly point to MongoDB API Config!
-    api_url = args.supabase_url or os.environ.get("SUPABASE_URL", "http://localhost:5000")
-    api_key = args.supabase_key or os.environ.get("SUPABASE_KEY", "worker-secret-key-for-python-script")
+    api_url = args.api_url or os.environ.get("BACKEND_API_URL", "http://localhost:5000")
+    api_key = args.api_key or os.environ.get("BACKEND_API_KEY", "worker-secret-key-for-python-script")
 
     with SimapSyncWorker(
         api_url=api_url,

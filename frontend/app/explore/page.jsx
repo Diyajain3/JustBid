@@ -7,17 +7,22 @@ import { Navbar } from "@/components/ui/navbar"
 
 export default function ExplorePage() {
   const [tenders, setTenders] = useState([])
+  const [filteredTenders, setFilteredTenders] = useState([])
   const [loading, setLoading] = useState(true)
   const [scannerActive, setScannerActive] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
   const navigate = useNavigate()
+
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000"
 
   useEffect(() => {
     const fetchTenders = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/tenders")
+        const res = await fetch(`${API_URL}/api/tenders`)
         if (res.ok) {
           const data = await res.json()
           setTenders(data.tenders) // The backend returns { tenders: [], pagination: {} }
+          setFilteredTenders(data.tenders)
         }
       } catch (err) {
         console.error("Failed to load generic tenders", err)
@@ -27,7 +32,24 @@ export default function ExplorePage() {
     }
 
     fetchTenders()
-  }, [])
+  }, [API_URL])
+
+  // Live Search Logic
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setFilteredTenders(tenders)
+      return
+    }
+
+    const q = searchQuery.toLowerCase()
+    const filtered = tenders.filter(t => 
+      t.title?.toLowerCase().includes(q) || 
+      t.description?.toLowerCase().includes(q) ||
+      t.location?.toLowerCase().includes(q) ||
+      t.cpvCodes?.some(c => c.toLowerCase().includes(q))
+    )
+    setFilteredTenders(filtered)
+  }, [searchQuery, tenders])
 
   const handleMatchClick = () => {
     setScannerActive(true)
@@ -35,7 +57,12 @@ export default function ExplorePage() {
 
   const handleScannerComplete = () => {
     setScannerActive(false)
-    navigate('/auth')
+    const token = localStorage.getItem('token')
+    if (token) {
+      navigate('/dashboard')
+    } else {
+      navigate('/auth')
+    }
   }
 
   return (
@@ -58,8 +85,13 @@ export default function ExplorePage() {
             <input 
               type="text" 
               placeholder="Search keywords, locations, or CPV codes manually..." 
-              className="w-full bg-background border border-border shadow-xl rounded-full py-4 pl-12 pr-4 focus:ring-2 focus:ring-primary/50 transition-all text-lg"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-background border border-border shadow-xl rounded-full py-4 pl-12 pr-32 focus:ring-2 focus:ring-primary/50 transition-all text-lg"
             />
+            <button className="absolute right-2 top-1/2 -translate-y-1/2 bg-primary text-primary-foreground px-6 py-2 rounded-full font-bold hover:scale-105 transition-all shadow-lg">
+              Search
+            </button>
           </div>
         </section>
 
@@ -70,13 +102,13 @@ export default function ExplorePage() {
                <div className="animate-spin w-10 h-10 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
                Connecting to SIMAP Server...
             </div>
-          ) : tenders.length === 0 ? (
+          ) : filteredTenders.length === 0 ? (
             <div className="text-center py-20 text-muted-foreground">
-              No public tenders available right now. 
+              {searchQuery ? `No tenders matching "${searchQuery}" found.` : "No public tenders available right now."}
             </div>
           ) : (
             <div className="grid gap-6">
-               {tenders.map((tender, i) => (
+               {filteredTenders.map((tender, i) => (
                   <TenderCard3D 
                     key={tender.id} 
                     tender={tender} 
